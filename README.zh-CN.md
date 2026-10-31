@@ -50,6 +50,8 @@ python -m venv .venv
 
 通用方法、自动化和可复用交互回到上游；具体地区的数据、身份、模型与品牌留在下游。重建锁与模板锁独立，升级不伪造旧资产来源，也不覆盖人工精细模型。
 
+建议每个具体地图维护 **`data/reference-images/`**，保存采用的照片／图片及作者、许可、日期、用途、来源链接与 hash，避免使用不能开放分发或导出资产的受限／授权不明素材。见[素材规范与自动核查](docs/zh-CN/reference-media.md)及 [UO 实例](https://github.com/williamQ96/open-campus-uo/tree/main/data/reference-images)。
+
 代码与模板代码 **Apache-2.0**，原创文档和模型／设计贡献 **CC BY 4.0**。保留 NOTICE、署名和第三方条款，见[协议说明](LICENSING.zh-CN.md)。
 
 [历史 README](docs/zh-CN/README-pre-template.md)保留早期实现记录；[架构](docs/zh-CN/architecture.md)与[方法说明](docs/zh-CN/viewer-template.md)提供更多背景。

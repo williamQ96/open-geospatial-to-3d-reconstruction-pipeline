@@ -28,3 +28,5 @@ Authors are encouraged to explore Stylized PBR, photorealism, full comic, voxel/
 Propose a `style/<slug>/` directory with an English README, optional translations, representative mockups, palette/material rules, asset provenance and license scope, a clear status (proposal, experimental or recommended), and a cost/maintenance/runtime evaluation. Preserve the same verified geography and object IDs for comparisons. Keep mockups separate from survey evidence and do not bake an engine-specific shader into the only source asset.
 
 Original design documentation and rights-held illustration contributions follow [CC BY 4.0](../LICENSING.md); code examples follow Apache-2.0. Third-party references retain their own rights.
+
+For each concrete map, keep the adopted photographs, mockups and image inputs in its own `data/reference-images/` archive with per-file provenance and export-compatible terms. Follow the [reference-media policy](../docs/reference-media.md); a style choice does not remove source restrictions.

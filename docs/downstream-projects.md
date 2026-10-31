@@ -12,4 +12,6 @@ This registry starts with one real application and is designed to grow to other 
 
 Add a row after the existing entries with a project name, location or synthetic scope, source repository, optional live URL, maintainer and refinement goal. Document source rights, coordinate frame, reconstruction pin and viewer-template pin in that downstream project. A new map may use the same runtime and design while supplying its own scene and profile.
 
+Maintain a `data/reference-images/` folder in each map repository for adopted photographs, mockups and other image inputs, with original files, usage, authors, license evidence, dates and hashes. Prefer openly redistributable sources and avoid assets that prevent open export. Follow the [reference-media policy](reference-media.md); the [UO media archive](https://github.com/williamQ96/open-campus-uo/tree/main/data/reference-images) is the first example.
+
 Use `init-viewer` to start independently. General methods and reusable interaction fixes should return upstream; regional data, hand-refined geometry and branding remain downstream. Preserve the applicable Apache/NOTICE and CC BY attribution when redistributing shared software or original content. Registration does not imply measured survey accuracy or institutional endorsement.

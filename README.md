@@ -76,6 +76,8 @@ This is the first entry in an expandable [downstream registry](docs/downstream-p
 
 This long-lived upstream owns transferable methods, automation, schemas, validation and reusable viewer behavior. Downstream projects own specific areas, input choices, identities, models, materials and content. Upgrades must preserve manually refined assets and clearly distinguish measurements from estimates.
 
+Each downstream map should keep a versioned **`data/reference-images/`** archive with the actual adopted photographs/images, source links, authors, licenses, dates, usage and checksums. Prefer sources that permit open redistribution and asset export; avoid restricted or unverified inputs. See the [reference-media policy and automated audit](docs/reference-media.md), with the [UO archive](https://github.com/williamQ96/open-campus-uo/tree/main/data/reference-images) as the first example.
+
 See [maintenance](MAINTENANCE.md), [architecture](docs/architecture.md), [roadmap](docs/roadmap.md), [source decisions](docs/source-discussion.md), [data management](data/README.md), and [viewer methodology](docs/viewer-template.md).
 
 Code and template software use **Apache-2.0**; original documentation and model/design contributions use **CC BY 4.0**. See [licensing and attribution](LICENSING.md) and [NOTICE](NOTICE). Third-party material retains its own terms.
