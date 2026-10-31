@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "geospatial3d"
-version = "0.6.0"
+version = "0.7.0"
 description = "Reusable geospatial point-cloud to Blender and glTF reconstruction tools"
 license = "Apache-2.0 AND CC-BY-4.0"
 license-files = ["LICENSE", "LICENSES/*.txt", "NOTICE", "LICENSING.md"]

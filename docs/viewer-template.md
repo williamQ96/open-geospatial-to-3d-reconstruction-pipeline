@@ -33,3 +33,7 @@ Add other places through the [downstream registry](downstream-projects.md). Keep
 ## Art direction
 
 The [style library](../style/README.md) contains the default recommended Architectural Toon Realism design archive and welcomes alternatives. The default remains a synthetic whitebox, with optional authored GLB / Toon support described in [presentation layers](presentation-layers.md). Keep style experiments separate from geographic evidence and managed runtime files until a reusable implementation has been reviewed.
+
+## Phone controls
+
+Compact phone layouts respect safe areas, reduce the minimap, and keep camera buttons at the bottom. First-person touch assigns lower-half contacts to a floating movement stick (dead zone, bounded analog speed) and upper-half contacts to looking. Roles remain fixed until release; two fingers operate independently. Release/cancel/lost capture, blur, resize, search, view changes and Settings clear movement. Follow retains drag-to-look; Overview retains orbit/pinch gestures. Desktop input is unchanged.

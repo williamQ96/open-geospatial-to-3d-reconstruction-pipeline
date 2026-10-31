@@ -719,3 +719,174 @@ dialog::backdrop {
   font-weight: 650;
   letter-spacing: -0.04em;
 }
+
+/* Floating controls never intercept the scene's pointer stream. */
+.touch-stick {
+  position: absolute;
+  width: 96px;
+  height: 96px;
+  margin: -48px;
+  border-radius: 50%;
+  border: 1px solid #f5f5efb0;
+  background: #204d3d35;
+  pointer-events: none;
+  z-index: 6;
+}
+.touch-stick span {
+  position: absolute;
+  left: 28px;
+  top: 28px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f5f5efcc;
+  border: 1px solid #204d3d80;
+}
+.touch-hint {
+  display: none;
+  pointer-events: none;
+}
+@media (max-width: 600px), (max-height: 500px) and (pointer: coarse) {
+  #app {
+    min-height: 0;
+  }
+  .masthead {
+    height: 58px;
+    top: env(safe-area-inset-top, 0px);
+    left: 12px;
+    right: 12px;
+  }
+  .brand-logo {
+    width: 144px;
+  }
+  .settings-button {
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+    padding: 0;
+    font-size: 0;
+  }
+  .settings-button span {
+    font-size: 22px;
+  }
+  .campus-search {
+    top: calc(68px + env(safe-area-inset-top, 0px));
+    left: 12px;
+    width: calc(100% - 62px);
+  }
+  .search-field {
+    min-height: 44px;
+  }
+  .search-field input {
+    padding: 12px 0;
+    font-size: 16px;
+  }
+  .search-dropdown {
+    max-height: min(35dvh, 250px);
+    overflow-y: auto;
+  }
+  .view-switch {
+    top: auto;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    width: calc(100% - 24px);
+    max-width: 370px;
+  }
+  .view-switch button {
+    min-height: 44px;
+    padding: 10px 6px;
+    font-size: 11px;
+  }
+  .view-switch kbd {
+    display: none;
+  }
+  .map-panel {
+    top: calc(122px + env(safe-area-inset-top, 0px));
+    bottom: auto;
+    right: 12px;
+    width: 94px;
+    padding: 7px;
+    pointer-events: none;
+  }
+  .map-panel canvas {
+    width: 80px;
+    height: 80px;
+  }
+  .map-title {
+    display: none;
+  }
+  .map-footer {
+    font-size: 7px;
+  }
+  .compass {
+    top: calc(74px + env(safe-area-inset-top, 0px));
+    right: 17px;
+  }
+  .controls-bar {
+    bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    height: 44px;
+    border: 0;
+    pointer-events: none;
+  }
+  .control-hint,
+  .position-readout {
+    display: none;
+  }
+  .reset-button {
+    margin-left: auto;
+    min-width: 44px;
+    min-height: 44px;
+    pointer-events: auto;
+    background: #f5f5efde;
+  }
+  .selection {
+    left: 12px;
+    bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+    width: calc(100% - 80px);
+    max-width: 270px;
+    padding: 8px 10px;
+    pointer-events: none;
+  }
+  .selection span {
+    display: none;
+  }
+  .building-label {
+    font-size: 8px;
+    padding: 3px 5px;
+    max-width: 145px;
+  }
+  #app[data-view="first"] .building-label {
+    pointer-events: none;
+  }
+  #app[data-view="first"] .touch-hint {
+    display: block;
+    position: absolute;
+    bottom: calc(65px + env(safe-area-inset-bottom, 0px));
+    left: 12px;
+    margin: 0;
+    max-width: 240px;
+    font-size: 9px;
+    color: var(--green);
+    background: #f5f5efcc;
+    padding: 5px 7px;
+  }
+  #app[data-view="first"] .selection {
+    bottom: calc(98px + env(safe-area-inset-bottom, 0px));
+  }
+}
+@media (max-height: 500px) and (pointer: coarse) {
+  .map-panel {
+    display: none;
+  }
+  .view-switch {
+    width: 270px;
+    left: auto;
+    right: 12px;
+    transform: none;
+  }
+  .campus-search {
+    width: 240px;
+  }
+  .touch-hint {
+    max-width: 210px;
+  }
+}

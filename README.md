@@ -4,7 +4,7 @@
 
 Reusable tools for verified geographic data → editable Blender assets → GLB/glTF and interactive browser explorers.
 
-**v0.6 adds reusable modular facade poses and aerial vegetation cues**, with a [recognizable-first, progressively corrected modeling policy](docs/progressive-modeling.md). The v0.5 authored presentation layers and v0.4 explorer interactions remain available. See [presentation methodology](docs/presentation-layers.md). The reconstruction exchange remains schema v1. This upstream repository and the [Open Campus: UO](https://github.com/williamQ96/open-campus-uo) downstream and its [live explorer](https://williamq96.github.io/open-campus-uo/) are public.
+**v0.7 adds compact phone layouts and dual-touch first-person movement/look controls.** [Phone behavior](docs/viewer-template.md#phone-controls). v0.6 added reusable modular facade poses and aerial vegetation cues, with a [recognizable-first, progressively corrected modeling policy](docs/progressive-modeling.md). The v0.5 authored presentation layers and v0.4 explorer interactions remain available. See [presentation methodology](docs/presentation-layers.md). The reconstruction exchange remains schema v1. This upstream repository and the [Open Campus: UO](https://github.com/williamQ96/open-campus-uo) downstream and its [live explorer](https://williamq96.github.io/open-campus-uo/) are public.
 
 ## Start with the browser template
 

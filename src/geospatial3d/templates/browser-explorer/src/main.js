@@ -15,6 +15,7 @@ import { createBuildingLabels } from "./labels.js";
 import { createMinimap } from "./minimap.js";
 import { createBuildingSearch } from "./search.js";
 import { loadPresentation, setEmissive } from "./presentation.js";
+import { createTouchControls } from "./touch.js";
 import { applyProfile } from "./profile.js";
 import "@fontsource-variable/dm-sans";
 import "@fontsource/ibm-plex-mono/latin-400.css";
@@ -70,6 +71,22 @@ renderer.shadowMap.autoUpdate = false;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.02;
 viewport.append(renderer.domElement);
+const touchControls = createTouchControls(renderer.domElement, {
+  enabled: () => view === "first" && !dialog.open && !!field,
+  onLook: (dx, dy) => {
+    focusCameraTarget = null;
+    yaw -= dx * 0.004;
+    pitch = THREE.MathUtils.clamp(pitch + dy * 0.003, -0.7, 0.9);
+  },
+  onMove: () => {
+    focusCameraTarget = null;
+    cancelCameraTransition();
+  },
+});
+const touchHint = document.createElement("p");
+touchHint.className = "touch-hint";
+touchHint.textContent = "Lower half: drag to walk · Upper half: drag to look";
+$("#app").append(touchHint);
 scene.add(new THREE.HemisphereLight(0xffffff, 0x929b94, 1.9));
 const sun = new THREE.DirectionalLight(0xfff9ef, 2.4);
 sun.position.set(-1400, 2400, 1300);
@@ -119,10 +136,12 @@ const buildingSearch = createBuildingSearch($("#building-search"), {
   onFocus: () => {
     keys.clear();
     drag = null;
+    touchControls.reset();
   },
 });
 orbit.addEventListener("start", cancelCameraTransition);
 function resize() {
+  touchControls.reset();
   const w = viewport.clientWidth,
     h = viewport.clientHeight;
   renderer.setSize(w, h);
@@ -137,7 +156,10 @@ function setView(next) {
   if (!views.includes(next)) return;
   cancelCameraTransition();
   focusCameraTarget = null;
+  touchControls.reset();
+  drag = null;
   view = next;
+  $("#app").dataset.view = view;
   orbit.enabled = view === "aerial";
   character.root.visible = view !== "first";
   keys.clear();
@@ -228,6 +250,7 @@ function setSettingsTab(tab) {
 $("#settings-open").addEventListener("click", () => {
   keys.clear();
   drag = null;
+  touchControls.reset();
   dialog.showModal();
 });
 $("#settings-close").addEventListener("click", () => dialog.close());
@@ -310,11 +333,13 @@ addEventListener("keyup", (event) => keys.delete(event.code));
 addEventListener("blur", () => {
   keys.clear();
   drag = null;
+  touchControls.reset();
 });
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     keys.clear();
     drag = null;
+    touchControls.reset();
   }
 });
 renderer.domElement.addEventListener("pointerdown", (event) => {
@@ -347,9 +372,11 @@ renderer.domElement.addEventListener("pointerup", (event) => {
   )
     selectAt(event);
   drag = null;
+  touchControls.reset();
 });
 renderer.domElement.addEventListener("pointercancel", () => {
   drag = null;
+  touchControls.reset();
 });
 viewport.addEventListener(
   "wheel",
@@ -432,6 +459,7 @@ function focusBuilding(id, { animate = true } = {}) {
   if (!record?.name) return;
   keys.clear();
   drag = null;
+  touchControls.reset();
   selectBuilding(id, { fromSearch: true });
   const anchor = buildingAnchor(record);
   if (view === "aerial") {
@@ -508,10 +536,12 @@ function selectAt(event) {
 function updatePlayer(dt) {
   const forward =
     (keys.has("KeyW") || keys.has("ArrowUp") ? 1 : 0) -
-    (keys.has("KeyS") || keys.has("ArrowDown") ? 1 : 0);
+    (keys.has("KeyS") || keys.has("ArrowDown") ? 1 : 0) +
+    (view === "first" ? touchControls.axes.forward : 0);
   const right =
     (keys.has("KeyD") || keys.has("ArrowRight") ? 1 : 0) -
-    (keys.has("KeyA") || keys.has("ArrowLeft") ? 1 : 0);
+    (keys.has("KeyA") || keys.has("ArrowLeft") ? 1 : 0) +
+    (view === "first" ? touchControls.axes.right : 0);
   moving = !!(forward || right);
   if (moving) {
     focusCameraTarget = null;
