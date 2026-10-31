@@ -16,12 +16,14 @@ import { createMinimap } from "./minimap.js";
 import { createBuildingSearch } from "./search.js";
 import { loadPresentation, setEmissive } from "./presentation.js";
 import { createTouchControls } from "./touch.js";
+import { createAnalytics } from "./analytics.js";
 import { applyProfile } from "./profile.js";
 import "@fontsource-variable/dm-sans";
 import "@fontsource/ibm-plex-mono/latin-400.css";
 import "@fontsource/ibm-plex-mono/latin-500.css";
 import "./style.css";
 
+let analytics = { event() {} };
 const $ = (selector) => document.querySelector(selector);
 const viewport = $("#viewport"),
   dialog = $("#settings-dialog");
@@ -79,6 +81,7 @@ const touchControls = createTouchControls(renderer.domElement, {
     pitch = THREE.MathUtils.clamp(pitch + dy * 0.003, -0.7, 0.9);
   },
   onMove: () => {
+    analytics.event("touch-walk");
     focusCameraTarget = null;
     cancelCameraTransition();
   },
@@ -154,6 +157,7 @@ resize();
 
 function setView(next) {
   if (!views.includes(next)) return;
+  if (next !== view) analytics.event("view-" + next);
   cancelCameraTransition();
   focusCameraTarget = null;
   touchControls.reset();
@@ -237,6 +241,7 @@ function resetPlayer() {
   followDistance = 7.5;
 }
 $("#reset").addEventListener("click", () => {
+  analytics.event("return-to-start");
   resetPlayer();
   setView(view);
 });
@@ -248,6 +253,7 @@ function setSettingsTab(tab) {
   $("#about-tab").setAttribute("aria-selected", String(about));
 }
 $("#settings-open").addEventListener("click", () => {
+  analytics.event("settings-open");
   keys.clear();
   drag = null;
   touchControls.reset();
@@ -457,6 +463,7 @@ function selectBuilding(id, { fromSearch = false } = {}) {
 function focusBuilding(id, { animate = true } = {}) {
   const record = buildings.find((building) => building.id === id);
   if (!record?.name) return;
+  analytics.event("building-search-selected");
   keys.clear();
   drag = null;
   touchControls.reset();
@@ -658,6 +665,13 @@ try {
     throw new Error("Unsupported scene manifest version.");
   field = await loadJson(base + manifest.heightfield_url);
   applyProfile(profile, manifest, field);
+  analytics = createAnalytics(profile.analytics);
+  if (analytics.enabled) {
+    const notice = document.createElement("p");
+    notice.textContent =
+      "Aggregate page visits and basic interaction events are counted with GoatCounter. Search text and character coordinates are not sent. Do Not Track and Global Privacy Control are respected.";
+    $("#about-panel").append(notice);
+  }
   half = manifest.aoi_size_m / 2;
   buildings = manifest.buildings;
   if (field.heights_m.length !== field.nx * field.ny)

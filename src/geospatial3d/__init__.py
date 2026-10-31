@@ -1,4 +1,4 @@
 # SPDX-License-Identifier: Apache-2.0
 """Long-lived upstream geospatial reconstruction tools, independent of any campus."""
 
-__version__ = "0.7.1"
+__version__ = "0.8.0"

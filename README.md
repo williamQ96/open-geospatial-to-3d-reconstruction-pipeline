@@ -83,3 +83,5 @@ Each downstream map should keep a versioned **`data/reference-images/`** archive
 See [maintenance](MAINTENANCE.md), [architecture](docs/architecture.md), [roadmap](docs/roadmap.md), [source decisions](docs/source-discussion.md), [data management](data/README.md), and [viewer methodology](docs/viewer-template.md).
 
 Code and template software use **Apache-2.0**; original documentation and model/design contributions use **CC BY 4.0**. See [licensing and attribution](LICENSING.md) and [NOTICE](NOTICE). Third-party material retains its own terms.
+
+[Traffic and analytics](docs/analytics.md): private repository-history archiving and optional, explicitly configured GoatCounter page/interaction statistics.

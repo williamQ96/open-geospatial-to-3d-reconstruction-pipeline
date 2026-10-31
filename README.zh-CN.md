@@ -57,3 +57,5 @@ python -m venv .venv
 代码与模板代码 **Apache-2.0**，原创文档和模型／设计贡献 **CC BY 4.0**。保留 NOTICE、署名和第三方条款，见[协议说明](LICENSING.zh-CN.md)。
 
 [历史 README](docs/zh-CN/README-pre-template.md)保留早期实现记录；[架构](docs/zh-CN/architecture.md)与[方法说明](docs/zh-CN/viewer-template.md)提供更多背景。
+
+[流量与统计](docs/zh-CN/analytics.md)：仓库流量私有归档与显式配置的 GoatCounter 网页／交互统计。
