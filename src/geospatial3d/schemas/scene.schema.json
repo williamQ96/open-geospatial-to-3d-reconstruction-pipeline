@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Geospatial3D Scene Manifest v1",
+  "type": "object",
+  "required": ["schema_version", "project_id", "coordinate_frame", "pipeline", "model", "heightfield_url", "buildings", "quality", "source_ids"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "project_id": {"type": "string"},
+    "aoi_size_m": {"type": "number", "exclusiveMinimum": 0},
+    "coordinate_frame": {
+      "type": "object", "required": ["horizontal_epsg", "vertical_epsg", "origin_projected_m", "gltf_axes", "unit"],
+      "properties": {
+        "horizontal_epsg": {"type": "integer"}, "vertical_epsg": {"type": "integer"},
+        "origin_projected_m": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
+        "unit": {"const": "metre"}, "gltf_axes": {"const": "X east, Y up, Z south"}
+      }
+    },
+    "pipeline": {"type": "object", "required": ["version", "commit", "dirty"]},
+    "model": {
+      "type": "object", "required": ["url", "sha256", "glb_bytes"],
+      "properties": {"url": {"const": "campus.glb"}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "glb_bytes": {"type": "integer", "minimum": 20}}
+    },
+    "heightfield_url": {"const": "heightfield.json"},
+    "source_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "buildings": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "required": ["id", "status", "footprint_enu_m", "base_z_m", "roof_z_m"],
+        "properties": {
+          "id": {"type": "string"}, "status": {"const": "estimated-blockout"},
+          "footprint_enu_m": {"type": "array", "minItems": 3, "items": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2}},
+          "base_z_m": {"type": "number"}, "roof_z_m": {"type": "number"}
+        }
+      }
+    },
+    "quality": {"type": "object", "required": ["cropped_points", "ground_cell_coverage_fraction", "external_control_points"]}
+  }
+}

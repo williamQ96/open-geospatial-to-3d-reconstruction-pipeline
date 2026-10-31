@@ -20,6 +20,6 @@ UO 首版不使用 UO 内部 GIS、OSM、Microsoft/Oregon 汇编建筑轮廓、E
 - [USGS 数据下载](https://www.usgs.gov/the-national-map-data-delivery/gis-data-download)
 - [EarthExplorer](https://earthexplorer.usgs.gov/)
 
-这些入口来自原讨论，本次未下载或核验具体数据集。对话中的工具版本、价格、许可结论和性能目标不是本仓库已经验证的结果。实际采用数据与依赖时另行核验。
+这些入口来自原讨论。v0.1 已在 UO downstream 下载并核验具体点云，来源与排除记录由 downstream 的 `data/metadata/source-audit.json` 维护。对话中的工具价格、性能目标等不自动成为已验证结果，实际采用时另行核验。
 
 原讨论中的 MIT、CC BY 4.0、CC0 均为候选；本次未选定代码或资产许可证，未设置公开发布，也未发送原讨论中的申请邮件。

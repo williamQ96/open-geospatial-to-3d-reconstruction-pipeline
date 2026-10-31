@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema_version", "project_id", "title", "aoi", "sources", "reconstruction"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "project_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+    "title": {"type": "string"},
+    "aoi": {
+      "type": "object", "required": ["center_lon_lat", "size_m", "horizontal_epsg", "vertical_epsg", "vertical_datum"],
+      "properties": {
+        "center_lon_lat": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+        "size_m": {"type": "number", "minimum": 40, "maximum": 2000},
+        "horizontal_epsg": {"type": "integer"},
+        "vertical_epsg": {"type": "integer"},
+        "vertical_datum": {"type": "string", "minLength": 1}
+      }
+    },
+    "sources": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "required": ["id", "url", "filename", "sha256", "acquisition_date", "license_url"],
+        "properties": {
+          "id": {"type": "string"}, "url": {"type": "string", "pattern": "^https://"},
+          "filename": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+\\.laz$"},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "acquisition_date": {"type": "string"}, "license_url": {"type": "string"}
+        }
+      }
+    },
+    "reconstruction": {
+      "type": "object", "required": ["terrain_spacing_m", "raster_spacing_m", "min_building_area_m2"],
+      "properties": {
+        "terrain_spacing_m": {"type": "number", "minimum": 1, "maximum": 10},
+        "raster_spacing_m": {"type": "number", "minimum": 0.5, "maximum": 4},
+        "min_building_area_m2": {"type": "number", "minimum": 20}
+      }
+    }
+  }
+}

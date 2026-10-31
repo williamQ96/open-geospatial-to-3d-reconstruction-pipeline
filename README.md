@@ -2,7 +2,43 @@
 
 将经核验的地理数据转换为可编辑、可复用三维资产的通用重建流水线。以 Blender 为创作核心，以 GLB/glTF 和地理元数据连接浏览器及多种游戏引擎。
 
-**状态：项目规划与仓库初始化。尚未实现处理工具或下载数据。仓库为 private。**
+**状态：v0.1.0 首个真实数据闭环已实现。仓库为 private，作为长期维护的 upstream source。**
+
+长期升级重点是重建方法、自动化、输入验证、地理精度、导出约定和可重复性。UO 下游也会长期维护，但主要升级具体校园的建筑几何、材质与场景内容。详见 [维护边界](MAINTENANCE.md)。
+
+## v0.1 已实现
+
+- 校验输入 LAZ 的 SHA-256、水平/垂直 CRS，按可配置 AOI 裁剪。
+- 由 class-2 地面点生成米制局部地形，并做地面网格留出插值检查。
+- 用高度、局部平面性与单回波比例提取保守的建筑白模候选。
+- 使用真实 Blender 后台进程保存可编辑 `.blend` 并导出 GLB；输出 heightfield、来源、质量报告和 schema v1 场景清单。
+- UO downstream 已验证 GLB 载入、坐标轴、地面高度、角色移动、碰撞和三种视角。
+
+当前不支持自动立面重建、精确建筑语义、庭院、LOD 或任意 CRS 的自动重投影。输入必须已是相同的米制水平 CRS 与声明的垂直 CRS；不匹配会明确失败。
+
+## 本地运行（Windows / Python 3.12）
+
+```powershell
+python -m venv .venv
+./.venv/Scripts/python.exe -m pip install -r requirements.lock.txt
+./.venv/Scripts/python.exe -m pip install --no-deps -e .
+./.venv/Scripts/python.exe -m unittest discover -s tests -v
+```
+
+安装或解压 [Blender 4.5 LTS](https://www.blender.org/download/lts/)，然后：
+
+```powershell
+./.venv/Scripts/python.exe -m geospatial3d build `
+  --config '../open campus 3D/configs/memorial-quad.json' `
+  --workspace '../open campus 3D' `
+  --output '../open campus 3D/exports/memorial-quad' `
+  --blender 'C:/path/to/blender.exe' `
+  --web-public '../open campus 3D/apps/web-preview/public/scene'
+```
+
+路径可调整；不依赖下游本地文件夹名称。初次运行会下载配置中固定校验和的源文件，之后复用已验证缓存。UO 源瓦片约 61 MB。生成的 `scene.blend`、`campus.glb`、`manifest.json`、`heightfield.json`、`sources.json` 和 `quality.json` 位于输出目录。
+
+本次验证使用 Blender **4.5.15 LTS** 官方 Windows portable 包，SHA-256：`52dd02fd74877fa08e74b67d7854cf32468a232c02aaa19b6844c91285574f8d`。Python 精确依赖记录在 `requirements.lock.txt`；Blender 内部依赖由该 Blender 包提供。
 
 ## 与 Open Campus: UO 的关系
 
@@ -21,7 +57,7 @@ LiDAR / DEM / 正射影像 / 自采照片
   → 下游预览与引擎适配
 ```
 
-候选工具包括 Python、PDAL、GDAL/Rasterio、Shapely、OpenCV 和 Blender Python API。它们是技术调查方向，依赖及版本尚未确定。
+当前使用 Python、laspy/lazrs、NumPy/SciPy、PyProj、Rasterio、Shapely 与 Blender Python API；依赖在 `pyproject.toml` 和锁文件中管理。PDAL、OpenCV 等为后续可选方法，不是当前运行要求。
 
 ## 设计原则
 

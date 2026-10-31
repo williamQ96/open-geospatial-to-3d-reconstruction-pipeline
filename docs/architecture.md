@@ -1,6 +1,16 @@
 # 架构与拟定交换约定
 
-本文为设计提案；模块、命令行和正式 JSON schema 均未实现。
+v0.1 已实现 LAZ → 地形/建筑候选 → Blender → GLB。下列较完整阶段表同时保留长期设计方向；LOD、碰撞资产导出、摄影测量与自动重投影尚未实现。
+
+## 当前实现入口
+
+- `src/geospatial3d/cli.py`：命令行、Blender 调用、GLB 完整性与 schema 验证。
+- `io.py`：固定校验和下载、缓存与 upstream commit 记录。
+- `reconstruct.py`：类 2 地面网格插值、空间留出评价、屋顶平面/回波启发式候选。
+- `blender_export.py`：米制 ENU Blender 场景、法线、材质、附加元数据与 Y-up GLB 导出。
+- `schemas/project.schema.json` 和 `schemas/scene.schema.json`：配置及场景交换 v1。
+
+v0.1 要求源 LAZ 具有明确的、与项目一致的水平和垂直 CRS。实际坐标转换只用于确定 AOI 的投影中心，不对输入点云偷偷进行不同高程基准的混合。
 
 ## 处理阶段
 
@@ -22,7 +32,7 @@
 
 通用实现不内置 UO 专用边界或原点。下游实例保存自己的配置和 Pipeline 版本。原讨论建议的米制投影可作为调查起点，最终坐标选择应依据实际数据与转换验证。
 
-## 交换约定 v0（拟定）
+## 交换约定 v1
 
 | 对象 | 最少需要表达的信息 |
 | --- | --- |
@@ -32,7 +42,7 @@
 | 导出记录 | 相对文件路径、格式、校验和、LOD、边界、局部变换、坐标框架 ID、可选碰撞引用 |
 | 场景清单 | 清单版本、坐标框架、瓦片 IDs、资产引用、相对变换和 LOD 信息 |
 
-字段名称与机器可验证 schema 在首个真实数据闭环时确定，之后由本仓库统一维护。UO 项目引用这个约定，不另建相互矛盾的格式。
+机器可验证的当前字段以 `src/geospatial3d/schemas/` 为准；上表还包括未来的 LOD、瓦片、资产登记等扩展方向。UO 项目消费 `manifest.json`、`campus.glb` 与 `heightfield.json`，不另建坐标约定。高度数组按 north-ascending 行序保存，GLB 运行时以 `x=east, y=height, z=-north` 采样。
 
 Blender 工作单位为米，局部坐标采用 East/North/Up。导出 glTF 时明确转换到目标轴约定，并在元数据记录已执行的转换。下游不得再次应用同一变换。
 

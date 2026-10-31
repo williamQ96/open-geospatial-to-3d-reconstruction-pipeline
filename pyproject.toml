@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geospatial3d"
+version = "0.1.0"
+description = "Reusable geospatial point-cloud to Blender and glTF reconstruction tools"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=2.0,<3", "scipy>=1.14,<2", "laspy[lazrs]>=2.5,<3",
+  "pyproj>=3.6,<4", "rasterio>=1.4,<2", "shapely>=2.0,<3",
+  "requests>=2.32,<3", "jsonschema>=4.23,<5"
+]
+
+[project.scripts]
+geospatial3d = "geospatial3d.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+geospatial3d = ["schemas/*.json"]

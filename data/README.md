@@ -1,6 +1,6 @@
 # 数据管理
 
-目前没有数据。`raw/`、`processed/` 与根目录 `exports/`、`artifacts/` 为本地工作目录，默认忽略。
+上游不携带 UO 实际大数据。首个真实样本由 downstream 的 `configs/memorial-quad.json` 指定，并缓存在 downstream 的 `data/raw/`。本仓库 `raw/`、`processed/` 与根目录 `exports/`、`artifacts/` 为本地工作目录，默认忽略。
 
 后续可提交小型合成验证样本、配置、来源台账与校验和；大型 LAZ、GeoTIFF、照片和生成模型不直接放入普通 Git。
 
