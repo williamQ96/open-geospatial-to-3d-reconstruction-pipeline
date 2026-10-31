@@ -2,7 +2,7 @@
 
 # Open Geospatial-to-3D Reconstruction Pipeline
 
-长期维护的通用上游，将核验后的地理数据转换为 Blender、GLB 与可交互的浏览器地图。**v0.4** 增加独立浏览器模板、配置化内容和安全创建／升级命令。上下游仓库均为 public。
+长期维护的通用上游，将核验后的地理数据转换为 Blender、GLB 与可交互的浏览器地图。**v0.5** 增加[可选美术展示层](docs/zh-CN/presentation-layers.md)、PBR／Toon 切换和安全复制，保留 v0.4 浏览器模板与安全升级。上下游仓库均为 public。
 
 ## 浏览器模板
 
@@ -19,7 +19,7 @@ npm run dev
 
 ## 推荐画风
 
-[style 画风库](style/README.zh-CN.md)默认推荐 **Architectural Toon Realism（建筑卡通写实）**，综合考虑视觉可读性、制作成本、维护和运行。包含 UO 来源原始概念图、精确调色板、双语规范与评估计划，同时鼓励探索其他画风。本次是美术档案，模板仍为白模，尚未启用 Toon 渲染器。
+[style 画风库](style/README.zh-CN.md)默认推荐 **Architectural Toon Realism（建筑卡通写实）**，综合考虑视觉可读性、制作成本、维护和运行。包含 UO 来源原始概念图、精确调色板、双语规范与评估计划，同时鼓励探索其他画风。模板仍默认合成白模，现支持可选美术 GLB／Toon；[UO 首个闭环](https://github.com/williamQ96/open-campus-uo/blob/main/docs/visual-pilot.md)已实现。
 
 ## 下游项目
 

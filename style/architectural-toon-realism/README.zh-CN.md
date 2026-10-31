@@ -61,7 +61,7 @@ UO 案例采用西北地区针叶／阔叶树氛围；其他地图应适配自�
 
 包含原始 PNG、英文规范／中文选项、精确调色板、[复用 prompt](style-prompt.txt)、[整理后的公开原文](source-guide.zh-CN.md)、[实现评估计划](implementation.zh-CN.md)与来源记录。
 
-**本次交付是设计档案。** Toon 材质、植被、LOD、描边预设和风格切换尚未实现，模板和在线 UO 仍是白模；尚未建立此画风的性能或跨引擎一致性测试结果。
+**[UO 首个原型](https://github.com/williamQ96/open-campus-uo/blob/main/docs/zh-CN/visual-pilot.md)已实现美术层、植被和 Toon／PBR 切换。** 模板仍默认合成白模，可选接入美术层；LOD、全屏装饰描边、硬件性能验证和跨引擎 shader 一致性仍待完成。
 
 ## 复用与署名
 

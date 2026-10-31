@@ -8,7 +8,7 @@
 | --- | --- | --- |
 | **Architectural Toon Realism v1.0** | **Default recommendation** | [Guide, palette, original mockup and source record](architectural-toon-realism/README.md) |
 
-The first case study is [Open Campus: UO](https://github.com/williamQ96/open-campus-uo/tree/main/design/architectural-toon-realism). The archived AI-generated concept illustrates art direction; its buildings, river and sports grounds are not verified geography. The current explorer and scaffold remain whitebox previews. This folder does not change GIS inputs, exported models or the shared viewer lock.
+The first case study is [Open Campus: UO](https://github.com/williamQ96/open-campus-uo/tree/main/design/architectural-toon-realism). The archived AI-generated concept illustrates art direction; its buildings, river and sports grounds are not verified geography. The UO explorer now includes a [limited visual pilot](https://github.com/williamQ96/open-campus-uo/blob/main/docs/visual-pilot.md); the scaffold defaults to a whitebox and supports optional authored layers. This folder does not change GIS inputs, exported models or the shared viewer lock.
 
 ## Why recommend it?
 

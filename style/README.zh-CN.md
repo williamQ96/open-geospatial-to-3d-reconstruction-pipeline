@@ -8,7 +8,7 @@
 | --- | --- | --- |
 | **Architectural Toon Realism v1.0** | **默认推荐** | [规范、调色板、原始概念图和来源](architectural-toon-realism/README.zh-CN.md) |
 
-第一份案例来自 [Open Campus: UO](https://github.com/williamQ96/open-campus-uo/tree/main/design/architectural-toon-realism)。概念图为 AI 生成的画风参考，其中建筑、河流、运动场不构成可靠地理数据。当前在线项目与模板仍是白模；本目录不会修改 GIS、导出模型或 viewer lock。
+第一份案例来自 [Open Campus: UO](https://github.com/williamQ96/open-campus-uo/tree/main/design/architectural-toon-realism)。概念图为 AI 生成的画风参考，其中建筑、河流、运动场不构成可靠地理数据。在线 UO 已有有限范围美术试点，模板仍默认合成白模并支持可选美术层；本目录不会修改 GIS、导出模型或 viewer lock。
 
 ## 推荐依据与代价
 

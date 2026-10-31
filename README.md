@@ -4,7 +4,7 @@
 
 Reusable tools for verified geographic data → editable Blender assets → GLB/glTF and interactive browser explorers.
 
-**v0.4 adds a runnable, configurable explorer template and safe creation/upgrade commands.** The reconstruction exchange remains schema v1. This upstream repository and the [Open Campus: UO](https://github.com/williamQ96/open-campus-uo) downstream and its [live explorer](https://williamq96.github.io/open-campus-uo/) are public.
+**v0.5 adds optional authored presentation layers, portable PBR / three-tone materials and safe scaffold copying.** The v0.4 explorer template and safe upgrades remain available. See [presentation methodology](docs/presentation-layers.md). The reconstruction exchange remains schema v1. This upstream repository and the [Open Campus: UO](https://github.com/williamQ96/open-campus-uo) downstream and its [live explorer](https://williamq96.github.io/open-campus-uo/) are public.
 
 ## Start with the browser template
 
@@ -62,7 +62,7 @@ The verified Windows portable Blender 4.5.15 LTS package had SHA-256 `52dd02fd74
 
 ## Recommended visual style
 
-The [style library](style/README.md) recommends **Architectural Toon Realism** by default, balancing architectural readability, asset production cost, maintenance and scalable rendering. It includes the original UO-origin concept mockup, exact palette, bilingual design guide and an evaluation plan. Other styles are actively encouraged. This is art-direction documentation; the explorer template remains whitebox and no toon renderer is enabled.
+The [style library](style/README.md) recommends **Architectural Toon Realism** by default, balancing architectural readability, asset production cost, maintenance and scalable rendering. It includes the original UO-origin concept mockup, exact palette, bilingual design guide and an evaluation plan. Other styles are actively encouraged. The template starts whitebox and now supports opt-in authored GLB / Toon presentation layers. See the [first UO pilot](https://github.com/williamQ96/open-campus-uo/blob/main/docs/visual-pilot.md) and [reusable method](docs/presentation-layers.md).
 
 ## Downstream projects
 

@@ -58,7 +58,7 @@ export function createBuildingLabels(scene, viewport, camera, onSelect) {
         );
       }
     },
-    update(time) {
+    update(time, view = "aerial") {
       if (!enabled && !selectedId) return;
       // Screen-facing labels stay horizontal at every orbit; declutter overlaps.
       if (time - lastUpdate > 120 || lastUpdate < 0) {
@@ -78,6 +78,14 @@ export function createBuildingLabels(scene, viewport, camera, onSelect) {
           );
         visibleCount = 0;
         for (const entry of sorted) {
+          if (
+            view !== "aerial" &&
+            entry.distance > 180 * 180 &&
+            entry.building.id !== selectedId
+          ) {
+            entry.button.hidden = true;
+            continue;
+          }
           projected.copy(entry.position).project(camera);
           let x = (projected.x * 0.5 + 0.5) * width,
             y = (-projected.y * 0.5 + 0.5) * height;

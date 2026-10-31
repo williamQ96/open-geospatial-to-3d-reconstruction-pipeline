@@ -70,6 +70,16 @@ def create_viewer(output, scene_dir=None):
             names.append(manifest['sources_url'])
         if (scene / 'viewer-settings.json').is_file():
             names.append('viewer-settings.json')
+            settings = json.loads((scene/'viewer-settings.json').read_text(encoding='utf-8-sig'))
+            presentation_name = settings.get('presentation_url')
+            if presentation_name:
+                presentation_path = (scene/presentation_name).resolve()
+                if not presentation_path.is_relative_to(scene) or ':' in presentation_name or Path(presentation_name).is_absolute():
+                    raise ValueError('Presentation paths must stay inside the scene directory.')
+                presentation = json.loads(presentation_path.read_text(encoding='utf-8-sig'))
+                if presentation.get('version') != 1:
+                    raise ValueError('Unsupported presentation contract')
+                names.extend([presentation_name, presentation['asset_url']])
         for name in names:
             path = (scene / name).resolve()
             if Path(name).is_absolute() or ':' in name or not path.is_relative_to(scene):

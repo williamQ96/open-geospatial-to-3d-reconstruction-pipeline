@@ -38,3 +38,7 @@ Browser tests use port 5174 so they can run alongside a normal local preview. Lo
 ## Licensing
 
 Software is [Apache-2.0](LICENSE). Original prose/design/synthetic-model contributions are [CC BY 4.0](public/licenses/CC-BY-4.0.txt). Preserve [NOTICE](NOTICE), attribution and third-party font/dependency notices. No hosting identity, credentials, UO logo or campus assets are included.
+
+## Optional authored art / 可选美术层
+
+Version 0.5 supports a separate presentation GLB, stable replacement IDs and Toon/PBR settings without rewriting geospatial evidence. `init-viewer --scene-dir` copies the optional art JSON and GLB; safe upgrades preserve downstream content. See [the contract and validation plan](https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline/blob/main/docs/presentation-layers.md) ([中文](https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline/blob/main/docs/zh-CN/presentation-layers.md)). The default synthetic scene does not opt in.

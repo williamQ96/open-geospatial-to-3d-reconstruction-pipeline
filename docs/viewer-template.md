@@ -32,4 +32,4 @@ Add other places through the [downstream registry](downstream-projects.md). Keep
 
 ## Art direction
 
-The [style library](../style/README.md) contains the default recommended Architectural Toon Realism design archive and welcomes alternatives. It documents a future rendering direction; `init-viewer` and `sync-viewer` still ship the current whitebox runtime. Keep style experiments separate from geographic evidence and managed runtime files until a reusable implementation has been reviewed.
+The [style library](../style/README.md) contains the default recommended Architectural Toon Realism design archive and welcomes alternatives. The default remains a synthetic whitebox, with optional authored GLB / Toon support described in [presentation layers](presentation-layers.md). Keep style experiments separate from geographic evidence and managed runtime files until a reusable implementation has been reviewed.

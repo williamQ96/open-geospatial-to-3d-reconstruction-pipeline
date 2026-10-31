@@ -50,3 +50,7 @@ Proposed quality levels: **Low** uses simple lighting and no decorative outline/
 - New artwork, components and datasets have provenance and appropriate attribution.
 
 Alternative styles should be assessed against the same functional and geographic contract. The default recommendation does not exclude more costly or experimental styles when their authors document the tradeoffs.
+
+## Pilot status / 原型状态
+
+The original plan above is retained. A first [UO visual pilot](https://github.com/williamQ96/open-campus-uo/blob/main/docs/visual-pilot.md) now implements authored GLB layering, three-tone/PBR switching, selected architectural features and illustrative landscaping. LOD/streaming, full-screen outlines/AO and hardware performance validation remain future work. See [the implemented layer contract](../../docs/presentation-layers.md).

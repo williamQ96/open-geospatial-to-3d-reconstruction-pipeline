@@ -39,3 +39,7 @@ Follow／第一人称／Overview 均记录帧耗时中位数及 p95、draw calls
 建议后续分级：Low 简化光照、无装饰描边／AO；Balanced 有边界的阴影和选择性描边；High 可增加接触阴影与植被。它们尚不是现有设置。降级不移除搜索标签、不改地理数据，保留标准 PBR 回退。
 
 未来实现需验证：地理版本与 ID 一致，近似标记保留；三模式／跳跃／移动／搜索／所选标签／小地图正常；远近建筑可辨识；有设备相关实测；Blender 可编辑、GLB 有标准材质；新增资产来源与署名完整。其他画风采用相同功能与地理契约，记录各自取舍即可。
+
+## Pilot status / 原型状态
+
+The original plan above is retained. A first [UO visual pilot](https://github.com/williamQ96/open-campus-uo/blob/main/docs/visual-pilot.md) now implements authored GLB layering, three-tone/PBR switching, selected architectural features and illustrative landscaping. LOD/streaming, full-screen outlines/AO and hardware performance validation remain future work. See [the implemented layer contract](../../docs/presentation-layers.md).

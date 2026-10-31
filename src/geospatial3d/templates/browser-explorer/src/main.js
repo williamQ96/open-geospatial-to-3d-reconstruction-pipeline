@@ -14,6 +14,7 @@ import {
 import { createBuildingLabels } from "./labels.js";
 import { createMinimap } from "./minimap.js";
 import { createBuildingSearch } from "./search.js";
+import { loadPresentation, setEmissive } from "./presentation.js";
 import { applyProfile } from "./profile.js";
 import "@fontsource-variable/dm-sans";
 import "@fontsource/ibm-plex-mono/latin-400.css";
@@ -37,7 +38,8 @@ let view = "aerial",
   half,
   model,
   terrainMesh,
-  drawMap;
+  drawMap,
+  presentation;
 let buildings = [],
   elapsed = 0,
   lastTime = 0,
@@ -145,11 +147,18 @@ function setView(next) {
       button.setAttribute("aria-pressed", String(button.dataset.view === view)),
     );
   if (view === "aerial") {
-    orbit.target.set(0, field ? sampleGround(field, 0, 0) + 5 : 0, 0);
+    const overview = presentation?.config.overview;
+    orbit.target.fromArray(
+      overview?.target || [0, field ? sampleGround(field, 0, 0) + 5 : 0, 0],
+    );
     const scale = half || 1000;
     camera.position
       .copy(orbit.target)
-      .add(new THREE.Vector3(scale * 1.5, scale * 2, scale * 1.65));
+      .add(
+        new THREE.Vector3(
+          ...(overview?.offset || [scale * 1.5, scale * 2, scale * 1.65]),
+        ),
+      );
     orbit.update();
   } else if (view === "first") {
     pitch = 0;
@@ -376,7 +385,7 @@ function cancelCameraTransition() {
   orbit.enableDamping = true;
 }
 function clearSelection() {
-  if (selected) selected.material.emissive.setHex(0);
+  setEmissive(selected, 0);
   selected = null;
   selectedId = searchFocusId = null;
   focusCameraTarget = selectedMapTarget = null;
@@ -391,7 +400,7 @@ function selectBuilding(id, { fromSearch = false } = {}) {
     clearSelection();
     return;
   }
-  if (selected) selected.material.emissive.setHex(0);
+  setEmissive(selected, 0);
   cancelCameraTransition();
   focusCameraTarget = null;
   selected = meshesById.get(id) || null;
@@ -401,14 +410,18 @@ function selectBuilding(id, { fromSearch = false } = {}) {
   labels.setSelected(record.name ? id : null);
   buildingSearch.setSelection(record);
   $("#selection").hidden = false;
-  if (selected) selected.material.emissive.setHex(0x273d1d);
+  setEmissive(selected, 0x273d1d);
   const title = document.createElement("strong");
   title.textContent = record.name || "Unidentified structure";
   const detail = document.createElement("span");
   detail.textContent =
-    (record.status === "approximate-context-placeholder"
-      ? "Approximate building envelope"
-      : "Historical roof estimate") +
+    (presentation?.config.replaces_building_ids.includes(id)
+      ? presentation.config.landmark_building_ids?.includes(id)
+        ? "Photo-informed art model · Approximate dimensions"
+        : "Stylized historical envelope"
+      : record.status === "approximate-context-placeholder"
+        ? "Approximate building envelope"
+        : "Historical roof estimate") +
     " · " +
     record.height_m.toFixed(1) +
     " m";
@@ -619,6 +632,12 @@ try {
   buildings = manifest.buildings;
   if (field.heights_m.length !== field.nx * field.ny)
     throw new Error("The terrain heightfield is incomplete.");
+  if (viewerSettings.presentation_url)
+    presentation = await loadPresentation(
+      base,
+      viewerSettings.presentation_url,
+      new Set(buildings.map((b) => b.id)),
+    );
   const gltf = await new GLTFLoader().loadAsync(base + manifest.model.url);
   model = gltf.scene;
   model.updateMatrixWorld(true);
@@ -634,6 +653,10 @@ try {
     }
     if (object.userData.asset_kind === "building") {
       const id = object.userData.asset_id || object.name;
+      if (presentation?.config.replaces_building_ids.includes(id)) {
+        remove.push(object);
+        return;
+      }
       meshesById.set(id, object);
       collisionMeshes.push(object);
       object.castShadow = true;
@@ -672,6 +695,47 @@ try {
     for (const part of contextGeometries) part.dispose();
   }
   if (!terrainMesh) throw new Error("The GLB does not contain terrain.");
+  if (presentation) {
+    model.add(presentation.root);
+    for (const [id, group] of presentation.groups) meshesById.set(id, group);
+    collisionMeshes.push(...presentation.collisionMeshes);
+    const light = presentation.config.lighting;
+    if (light) {
+      scene.background.set(light.background);
+      scene.fog.color.set(light.background);
+      const hemisphere = scene.children.find(
+        (child) => child.isHemisphereLight,
+      );
+      hemisphere.color.set(light.sky);
+      hemisphere.groundColor.set(light.ground);
+      hemisphere.intensity = light.ambient_intensity;
+      sun.color.set(light.sun);
+      sun.intensity = light.sun_intensity;
+      sun.target.position.fromArray(light.target);
+      scene.add(sun.target);
+      sun.position
+        .copy(sun.target.position)
+        .add(new THREE.Vector3(-220, 420, -180));
+      Object.assign(sun.shadow.camera, {
+        left: -470,
+        right: 470,
+        top: 470,
+        bottom: -470,
+        near: 1,
+        far: 1500,
+      });
+      sun.shadow.camera.updateProjectionMatrix();
+      sun.shadow.normalBias = 0.25;
+      sun.shadow.bias = -0.0004;
+    }
+    $("#toon-row").hidden = false;
+    $("#toon-setting").addEventListener("change", (event) => {
+      setEmissive(selected, 0);
+      presentation.setToon(event.target.checked);
+      setEmissive(selected, 0x273d1d);
+      renderer.shadowMap.needsUpdate = true;
+    });
+  }
   scene.add(model);
   labels.populate(buildings);
   buildingSearch.populate(buildings);
@@ -699,7 +763,7 @@ try {
     if (!dialog.open) updatePlayer(dt);
     updateCamera(dt);
     renderer.render(scene, camera);
-    labels.update(now);
+    labels.update(now, view);
     frames++;
     if (now - lastFps > 1000) {
       fps = Math.round((frames * 1000) / (now - lastFps));
@@ -748,6 +812,15 @@ try {
       blocked: isBlocked(player.x, player.z, buildings, half),
       ground: sampleGround(field, player.x, player.z),
       drawCalls: renderer.info.render.calls,
+      triangles: renderer.info.render.triangles,
+      presentation: presentation
+        ? {
+            id: presentation.config.id,
+            buildings: presentation.groups.size,
+            toon: $("#toon-setting").checked,
+            ...presentation.config.stats,
+          }
+        : null,
     }),
     setView,
     reset: resetPlayer,

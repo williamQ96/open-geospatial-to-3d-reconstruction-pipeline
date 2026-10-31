@@ -7,7 +7,7 @@
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "test": "node --test tests/world.test.js",
+    "test": "node --test tests/*.test.js",
     "test:browser": "playwright test",
     "format": "prettier --write src tests scripts index.html package.json playwright.config.js vite.config.js",
     "format:check": "prettier --check src tests scripts index.html package.json playwright.config.js vite.config.js",

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "colorSpace": "sRGB",
   "source": "https://chatgpt.com/share/6ae5adf2-4a74-83e8-b001-f9de17509c56",
-  "status": "art-direction reference; not applied to the current viewer",
+  "status": "source art-direction palette; first UO material pilot implemented, not measured material colors",
   "usage": "Suggested material base colors, not measured reflectance, official UO brand colors, or accessible UI color pairs.",
   "license": "CC-BY-4.0 to the extent copyright applies to original project contributions",
   "colors": [

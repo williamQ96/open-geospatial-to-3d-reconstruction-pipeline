@@ -63,3 +63,20 @@ class ScaffoldTests(unittest.TestCase):
             sync_viewer(target)
             self.assertEqual(json.loads(profile.read_text())['brand_name'],'Local project')
             self.assertEqual(json.loads(manifest.read_text())['project_id'],'local')
+
+    def test_optional_presentation_is_copied_and_cannot_escape_scene(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = create_viewer(root/'source')/'public/scene'
+            (source/'viewer-settings.json').write_text(json.dumps({'presentation_url':'art.json'}))
+            (source/'art.json').write_text(json.dumps({'version':1,'asset_url':'art.glb','replaces_building_ids':[]}))
+            (source/'art.glb').write_bytes(b'authored overlay fixture')
+            target = create_viewer(root/'target',source)
+            self.assertEqual((target/'public/scene/art.glb').read_bytes(), b'authored overlay fixture')
+            (source/'art.json').write_text(json.dumps({'version':1,'asset_url':'../escape.glb'}))
+            with self.assertRaisesRegex(ValueError, 'inside the scene'):
+                create_viewer(root/'unsafe',source)
+            self.assertFalse((root/'unsafe').exists())
+            (source/'viewer-settings.json').write_text(json.dumps({'presentation_url':'../escape.json'}))
+            with self.assertRaisesRegex(ValueError, 'inside the scene'):
+                create_viewer(root/'unsafe',source)

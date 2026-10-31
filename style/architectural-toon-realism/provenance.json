@@ -10,7 +10,7 @@
   "credit": "OpenCampus Architectural Toon Realism — Zhongyi “William” Qiu and contributors",
   "originProject": "https://github.com/williamQ96/open-campus-uo",
   "reusableArchive": "https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline/tree/main/style/architectural-toon-realism",
-  "status": "recommended art direction; not implemented in the current viewer",
+  "status": "archived art-direction reference; first UO visual pilot implemented separately",
   "mockup": {
     "file": "mockups/uo-campus-concept.png",
     "sourceAssetId": "file_00000000a5988230b7641ae1214aad0b",
@@ -69,8 +69,8 @@
     },
     {
       "path": "palette.json",
-      "bytes": 1260,
-      "sha256": "1acda9de946b58e6f7d85401f059ebfc1856417ec03d0ec0e55bca15451d2486"
+      "bytes": 1297,
+      "sha256": "a61a7a1f8abaac1bc49e211f48c9e281da3e1bb06f35e1268febc5a34e12abb4"
     },
     {
       "path": "style-prompt.txt",

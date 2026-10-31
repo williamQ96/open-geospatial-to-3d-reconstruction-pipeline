@@ -9,3 +9,7 @@
 上游 Python 命令 `init-viewer --output ../new-map --scene-dir <导出目录>` 可创建自己的地图项目；`sync-viewer` 按文件 hash 安全升级共享代码，保留具体项目资料。
 
 `npm test`、`npm run build`、`npm run test:browser` 负责检查；`npm run demo` 重建小型合成示例。代码采用 Apache-2.0，原创内容采用 CC BY 4.0；保留 NOTICE、署名和第三方字体／依赖条款。
+
+## Optional authored art / 可选美术层
+
+Version 0.5 supports a separate presentation GLB, stable replacement IDs and Toon/PBR settings without rewriting geospatial evidence. `init-viewer --scene-dir` copies the optional art JSON and GLB; safe upgrades preserve downstream content. See [the contract and validation plan](https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline/blob/main/docs/presentation-layers.md) ([中文](https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline/blob/main/docs/zh-CN/presentation-layers.md)). The default synthetic scene does not opt in.

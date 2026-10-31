@@ -10,4 +10,4 @@
 
 ## 美术方向
 
-[style 库](../../style/README.zh-CN.md)默认推荐 Architectural Toon Realism，也欢迎其他画风。该档案描述后续方向，`init-viewer`／`sync-viewer` 仍交付当前白模。风格实验不改变地理证据；通用实现评审前不修改受管运行时代码。
+[style 库](../../style/README.zh-CN.md)默认推荐 Architectural Toon Realism，也欢迎其他画风。默认仍是合成白模，现可接入[GLB／Toon 美术层](presentation-layers.md)。风格实验不改变地理证据；通用实现评审前不修改受管运行时代码。

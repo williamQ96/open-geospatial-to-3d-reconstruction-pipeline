@@ -63,7 +63,7 @@ The source explicitly contrasted Overview and First Person; the Follow column is
 - Exact palette tokens, the reusable [style prompt](style-prompt.txt) and the normalized [public final source guide](source-guide.zh-CN.md).
 - A staged [implementation/evaluation plan](implementation.md) and machine-readable [provenance](provenance.json).
 
-**Implementation status:** documentation and concept only. Toon materials, foliage, LOD, outline presets and style switching are proposed work, not features shipped by this archive. The current browser template stays whitebox with existing controls. No performance or cross-engine rendering parity has been established for this style.
+**Implementation status:** a first [UO pilot](https://github.com/williamQ96/open-campus-uo/blob/main/docs/visual-pilot.md) now implements an authored art layer, foliage and Toon/PBR switching. The template defaults to a synthetic whitebox and supports the optional layer. LOD, full-screen decorative outlines, hardware performance validation and cross-engine shader parity remain future work.
 
 ## Reuse and attribution
 
