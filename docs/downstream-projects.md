@@ -6,7 +6,7 @@ This registry starts with one real application and is designed to grow to other 
 
 | Project | Area / map | Repository | Live explorer | Focus |
 | --- | --- | --- | --- | --- |
-| **Open Campus: UO** | University of Oregon, main Eugene campus | [Source](https://github.com/williamQ96/open-campus-uo) | [Open map](https://opencampus-uo-williamq96.fluffy-chub-9311.chatgpt.site) | Historical terrain and placeholders, campus-specific refinement, paths, names and exploration |
+| **Open Campus: UO** | University of Oregon, main Eugene campus | [Source](https://github.com/williamQ96/open-campus-uo) | [Open map](https://williamq96.github.io/open-campus-uo/) | Historical terrain and placeholders, campus-specific refinement, paths, names and exploration |
 
 ## Register another map
 

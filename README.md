@@ -4,7 +4,7 @@
 
 Reusable tools for verified geographic data → editable Blender assets → GLB/glTF and interactive browser explorers.
 
-**v0.4 adds a runnable, configurable explorer template and safe creation/upgrade commands.** The reconstruction exchange remains schema v1. This upstream repository and the [Open Campus: UO](https://github.com/williamQ96/open-campus-uo) downstream and its [live explorer](https://opencampus-uo-williamq96.fluffy-chub-9311.chatgpt.site) are public.
+**v0.4 adds a runnable, configurable explorer template and safe creation/upgrade commands.** The reconstruction exchange remains schema v1. This upstream repository and the [Open Campus: UO](https://github.com/williamQ96/open-campus-uo) downstream and its [live explorer](https://williamq96.github.io/open-campus-uo/) are public.
 
 ## Start with the browser template
 
@@ -64,7 +64,7 @@ The verified Windows portable Blender 4.5.15 LTS package had SHA-256 `52dd02fd74
 
 | Project | Map | Source | Live explorer |
 | --- | --- | --- | --- |
-| **Open Campus: UO** | University of Oregon, main Eugene campus | [Repository](https://github.com/williamQ96/open-campus-uo) | [Open map](https://opencampus-uo-williamq96.fluffy-chub-9311.chatgpt.site) |
+| **Open Campus: UO** | University of Oregon, main Eugene campus | [Repository](https://github.com/williamQ96/open-campus-uo) | [Open map](https://williamq96.github.io/open-campus-uo/) |
 
 This is the first entry in an expandable [downstream registry](docs/downstream-projects.md). Additional campuses, neighborhoods and other maps can reuse the template while maintaining their own data and refinement goals.
 

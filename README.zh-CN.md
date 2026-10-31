@@ -21,7 +21,7 @@ npm run dev
 
 | 项目 | 地图 | 源码 | 在线运行 |
 | --- | --- | --- | --- |
-| **Open Campus: UO** | UO 主 Eugene 校园 | [仓库](https://github.com/williamQ96/open-campus-uo) | [打开地图](https://opencampus-uo-williamq96.fluffy-chub-9311.chatgpt.site) |
+| **Open Campus: UO** | UO 主 Eugene 校园 | [仓库](https://github.com/williamQ96/open-campus-uo) | [打开地图](https://williamq96.github.io/open-campus-uo/) |
 
 这是[下游登记表](docs/zh-CN/downstream-projects.md)的第一条，后续可继续增加其他校园、街区和地图。
 
