@@ -1,0 +1,51 @@
+{
+  "name": "Architectural Toon Realism",
+  "version": "1.0.0",
+  "colorSpace": "sRGB",
+  "source": "https://chatgpt.com/share/6ae5adf2-4a74-83e8-b001-f9de17509c56",
+  "status": "art-direction reference; not applied to the current viewer",
+  "usage": "Suggested material base colors, not measured reflectance, official UO brand colors, or accessible UI color pairs.",
+  "license": "CC-BY-4.0 to the extent copyright applies to original project contributions",
+  "colors": [
+    {
+      "id": "brick-red",
+      "name": "Brick Red",
+      "hex": "#B96F55"
+    },
+    {
+      "id": "warm-stone",
+      "name": "Warm Stone",
+      "hex": "#E4D6BB"
+    },
+    {
+      "id": "roof-gray",
+      "name": "Roof Gray",
+      "hex": "#A8ADB0"
+    },
+    {
+      "id": "glass-blue",
+      "name": "Glass Blue",
+      "hex": "#8FAEAE"
+    },
+    {
+      "id": "grass-green",
+      "name": "Grass Green",
+      "hex": "#91B66F"
+    },
+    {
+      "id": "foliage-green",
+      "name": "Foliage Green",
+      "hex": "#658B54"
+    },
+    {
+      "id": "deep-evergreen",
+      "name": "Deep Evergreen",
+      "hex": "#385A45"
+    },
+    {
+      "id": "path-sand",
+      "name": "Path Sand",
+      "hex": "#CDBB9F"
+    }
+  ]
+}

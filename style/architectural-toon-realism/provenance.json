@@ -1,0 +1,86 @@
+{
+  "archiveVersion": 1,
+  "archivedOn": "2026-10-31",
+  "style": "Architectural Toon Realism",
+  "source": {
+    "url": "https://chatgpt.com/share/6ae5adf2-4a74-83e8-b001-f9de17509c56",
+    "title": "画风选择建议",
+    "kind": "user-supplied public ChatGPT shared conversation"
+  },
+  "credit": "OpenCampus Architectural Toon Realism — Zhongyi “William” Qiu and contributors",
+  "originProject": "https://github.com/williamQ96/open-campus-uo",
+  "reusableArchive": "https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline/tree/main/style/architectural-toon-realism",
+  "status": "recommended art direction; not implemented in the current viewer",
+  "mockup": {
+    "file": "mockups/uo-campus-concept.png",
+    "sourceAssetId": "file_00000000a5988230b7641ae1214aad0b",
+    "sourceTitle": "Stylized University Campus Aerial Map",
+    "aiGenerated": true,
+    "width": 1672,
+    "height": 941,
+    "mimeType": "image/png",
+    "transformations": "none; original downloaded PNG bytes",
+    "geographicEvidence": false,
+    "caveat": "Illustrates visual direction only. Buildings, road details, river, sports grounds and vegetation are not verified UO data."
+  },
+  "palette": {
+    "origin": "eight exact values in the final public guide interactive palette widget",
+    "colorSpace": "sRGB",
+    "officialBrandColors": false
+  },
+  "sourceGuide": {
+    "language": "zh-CN",
+    "edits": [
+      "Normalized final public answer to Markdown",
+      "Restored palette table from its interactive widget",
+      "Omitted third-party image widgets and suggested follow-up actions",
+      "Added archive context; source style rules do not constrain other styles"
+    ]
+  },
+  "editorialAdditions": [
+    "English guide and translations",
+    "Follow-mode detail guidance",
+    "Default-recommendation policy with alternatives",
+    "Production, maintenance and runtime evaluation gates",
+    "UO rollout plan and implementation-status clarification"
+  ],
+  "excluded": [
+    {
+      "kind": "third-party reference/search imagery",
+      "reason": "Not project artwork; linked context only, not redistributed or relicensed"
+    },
+    {
+      "kind": "two initial UO screenshot attachments",
+      "reason": "Public share presents uploaded-image placeholders without downloadable originals; not reconstructed or replaced"
+    }
+  ],
+  "rights": {
+    "originalDocumentationAndDesign": "CC-BY-4.0",
+    "aiConcept": "Offered under CC-BY-4.0 to the extent of copyrightable rights held by the project; no exclusive right in an artistic style is claimed.",
+    "software": "Apache-2.0",
+    "thirdPartyMaterial": "Retains its source terms; not relicensed",
+    "notice": "Retain credit and license, link sources and indicate modifications. No trademark rights or institutional/game endorsement implied."
+  },
+  "files": [
+    {
+      "path": "mockups/uo-campus-concept.png",
+      "bytes": 3513328,
+      "sha256": "5a709b45b91296dfa80c031e4ab289a854d7e20f30fc14aa3e4f497c203767bb"
+    },
+    {
+      "path": "palette.json",
+      "bytes": 1260,
+      "sha256": "1acda9de946b58e6f7d85401f059ebfc1856417ec03d0ec0e55bca15451d2486"
+    },
+    {
+      "path": "style-prompt.txt",
+      "bytes": 787,
+      "sha256": "dce4699b45bd85dd870658fab1120448b295e7193ea8519ec92d1d24748e32b1"
+    },
+    {
+      "path": "source-guide.zh-CN.md",
+      "bytes": 7420,
+      "sha256": "b8b59ee23ed41d52ac34200da92a8b245ca387d68536a7cee05f53126bdac9ce"
+    }
+  ]
+}

@@ -29,3 +29,7 @@ The runtime uses the supported Three.js `PCFShadowMap` rather than the removed s
 ## Extension rules
 
 Add other places through the [downstream registry](downstream-projects.md). Keep factual source terms and third-party notices separate from project licenses. Code/template software is Apache-2.0; original docs/design/model contributions are CC BY 4.0. The synthetic demo does not claim a real geographic origin or survey accuracy.
+
+## Art direction
+
+The [style library](../style/README.md) contains the default recommended Architectural Toon Realism design archive and welcomes alternatives. It documents a future rendering direction; `init-viewer` and `sync-viewer` still ship the current whitebox runtime. Keep style experiments separate from geographic evidence and managed runtime files until a reusable implementation has been reviewed.

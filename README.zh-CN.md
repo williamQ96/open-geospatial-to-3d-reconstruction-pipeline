@@ -17,6 +17,10 @@ npm run dev
 
 传入 `--scene-dir <导出目录>` 可创建自己的地图。修改 `public/viewer-profile.json`、场景与出生偏好完成项目定制。`sync-viewer --output <项目>` 按原有 hash 升级共享代码，保留资料并拒绝覆盖本地修改。见[模板文档](src/geospatial3d/templates/browser-explorer/README.zh-CN.md)。
 
+## 推荐画风
+
+[style 画风库](style/README.zh-CN.md)默认推荐 **Architectural Toon Realism（建筑卡通写实）**，综合考虑视觉可读性、制作成本、维护和运行。包含 UO 来源原始概念图、精确调色板、双语规范与评估计划，同时鼓励探索其他画风。本次是美术档案，模板仍为白模，尚未启用 Toon 渲染器。
+
 ## 下游项目
 
 | 项目 | 地图 | 源码 | 在线运行 |

@@ -7,3 +7,7 @@
 `init-viewer --output <新目录>` 创建含合成场景的独立项目，拒绝覆盖非空目录；`--scene-dir` 可导入已验证导出物并拒绝目录越界。`sync-viewer --output <项目>` 只升级共享代码、HTML 与 Vite 配置；文件 hash 先核查本地修改，项目数据、品牌、部署身份和凭据保持独立。首次接入使用 `--adopt`。
 
 重建锁和模板锁分别记录实际来源；UI 升级不伪造旧几何的重建版本。模板通过真实合成 GLB、地形采样、搜索、三种模式、移动／跳跃和窄屏测试。资产署名可写入 manifest、Blender 与 GLB；代码 Apache-2.0、原创内容 CC BY 4.0，保留第三方条款。
+
+## 美术方向
+
+[style 库](../../style/README.zh-CN.md)默认推荐 Architectural Toon Realism，也欢迎其他画风。该档案描述后续方向，`init-viewer`／`sync-viewer` 仍交付当前白模。风格实验不改变地理证据；通用实现评审前不修改受管运行时代码。

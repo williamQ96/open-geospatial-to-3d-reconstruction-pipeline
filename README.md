@@ -60,6 +60,10 @@ First runs fetch fixed-checksum sources; later runs verify the cache. Output inc
 
 The verified Windows portable Blender 4.5.15 LTS package had SHA-256 `52dd02fd74877fa08e74b67d7854cf32468a232c02aaa19b6844c91285574f8d`. Python versions are pinned in `requirements.lock.txt`.
 
+## Recommended visual style
+
+The [style library](style/README.md) recommends **Architectural Toon Realism** by default, balancing architectural readability, asset production cost, maintenance and scalable rendering. It includes the original UO-origin concept mockup, exact palette, bilingual design guide and an evaluation plan. Other styles are actively encouraged. This is art-direction documentation; the explorer template remains whitebox and no toon renderer is enabled.
+
 ## Downstream projects
 
 | Project | Map | Source | Live explorer |
