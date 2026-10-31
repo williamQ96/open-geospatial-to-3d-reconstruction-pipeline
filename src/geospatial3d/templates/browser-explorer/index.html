@@ -25,14 +25,24 @@
             >Geospatial Explorer</span
           ><span id="brand-kicker" class="campus-wordmark">3D EXPLORER</span></a
         >
-        <button
-          id="settings-open"
-          class="settings-button"
-          aria-haspopup="dialog"
-          aria-controls="settings-dialog"
-        >
-          <span aria-hidden="true">⚙</span> Settings / About
-        </button>
+        <div class="header-actions">
+          <button
+            id="directions-open"
+            aria-controls="directions-panel"
+            aria-expanded="false"
+            hidden
+            title="Directions"
+          >
+            ↗ <span>Directions</span></button
+          ><button
+            id="settings-open"
+            class="settings-button"
+            aria-haspopup="dialog"
+            aria-controls="settings-dialog"
+          >
+            <span aria-hidden="true">⚙</span> Settings / About
+          </button>
+        </div>
       </header>
       <section
         id="building-search"
@@ -83,6 +93,46 @@
           ></div>
           <p class="search-status" role="status" aria-live="polite"></p>
         </div>
+      </section>
+      <section
+        id="directions-panel"
+        class="directions-panel"
+        aria-label="Outdoor directions"
+        hidden
+      >
+        <div class="route-heading">
+          <strong>Directions</strong
+          ><button id="directions-close" aria-label="Close directions">
+            ×
+          </button>
+        </div>
+        <div class="route-endpoint">
+          <b>A</b><span id="route-a">Choose starting point</span>
+        </div>
+        <div class="route-actions">
+          <button data-route-search data-endpoint="a">Search A</button
+          ><button data-pin data-endpoint="a">Pin A on map</button>
+        </div>
+        <div class="route-endpoint">
+          <b>B</b><span id="route-b">Choose destination</span>
+        </div>
+        <div class="route-actions">
+          <button data-route-search data-endpoint="b">Search B</button
+          ><button data-pin data-endpoint="b">Pin B on map</button>
+        </div>
+        <div class="route-actions">
+          <button id="route-start" disabled>Start route</button
+          ><button id="route-fit" disabled>Fit route</button
+          ><button id="route-clear">Clear</button>
+        </div>
+        <p id="route-status" role="status" aria-live="polite">
+          Choose A and B in Overview, or a destination while walking.
+        </p>
+        <small
+          >Approximate outdoor paths. Building destinations stop at a nearby
+          approach; entrances and accessibility are unverified. Map pins are
+          available in Overview.</small
+        >
       </section>
       <nav class="view-switch" aria-label="Camera view">
         <button data-view="third" aria-pressed="false">
@@ -166,6 +216,27 @@
               ></span
             ><input id="toon-setting" type="checkbox" checked
           /></label>
+          <div id="immersion-settings" hidden>
+            <h2>Campus life</h2>
+            <label class="setting-row"
+              ><span
+                >People and traffic<small
+                  >Scripted walkers, bicycles, scooters and cars.</small
+                ></span
+              ><input id="people-setting" type="checkbox" checked
+            /></label>
+            <label class="setting-row"
+              ><span
+                >Parked vehicles and props<small
+                  >Illustrative static objects.</small
+                ></span
+              ><input id="props-setting" type="checkbox" checked
+            /></label>
+            <p>
+              Turn both off for a clean map. Activity is illustrative, not live
+              campus data.
+            </p>
+          </div>
           <h2>Controls</h2>
           <p>
             Search frames a building in Overview. In Follow and First person, it

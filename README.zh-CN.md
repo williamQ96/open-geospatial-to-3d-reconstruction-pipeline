@@ -59,3 +59,7 @@ python -m venv .venv
 [历史 README](docs/zh-CN/README-pre-template.md)保留早期实现记录；[架构](docs/zh-CN/architecture.md)与[方法说明](docs/zh-CN/viewer-template.md)提供更多背景。
 
 [流量与统计](docs/zh-CN/analytics.md)：仓库流量私有归档与显式配置的 GoatCounter 网页／交互统计。
+
+## 校园活动与室外导航
+
+模板新增可选骨骼角色、NPC／交通、独立的默认开启开关及按视角区分起点的 A／B 导航。[接口与可复用方法](docs/campus-life-navigation.zh-CN.md)。具体路线、配色、素材归档由下游维护。

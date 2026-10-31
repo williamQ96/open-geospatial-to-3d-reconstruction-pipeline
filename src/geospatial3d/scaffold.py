@@ -71,6 +71,8 @@ def create_viewer(output, scene_dir=None):
         if (scene / 'viewer-settings.json').is_file():
             names.append('viewer-settings.json')
             settings = json.loads((scene/'viewer-settings.json').read_text(encoding='utf-8-sig'))
+            for key in ['navigation_url','activity_url']:
+                if settings.get(key):names.append(settings[key])
             presentation_name = settings.get('presentation_url')
             if presentation_name:
                 presentation_path = (scene/presentation_name).resolve()

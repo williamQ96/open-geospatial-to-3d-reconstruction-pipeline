@@ -85,3 +85,7 @@ See [maintenance](MAINTENANCE.md), [architecture](docs/architecture.md), [roadma
 Code and template software use **Apache-2.0**; original documentation and model/design contributions use **CC BY 4.0**. See [licensing and attribution](LICENSING.md) and [NOTICE](NOTICE). Third-party material retains its own terms.
 
 [Traffic and analytics](docs/analytics.md): private repository-history archiving and optional, explicitly configured GoatCounter page/interaction statistics.
+
+## Campus life and outdoor routing
+
+The optional browser extension adds rigged heroes, scripted walkers/bicycles/scooters/road cars, independent default-on immersion switches and mode-aware A/B navigation with animated chevrons. [Contracts, reusable graph generation, asset licensing and limitations](docs/campus-life-navigation.md). Local routes, clothing colors and open asset archives stay downstream.

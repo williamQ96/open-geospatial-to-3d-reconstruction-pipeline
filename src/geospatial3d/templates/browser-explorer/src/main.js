@@ -14,15 +14,24 @@ import {
 import { createBuildingLabels } from "./labels.js";
 import { createMinimap } from "./minimap.js";
 import { createBuildingSearch } from "./search.js";
-import { loadPresentation, setEmissive } from "./presentation.js";
+import {
+  loadPresentation,
+  setEmissive,
+  sceneAssetUrl,
+} from "./presentation.js";
 import { createTouchControls } from "./touch.js";
 import { createAnalytics } from "./analytics.js";
+import { loadStudentFactory } from "./student.js";
+import { createRouter, distance } from "./routing.js";
+import { createNavigation } from "./navigation.js";
+import { createCampusLife } from "./life.js";
 import { applyProfile } from "./profile.js";
 import "@fontsource-variable/dm-sans";
 import "@fontsource/ibm-plex-mono/latin-400.css";
 import "@fontsource/ibm-plex-mono/latin-500.css";
 import "./style.css";
 
+let navigation, life, studentFactory;
 let analytics = { event() {} };
 const $ = (selector) => document.querySelector(selector);
 const viewport = $("#viewport"),
@@ -112,7 +121,7 @@ orbit.dampingFactor = 0.07;
 orbit.minDistance = 12;
 orbit.maxDistance = 6000;
 orbit.maxPolarAngle = Math.PI * 0.48;
-const character = createCharacter();
+let character = createCharacter();
 character.root.traverse((object) => {
   if (object.isMesh) object.castShadow = false;
 });
@@ -203,6 +212,7 @@ function setView(next) {
     camera.lookAt(player.clone().add(new THREE.Vector3(0, 1.58, 0)));
   }
   if (searchFocusId) focusBuilding(searchFocusId, { animate: false });
+  navigation?.modeChanged();
 }
 document
   .querySelectorAll("[data-view]")
@@ -468,6 +478,7 @@ function focusBuilding(id, { animate = true } = {}) {
   drag = null;
   touchControls.reset();
   selectBuilding(id, { fromSearch: true });
+  navigation?.acceptBuilding(record);
   const anchor = buildingAnchor(record);
   if (view === "aerial") {
     const target = anchor.clone();
@@ -528,6 +539,20 @@ function focusBuilding(id, { animate = true } = {}) {
   viewport.focus({ preventScroll: true });
 }
 function selectAt(event) {
+  if (navigation?.picking) {
+    const rect = renderer.domElement.getBoundingClientRect();
+    raycaster.setFromCamera(
+      new THREE.Vector2(
+        ((event.clientX - rect.left) / rect.width) * 2 - 1,
+        (-(event.clientY - rect.top) / rect.height) * 2 + 1,
+      ),
+      camera,
+    );
+    const hit = raycaster.intersectObject(terrainMesh, true)[0];
+    if (hit) navigation.pin([hit.point.x, -hit.point.z]);
+    return;
+  }
+
   const box = renderer.domElement.getBoundingClientRect();
   raycaster.setFromCamera(
     new THREE.Vector2(
@@ -781,6 +806,100 @@ try {
     });
   }
   scene.add(model);
+  if (profile.character?.asset_url) {
+    studentFactory = await loadStudentFactory(
+      sceneAssetUrl(import.meta.env.BASE_URL, profile.character.asset_url),
+    );
+    scene.remove(character.root);
+    character = studentFactory();
+    scene.add(character.root);
+  }
+  if (viewerSettings.navigation_url) {
+    const graph = await loadJson(
+      sceneAssetUrl(base, viewerSettings.navigation_url),
+    );
+    const clearSegment = (a, b) => {
+      const steps = Math.max(1, Math.ceil(distance(a, b) / 2));
+      for (let i = 0; i <= steps; i++) {
+        const x = a[0] + ((b[0] - a[0]) * i) / steps,
+          n = a[1] + ((b[1] - a[1]) * i) / steps;
+        if (isBlocked(x, -n, buildings, half, 0.5)) return false;
+      }
+      return true;
+    };
+    const surfaces = [];
+    model.traverse((o) => {
+      if (o.isMesh && o.userData.asset_kind === "landscape-surface")
+        surfaces.push(o);
+    });
+    model.updateMatrixWorld(true);
+    const surfaceRay = new THREE.Raycaster(),
+      heightCache = new Map();
+    const ground = (x, z) => {
+      const key = Math.round(x * 2) + "," + Math.round(z * 2);
+      if (heightCache.has(key)) return heightCache.get(key);
+      const y = sampleGround(field, x, z);
+      surfaceRay.set(
+        new THREE.Vector3(x, y + 20, z),
+        new THREE.Vector3(0, -1, 0),
+      );
+      const hit = surfaceRay.intersectObjects(surfaces, false)[0];
+      const height = Math.max(y, hit?.point.y ?? y);
+      heightCache.set(key, height);
+      return height;
+    };
+    const router = createRouter(graph, clearSegment);
+    navigation = createNavigation({
+      scene,
+      router,
+      ground,
+      getView: () => view,
+      getPlayer: () => player,
+      focusSearch: () => {
+        $("#building-search-input").focus();
+        $("#building-search-input").select();
+      },
+      canPin: (p) => clearSegment(p, p),
+      fitRoute: (points) => {
+        if (view !== "aerial") return;
+        cancelCameraTransition();
+        const bounds = new THREE.Box3().setFromPoints(
+            points.map(
+              (p) => new THREE.Vector3(p[0], ground(p[0], -p[1]), -p[1]),
+            ),
+          ),
+          target = bounds.getCenter(new THREE.Vector3()),
+          size = bounds.getSize(new THREE.Vector3());
+        const span = Math.max(65, size.x, size.z) / Math.min(1, camera.aspect);
+        orbit.target.copy(target);
+        camera.position
+          .copy(target)
+          .add(new THREE.Vector3(span * 0.6, span * 1.2, span));
+        orbit.update();
+      },
+    });
+    $("#directions-open").hidden = false;
+    if (viewerSettings.activity_url) {
+      const activity = await loadJson(
+        sceneAssetUrl(base, viewerSettings.activity_url),
+      );
+      life = createCampusLife({
+        scene,
+        router,
+        activity,
+        studentFactory: studentFactory || createCharacter,
+        ground,
+        clearSegment,
+      });
+      $("#immersion-settings").hidden = false;
+      $("#people-setting").addEventListener("change", (e) =>
+        life.setPeople(e.target.checked),
+      );
+      $("#props-setting").addEventListener("change", (e) =>
+        life.setProps(e.target.checked),
+      );
+    }
+  }
   labels.populate(buildings);
   buildingSearch.populate(buildings);
   resetPlayer();
@@ -806,6 +925,8 @@ try {
     elapsed += dt;
     if (!dialog.open) updatePlayer(dt);
     updateCamera(dt);
+    navigation?.update(elapsed);
+    if (!dialog.open) life?.update(dt);
     renderer.render(scene, camera);
     labels.update(now, view);
     frames++;
@@ -814,7 +935,7 @@ try {
       frames = 0;
       lastFps = now;
     }
-    drawMap(player, yaw, selectedMapTarget);
+    drawMap(player, yaw, selectedMapTarget, navigation?.points);
     const heading = new THREE.Vector3();
     camera.getWorldDirection(heading);
     $(".compass i").style.transform =
@@ -831,6 +952,9 @@ try {
   window.__campus = {
     getState: () => ({
       ready: true,
+      riggedHero: !!character.rigged,
+      life: life?.state() || null,
+      navigation: navigation?.state() || null,
       view,
       followDistance,
       player: player.toArray(),

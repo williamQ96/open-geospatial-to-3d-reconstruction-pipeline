@@ -890,3 +890,139 @@ dialog::backdrop {
     max-width: 210px;
   }
 }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#directions-open {
+  color: var(--ink, #204d3d);
+  border: 1px solid #bbc5bb;
+  background: #f6f7f1e8;
+  padding: 10px 14px;
+  min-height: 44px;
+  cursor: pointer;
+  font: inherit;
+}
+.directions-panel {
+  position: absolute;
+  z-index: 12;
+  top: 166px;
+  left: 30px;
+  width: 320px;
+  padding: 16px;
+  color: #24483b;
+  background: #f5f6eff5;
+  border: 1px solid #c7d2c5;
+  box-shadow: 0 12px 35px #193e2920;
+  max-height: calc(100dvh - 280px);
+  overflow: auto;
+}
+.route-heading,
+.route-endpoint,
+.route-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.route-heading {
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.route-heading button {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  background: transparent;
+  font-size: 24px;
+  cursor: pointer;
+}
+.route-endpoint b {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #2779d7;
+  color: white;
+  text-align: center;
+  line-height: 24px;
+  flex-shrink: 0;
+  font-size: 12px;
+}
+.route-endpoint span {
+  font-size: 14px;
+}
+.route-actions {
+  margin: 8px 0 12px 32px;
+  flex-wrap: wrap;
+}
+.route-actions button {
+  font: inherit;
+  font-size: 12px;
+  padding: 8px;
+  min-height: 36px;
+  border: 1px solid #b8c7bc;
+  color: #24483b;
+  background: #fff8;
+  cursor: pointer;
+}
+.route-actions button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+#route-start {
+  background: #245b45;
+  color: white;
+}
+#route-status {
+  font-size: 13px;
+  margin: 10px 0;
+}
+.directions-panel small {
+  display: block;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #68796d;
+}
+#viewport.pinning {
+  cursor: crosshair;
+}
+@media (max-width: 600px), (max-height: 600px) and (pointer: coarse) {
+  .header-actions {
+    gap: 4px;
+  }
+  #directions-open {
+    padding: 0;
+    width: 44px;
+    font-size: 24px;
+  }
+  #directions-open span {
+    display: none;
+  }
+  .directions-panel {
+    top: 122px;
+    left: 12px;
+    width: calc(100% - 24px);
+    max-height: calc(100dvh - 205px);
+    padding: 12px;
+  }
+  .directions-visible .map-panel {
+    visibility: hidden;
+  }
+  .route-actions button {
+    min-height: 40px;
+  }
+}
+
+.header-actions {
+  pointer-events: auto;
+}
+.directions-visible .campus-search {
+  z-index: 20;
+}
+
+.directions-panel.is-pinning .route-endpoint,
+.directions-panel.is-pinning .route-actions,
+.directions-panel.is-pinning small {
+  display: none;
+}

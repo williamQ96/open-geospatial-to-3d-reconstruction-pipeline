@@ -40,8 +40,17 @@ export function createMinimap(canvas, buildings, half, corridors = []) {
     b.fill();
   }
   const context = canvas.getContext("2d");
-  return (player, yaw, target) => {
+  return (player, yaw, target, route = []) => {
     context.drawImage(background, 0, 0);
+    if (route?.length) {
+      context.beginPath();
+      route.forEach(([x, n], i) =>
+        i ? context.lineTo(...point(x, n)) : context.moveTo(...point(x, n)),
+      );
+      context.strokeStyle = "#2584ef";
+      context.lineWidth = 2.5;
+      context.stroke();
+    }
     if (target) {
       const [x, y] = point(target.x, -target.z);
       context.beginPath();

@@ -80,3 +80,15 @@ class ScaffoldTests(unittest.TestCase):
             (source/'viewer-settings.json').write_text(json.dumps({'presentation_url':'../escape.json'}))
             with self.assertRaisesRegex(ValueError, 'inside the scene'):
                 create_viewer(root/'unsafe',source)
+
+    def test_optional_navigation_assets_are_copied_and_confined(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            source=create_viewer(root/'source')/'public/scene'
+            (source/'viewer-settings.json').write_text(json.dumps({'navigation_url':'graph.json','activity_url':'life.json'}))
+            for name in ['graph.json','life.json']:(source/name).write_text('{"version":1}')
+            target=create_viewer(root/'target',source)
+            for name in ['graph.json','life.json']:self.assertEqual((target/'public/scene'/name).read_text(),'{"version":1}')
+            (source/'viewer-settings.json').write_text(json.dumps({'navigation_url':'../escape.json'}))
+            with self.assertRaisesRegex(ValueError,'inside the scene'):create_viewer(root/'unsafe',source)
+            self.assertFalse((root/'unsafe').exists())
