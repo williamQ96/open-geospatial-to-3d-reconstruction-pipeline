@@ -83,6 +83,20 @@ def main():
         bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
         bm.to_mesh(obj.data)
         bm.free()
+    corridor_collection = bpy.data.collections.new("Terrain-draped roads and paths")
+    scene.collection.children.link(corridor_collection)
+    corridor_mats = {
+        'road': material('Roads | charcoal grey', (.12, .14, .16)),
+        'path': material('Paths | light mineral', (.47, .48, .46)),
+    }
+    for surface in bundle.get('corridor_surfaces', []):
+        obj = mesh_object(surface['id'], surface['vertices_enu_m'], surface['triangles'],
+                          corridor_mats[surface['kind']], corridor_collection)
+        obj['asset_id'] = surface['id']
+        obj['asset_kind'] = 'corridor'
+        obj['corridor_kind'] = surface['kind']
+        obj['reconstruction_status'] = 'estimated-width-terrain-draped'
+    scene["corridor_provenance_json"] = json.dumps(bundle.get('corridors', {}))
     scene["coordinate_frame_json"] = json.dumps(bundle["coordinate_frame"])
     scene["source_ids_json"] = json.dumps([s["id"] for s in bundle["sources"]])
     scene["pipeline_version"] = bundle["pipeline"]["version"]

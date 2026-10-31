@@ -47,8 +47,20 @@ def build(args):
         jsonschema.validate(catalog, annotation_schema)
         annotate(bundle, catalog)
         bundle['annotations']['catalog_sha256'] = sha256(catalog_path)
-        write_json(output / 'reconstruction.json', bundle)
-        write_json(output / 'quality.json', bundle['quality'])
+    if config.get('corridors_file'):
+        from .corridors import add_corridors
+        catalog_path = (config_path.parent / config['corridors_file']).resolve()
+        catalog = json.loads(catalog_path.read_text(encoding='utf-8'))
+        corridor_schema = json.loads((Path(__file__).parent / 'schemas/corridors.schema.json').read_text())
+        jsonschema.validate(catalog, corridor_schema)
+        print('Draping road/path corridors onto terrain', flush=True)
+        add_corridors(bundle, catalog)
+        bundle['corridors']['catalog_sha256'] = sha256(catalog_path)
+    write_json(output / 'reconstruction.json', bundle)
+    write_json(output / 'quality.json', bundle['quality'])
+    write_json(output / 'sources.json', {'sources': bundle['sources'],
+                                       'corridor_sources': bundle.get('corridors', {}).get('sources', []),
+                                       'coordinate_frame': bundle['coordinate_frame']})
     print(json.dumps(bundle["quality"], indent=2), flush=True)
     script = Path(__file__).parent / "blender_export.py"
     blender = Path(args.blender).resolve()
@@ -60,7 +72,8 @@ def build(args):
                                 stdout=log, stderr=subprocess.STDOUT, text=True)
     if result.returncode:
         raise RuntimeError(f"Blender failed; inspect {output / 'blender.log'}")
-    validation = validate_glb(output / "campus.glb", [b["id"] for b in bundle["buildings"]])
+    validation = validate_glb(output / "campus.glb", [b["id"] for b in bundle["buildings"]] +
+                              bundle.get('corridors', {}).get('surface_nodes', []))
     manifest = {
         "schema_version": 1, "project_id": config["project_id"], "title": config["title"],
         "status": "historical-whitebox", "aoi_size_m": bundle["aoi_size_m"],
@@ -71,7 +84,8 @@ def build(args):
         "spawn_enu_m": config.get("spawn_enu_m", [0, 0]),
         "model": {"url": "campus.glb", "sha256": sha256(output / "campus.glb"), **validation},
         "heightfield_url": "heightfield.json", "sources_url": "sources.json", "quality": bundle["quality"],
-        "buildings": bundle["buildings"], "annotations": bundle.get('annotations'), "limitations": [
+        "buildings": bundle["buildings"], "annotations": bundle.get('annotations'),
+        "corridors": bundle.get('corridors'), "limitations": [
             "Historical airborne LiDAR, not a current campus survey.",
             "Buildings are heuristic placeholders; no authoritative footprint or facade claims.",
             "No independent control-point accuracy validation yet."

@@ -20,6 +20,16 @@
       "type": "object", "required": ["url", "sha256", "glb_bytes"],
       "properties": {"url": {"const": "campus.glb"}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "glb_bytes": {"type": "integer", "minimum": 20}}
     },
+    "corridors": {
+      "type": ["object", "null"],
+      "required": ["features", "sources", "surface_nodes", "catalog_sha256"],
+      "properties": {
+        "features": {"type": "array", "items": {"type": "object", "required": ["id", "name", "kind", "width_m", "source_id", "centerline_enu_m"], "properties": {"id": {"type": "string"}, "kind": {"enum": ["road", "path"]}, "width_m": {"type": "number", "exclusiveMinimum": 0}, "centerline_enu_m": {"type": "array", "minItems": 2, "items": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}}}}}},
+        "sources": {"type": "array"},
+        "surface_nodes": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "catalog_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
     "heightfield_url": {"const": "heightfield.json"},
     "source_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
     "buildings": {
