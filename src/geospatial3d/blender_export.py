@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Run with Blender --background --factory-startup --python this_file -- INPUT OUTPUT."""
 
 import json
@@ -101,9 +102,12 @@ def main():
     scene["source_ids_json"] = json.dumps([s["id"] for s in bundle["sources"]])
     scene["pipeline_version"] = bundle["pipeline"]["version"]
     scene["acquisition_dates"] = ", ".join(s["acquisition_date"] for s in bundle["sources"])
+    asset_license = bundle['configuration'].get('asset_license', {})
+    scene['asset_license_json'] = json.dumps(asset_license)
     bpy.ops.wm.save_as_mainfile(filepath=str(output / "scene.blend"))
     bpy.ops.export_scene.gltf(filepath=str(output / "campus.glb"), export_format="GLB", export_yup=True,
-                              export_extras=True, export_cameras=False, export_lights=False)
+                              export_extras=True, export_cameras=False, export_lights=False,
+                              export_copyright=asset_license.get('attribution', ''))
     (output / "blender-version.json").write_text(json.dumps({"version": bpy.app.version_string,
                                                             "objects": len(collection.objects)}), encoding="utf-8")
 

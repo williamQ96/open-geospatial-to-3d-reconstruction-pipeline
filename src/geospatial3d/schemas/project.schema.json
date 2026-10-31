@@ -7,6 +7,10 @@
     "project_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
     "title": {"type": "string"},
     "corridors_file": {"type": "string", "minLength": 1},
+    "asset_license": {
+      "type": "object", "required": ["spdx", "attribution", "url", "scope"],
+      "properties": {"spdx": {"type": "string", "minLength": 1}, "attribution": {"type": "string", "minLength": 1}, "url": {"type": "string", "pattern": "^https://"}, "scope": {"type": "string", "minLength": 1}}
+    },
     "aoi": {
       "type": "object", "required": ["center_lon_lat", "size_m", "horizontal_epsg", "vertical_epsg", "vertical_datum"],
       "properties": {

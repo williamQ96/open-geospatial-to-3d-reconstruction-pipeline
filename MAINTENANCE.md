@@ -1,28 +1,15 @@
-# 长期 upstream source
+**English** | [简体中文](MAINTENANCE.zh-CN.md)
 
-本项目是长期维护的通用 upstream，Open Campus: UO 是第一个长期维护的 downstream。两者没有随首个闭环完成而结束的计划。
+# Long-lived upstream maintenance
 
-## 上游的升级方向
+The pipeline is maintained as a reusable upstream. Open Campus: UO is the first independently maintained downstream; completion of the first prototype does not end either project.
 
-- 重建方法论：点云分类、建筑轮廓、屋顶与地形恢复、影像融合和误差评价。
-- 自动化：数据发现与核验、批处理、参数配置、增量重建和失败恢复。
-- 工程：版本化配置与清单、导出质量、跨引擎坐标约定、自动测试和可重复运行。
-- 通用性：用不同地区的样本验证方法，避免把 UO 的边界、建筑名称和手工修模逻辑写进算法。
+Upstream priorities include reconstruction quality, point/roof/terrain methods, validation, source discovery/checksums, batch and incremental automation, interchange contracts, reproducibility, and reusable viewer interactions. Test methods against independent places and synthetic fixtures rather than embedding UO assumptions.
 
-## 下游的升级方向
+Downstream projects maintain area catalogs, names, specific models, materials, content and site branding. Reusable bug fixes flow upstream; a correction specific to one real building stays downstream. Automatic rebuilds must not replace manually refined authoritative assets.
 
-UO 项目持续维护当地数据台账、建筑身份和具体模型；从白模逐步升级到准确轮廓、屋顶、立面、材质、碰撞与校园细节。浏览器探索体验也由下游维护。
+Python tools and the browser template have semantic versions; interchange/configuration formats use `schema_version`. A downstream reconstruction lock and viewer-template lock may intentionally point to different revisions. Advance reconstruction only after a small-area comparison. Upgrade shared viewer files only after validating their previous hashes; preserve project data, profiles and hosting identity.
 
-可通用于其他地点的方法修复回到 upstream；只对某栋建筑有效的修正留在 downstream。上游更新不自动覆盖下游手工细化资产。
+Breaking coordinate or field changes require schema migration notes. Location-quantized roof IDs are seed identities that may split or merge; stable institutional registries remain a downstream refinement task.
 
-## 版本与兼容性
-
-- Python 工具以语义版本发布；配置与交换格式另外使用 `schema_version`。
-- downstream 的 `pipeline.lock.json` 固定 upstream commit 与版本，正常重建要求 clean checkout。
-- 升级上游时先在小区域重建，比较质量报告、坐标控制、资产 ID 和预览，再更新 lock；不直接替换手工细化的权威资产。
-- 不兼容字段或坐标约定变化提升 schema 版本，并提供迁移说明。
-- v0.1 的位置量化候选 ID 不是最终建筑登记 ID。方法升级可能拆分或合并候选；下游将来需要稳定建筑登记表与对应关系。
-
-## 当前验证范围
-
-已在一个历史 LiDAR 区域跑通闭环，并有合成几何与浏览器集成检查。第二地区、独立测量精度、任意 CRS 重投影和增量资产更新仍待实现。
+The historical UO loop and synthetic geometry/interaction checks are implemented. Independent survey accuracy, a second real geographic region, arbitrary CRS conversion, incremental regeneration and cross-engine validation remain open work.

@@ -1,11 +1,13 @@
 [build-system]
-requires = ["setuptools>=75"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "geospatial3d"
-version = "0.3.0"
+version = "0.4.0"
 description = "Reusable geospatial point-cloud to Blender and glTF reconstruction tools"
+license = "Apache-2.0 AND CC-BY-4.0"
+license-files = ["LICENSE", "LICENSES/*.txt", "NOTICE", "LICENSING.md"]
 requires-python = ">=3.11"
 dependencies = [
   "numpy>=2.0,<3", "scipy>=1.14,<2", "laspy[lazrs]>=2.5,<3",
@@ -20,4 +22,4 @@ geospatial3d = "geospatial3d.cli:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-geospatial3d = ["schemas/*.json"]
+geospatial3d = ["schemas/*.json", "templates/browser-explorer/*", "templates/browser-explorer/.gitignore", "templates/browser-explorer/src/*", "templates/browser-explorer/public/*", "templates/browser-explorer/public/scene/*", "templates/browser-explorer/public/licenses/*", "templates/browser-explorer/scripts/*", "templates/browser-explorer/tests/*", "templates/browser-explorer/tests/browser/*"]

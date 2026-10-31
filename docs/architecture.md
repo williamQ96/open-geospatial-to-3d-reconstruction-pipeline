@@ -1,55 +1,38 @@
-# 架构与拟定交换约定
+**English** | [简体中文](zh-CN/architecture.md)
 
-v0.1 已实现 LAZ → 地形/建筑候选 → Blender → GLB。下列较完整阶段表同时保留长期设计方向；LOD、碰撞资产导出、摄影测量与自动重投影尚未实现。
+# Architecture and interchange contracts
 
-## 当前实现入口
+## Implemented components
 
-- `src/geospatial3d/cli.py`：命令行、Blender 调用、GLB 完整性与 schema 验证。
-- `io.py`：固定校验和下载、缓存与 upstream commit 记录。
-- `reconstruct.py`：类 2 地面网格插值、空间留出评价、屋顶平面/回波启发式候选。
-- `blender_export.py`：米制 ENU Blender 场景、法线、材质、附加元数据与 Y-up GLB 导出。
-- `schemas/project.schema.json` 和 `schemas/scene.schema.json`：配置及场景交换 v1。
+`cli.py` drives validated reconstruction, Blender export, GLB checks and viewer scaffolding. `io.py` handles fixed-hash caching and revision evidence. `reconstruct.py` interpolates ground and detects conservative roofs. `annotations.py` matches independent semantic anchors and approximate envelopes. `corridors.py` creates terrain-conforming road/path surfaces. `blender_export.py` writes metre-based ENU Blender scenes and Y-up GLB. `scaffold.py` creates and safely synchronizes the reusable browser template.
 
-v0.1 要求源 LAZ 具有明确的、与项目一致的水平和垂直 CRS。实际坐标转换只用于确定 AOI 的投影中心，不对输入点云偷偷进行不同高程基准的混合。
+## Data pipeline
 
-## 处理阶段
-
-| 阶段 | 计划职责 | 主要交付 |
+| Stage | Responsibility | Output |
 | --- | --- | --- |
-| 输入登记 | 登记具体来源、校验和、采集日期、使用条件和验证状态 | 来源清单 |
-| 空间归一化 | 按 AOI 裁剪，明确水平/垂直基准与单位，保存坐标转换 | 地理坐标记录 |
-| 地形处理 | 从 DTM 或可靠地面点构建地形 | 地形 Mesh 与误差记录 |
-| 建筑提取 | 使用可靠分类或候选检测，栅格化、连通域、轮廓简化与人工复核 | 独立轮廓、高度和质量记录 |
-| Blender 生成 | 按持久 ID 生成独立白模、材质及场景引用 | 可编辑 `.blend` 资产 |
-| 导出 | 烘焙必要材质，导出交换 Mesh、LOD 和独立碰撞代理 | GLB/glTF 与元数据 |
-| 验证 | 检查来源、几何、地理配准、单位、轴及产物完整性 | 可重复的验证报告 |
+| Source registration | Product IDs, hashes, dates, terms and verification | Source ledger |
+| Spatial normalization | AOI, explicit CRS/datum/units and local origin | Coordinate frame |
+| Terrain | Reliable ground grid and internal interpolation checks | Mesh and heightfield |
+| Buildings | Conservative roof mask, contours, heights and explicit approximations | Independent candidates |
+| Corridors | Estimated widths, union/exclusion, terrain-triangle clipping | Road/path meshes |
+| Blender | Separate editable objects, normals, materials, metadata | `.blend` |
+| Exchange | GLB, sources, schema-v1 manifest and quality | Engine-neutral bundle |
+| Viewer | Configurable interaction template and local project content | Independent static app |
 
-不能假定所有点云都有可靠的建筑分类。航空点云的屋顶覆盖不等于完整立面；缺失几何、树冠误识别与高度估算必须保留质量状态。
+Input point clouds must have the declared matching metric horizontal and vertical CRS. AOI-center projection does not silently reproject or mix vertical datums. Airborne roofs do not reconstruct complete facades; canopy errors, missing walls and estimated heights retain quality status.
 
-## 通用输入配置
+## Coordinates and schema v1
 
-输入应包含 AOI、具体数据引用、目标水平 CRS、垂直基准和单位、局部原点、处理参数及版本。未知垂直基准需要显式记录，不能静默当作另一高程体系。
+Blender uses local X east, Y north, Z up. glTF uses X east, Y up, Z south. Convert once in the exporter. Heightfield rows ascend north; runtime sampling converts `north=-z` and follows the same SW–NE triangle diagonal.
 
-通用实现不内置 UO 专用边界或原点。下游实例保存自己的配置和 Pipeline 版本。原讨论建议的米制投影可作为调查起点，最终坐标选择应依据实际数据与转换验证。
+Sources identify products, URLs, acquisition/access dates, hashes, terms and verification. The frame records CRS, vertical datum, units and origin. Asset records identify geometry, estimated status and provenance. The actual machine-checkable contract is in `src/geospatial3d/schemas/`; LOD, tiles, collision assets and fuller registries remain future extensions.
 
-## 交换约定 v1
+## Browser boundary
 
-| 对象 | 最少需要表达的信息 |
-| --- | --- |
-| 来源记录 | source ID、提供者、具体产品 ID、URL、获取/采集日期、校验和、使用条件依据、验证状态 |
-| 坐标框架 | 水平 CRS、垂直基准、单位、局部原点、源轴和导出轴、转换方法 |
-| 资产记录 | 稳定 asset ID、版本、类型、Blockout/Detailed/Optimized 状态、来源 IDs、处理版本、精度及质量报告 |
-| 导出记录 | 相对文件路径、格式、校验和、LOD、边界、局部变换、坐标框架 ID、可选碰撞引用 |
-| 场景清单 | 清单版本、坐标框架、瓦片 IDs、资产引用、相对变换和 LOD 信息 |
+`templates/browser-explorer` is a consumer of exports, not part of geospatial reconstruction. Shared runtime and layout are managed separately from `public/viewer-profile.json`, scene data and hosting identity. A synthetic fixture makes the template runnable without any UO assets. Independent source-hash locks make upgrades reviewable and reject local-code overwrite.
 
-机器可验证的当前字段以 `src/geospatial3d/schemas/` 为准；上表还包括未来的 LOD、瓦片、资产登记等扩展方向。UO 项目消费 `manifest.json`、`campus.glb` 与 `heightfield.json`，不另建坐标约定。高度数组按 north-ascending 行序保存，GLB 运行时以 `x=east, y=height, z=-north` 采样。
+Three.js, Godot, Unity and Unreal consume the same asset contract. Engine-specific interaction adapters remain optional. The shared browser template demonstrates one adapter without making the Python reconstruction depend on a particular deployment.
 
-Blender 工作单位为米，局部坐标采用 East/North/Up。导出 glTF 时明确转换到目标轴约定，并在元数据记录已执行的转换。下游不得再次应用同一变换。
+## Reproducibility
 
-## 可重复生成
-
-每次运行应保存输入校验和、配置、Pipeline commit、工具版本、处理日志、产物清单与验证结果。可重复性以固定输入和参数重建为目标，不预设所有外部工具都能生成逐字节相同的文件。
-
-## 下游边界
-
-Three.js、Godot、Unity、Unreal 消费导出物；运行时交互和引擎专用设置放在下游适配层。UO 的 Three.js 预览保存在校园仓库。通用 Pipeline 不依赖某个下游站点或游戏工程。
+Record source/configuration hashes, actual pipeline revision and dirty state, tool versions, logs, asset checks and validation. Reproducibility means controlled regeneration from verified inputs and parameters; it is not a guarantee that all external tools produce byte-identical files.

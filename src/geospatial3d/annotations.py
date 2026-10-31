@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Optional independent semantic anchors, kept separate from LiDAR geometry."""
 import numpy as np
 from pyproj import Transformer

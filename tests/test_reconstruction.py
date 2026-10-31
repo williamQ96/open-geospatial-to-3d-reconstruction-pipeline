@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Synthetic geometric checks; real-data integration is captured downstream."""
 
 import json

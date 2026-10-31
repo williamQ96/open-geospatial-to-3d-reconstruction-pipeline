@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 import argparse
 import json
 from pathlib import Path
@@ -23,7 +24,8 @@ def validate_glb(path, expected_buildings):
     names = {node.get("name") for node in gltf["nodes"]}
     if "terrain" not in names or not set(expected_buildings).issubset(names):
         raise ValueError("GLB is missing expected terrain/building nodes")
-    return {"glb_bytes": size, "meshes": len(gltf.get("meshes", [])), "nodes": len(gltf["nodes"])}
+    return {"glb_bytes": size, "meshes": len(gltf.get("meshes", [])), "nodes": len(gltf["nodes"]),
+            "asset_copyright": gltf.get('asset', {}).get('copyright')}
 
 
 def build(args):
@@ -91,6 +93,8 @@ def build(args):
             "No independent control-point accuracy validation yet."
         ]
     }
+    if config.get('asset_license'):
+        manifest['asset_license'] = config['asset_license']
     manifest_schema = json.loads((Path(__file__).parent / "schemas/scene.schema.json").read_text())
     jsonschema.validate(manifest, manifest_schema)
     write_json(output / "manifest.json", manifest)
@@ -111,5 +115,19 @@ def main():
     run.add_argument("--output", required=True)
     run.add_argument("--blender", required=True)
     run.add_argument("--web-public", help="Optional downstream scene directory for browser deliverables")
+    viewer = sub.add_parser('init-viewer', help='Create a standalone Three.js explorer with a synthetic demo or an exported scene')
+    viewer.add_argument('--output', required=True)
+    viewer.add_argument('--scene-dir', help='Optional directory containing a schema-v1 manifest, GLB and heightfield')
+    sync = sub.add_parser('sync-viewer', help='Upgrade shared viewer files while preserving project content and checking local changes')
+    sync.add_argument('--output', required=True)
+    sync.add_argument('--adopt', action='store_true', help='Deliberately adopt the template in a project without a prior viewer lock')
     args = parser.parse_args()
-    build(args)
+    if args.command == 'init-viewer':
+        from .scaffold import create_viewer
+        path = create_viewer(args.output, args.scene_dir)
+        print(f'Created viewer: {path}\nRun npm ci and npm run dev in that directory.')
+    elif args.command == 'sync-viewer':
+        from .scaffold import sync_viewer
+        print(f'Updated viewer runtime: {sync_viewer(args.output, args.adopt)}')
+    else:
+        build(args)

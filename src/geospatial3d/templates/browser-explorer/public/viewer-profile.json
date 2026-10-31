@@ -1,0 +1,33 @@
+{
+  "title": "Geospatial Explorer · Synthetic Demo",
+  "brand_name": "Geospatial Explorer",
+  "kicker": "SYNTHETIC DEMO",
+  "map_label": "DEMO SCENE",
+  "about_title": "Synthetic demonstration",
+  "source_description": "Procedural Cartesian fixture. No real campus, survey, or third-party geographic dataset.",
+  "about_summary": "Four fictional buildings, a sloped ground grid, a road and a path demonstrate the reusable viewer.",
+  "about_limitations": "Coordinates and elevations are synthetic. Replace the scene directory with verified exports for a real project.",
+  "project_description": "Reusable Three.js explorer template from the Open Geospatial-to-3D Reconstruction Pipeline.",
+  "repository_links": [
+    {
+      "label": "Reconstruction Pipeline · Upstream",
+      "url": "https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline"
+    }
+  ],
+  "footer": "Synthetic demonstration. No real location is represented.",
+  "license_notice": "Code: Apache-2.0. Original documentation and model/design contributions: CC BY 4.0. Copyright 2026 Zhongyi “William” Qiu and contributors. Third-party sources retain their own terms.",
+  "license_links": [
+    {
+      "label": "Apache-2.0",
+      "url": "licenses/Apache-2.0.txt"
+    },
+    {
+      "label": "CC BY 4.0",
+      "url": "licenses/CC-BY-4.0.txt"
+    },
+    {
+      "label": "Attribution / NOTICE",
+      "url": "licenses/NOTICE.txt"
+    }
+  ]
+}

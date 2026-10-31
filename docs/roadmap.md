@@ -1,37 +1,21 @@
-# 首个闭环路线
+**English** | [简体中文](zh-CN/roadmap.md)
 
-v0.1 已跑通首个真实数据闭环；完成项与后续升级分别记录。
+# Pipeline roadmap
 
-## P0：输入与空间约定
+## Completed
 
-- [x] 以 Open Campus: UO 的 Memorial Quad 小区域为首个集成案例（360 × 360 m）。
-- [x] 核验 NOAA/DOGAMI 2008 年瓦片；同源地面回波生成地形。
-- [x] 配置与场景清单 schema v1，附来源与坐标框架。
-- [x] 命令行、环境锁文件与版本固定方式。
+- Verified NOAA/DOGAMI source hashes and CRS for a 360 × 360 m UO integration case, followed by a multi-tile campus case.
+- Configurable metre-based ENU reconstruction, ground interpolation/holdout checks, conservative roof candidates and independent Blender objects.
+- Schema-v1 GLB, heightfield, source and quality outputs; geometry/source and browser coordinate checks.
+- Independent semantic annotations, explicit approximate envelopes and terrain-draped road/path support.
+- Reusable browser template with synthetic data, safe scaffold/upgrade commands and profile-driven branding/source text.
 
-## P1：地理数据到 Blender
+## Next
 
-- [x] 按 AOI 裁剪，在同一水平/垂直 CRS 下生成 ENU 局部坐标。
-- [x] 从地面点生成地形，并记录内部留出插值误差。
-- [x] 提取带质量标记的建筑候选轮廓与高度。
-- [x] 生成独立 Blender 对象与候选 ID，并保留来源追踪。
-- [ ] 跨 CRS 自动转换与最终稳定建筑登记 ID。
+- Independent absolute survey control and another real geographic area.
+- Improved classification, outlines, roofs and imagery/photogrammetry integration.
+- Stable asset registries and incremental reconstruction.
+- Explicit cross-CRS conversion, LOD, tiles, compression and collision assets.
+- Validation in another engine and optional USD/adapters when justified.
 
-## P2：Blender 到交换资产
-
-- [x] 导出 GLB、地理元数据、heightfield 和场景清单。
-- [x] 合成斜坡检查单位与方向；浏览器射线检查真实 GLB 与 heightfield 的轴和高度一致性。
-- [x] 校园浏览器预览已加载真实产物，验证移动、碰撞和三种视角。
-- [ ] 引入独立外部控制点及更严格的几何有效性评价。
-
-验收：固定配置和已记录输入能重新生成可加载资产；报告来源状态、地理误差和估算项；替换校园区域配置不需要修改通用算法。
-
-## 后续
-
-- [x] 合成样本验证斜坡坐标、屋顶与多回波过滤、缓存完整性。
-- [ ] 增加多地区真实数据回归样本。
-- [ ] 验证另一地区，检查是否仍有 UO 专用假设。
-- [ ] 增加影像辅助分割、摄影测量输入、LOD、瓦片和压缩。
-- [ ] 按实际需求扩展 USD 或引擎适配器。
-
-已运行真实重建、Blender 导出与浏览器集成测试；没有独立测量精度或完整立面恢复的承诺。
+Acceptance requires a different region to work through configuration rather than algorithm edits, with measured validation separated from estimation. No complete-facade, absolute-accuracy or frame-rate promise is implied by the prototype.

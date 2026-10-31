@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Verified input caching and provenance. No project-specific providers are embedded."""
 
 import hashlib

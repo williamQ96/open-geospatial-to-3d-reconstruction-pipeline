@@ -1,0 +1,11 @@
+{
+  "sources": [
+    {
+      "id": "synthetic-demo",
+      "provider": "Procedural local fixture",
+      "title": "Synthetic road and path",
+      "license_note": "Original demonstration geometry; no third-party geographic data."
+    }
+  ],
+  "note": "Synthetic data; not a surveyed geographic location."
+}

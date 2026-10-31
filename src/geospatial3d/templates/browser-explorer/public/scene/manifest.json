@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "project_id": "synthetic-viewer-demo",
+  "title": "Synthetic Explorer",
+  "status": "synthetic-demo",
+  "asset_license": {
+    "spdx": "CC-BY-4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "Open Geospatial-to-3D Reconstruction Pipeline — Zhongyi William Qiu and contributors",
+    "scope": "Original synthetic demonstration content only."
+  },
+  "aoi_size_m": 120,
+  "coordinate_frame": {
+    "horizontal_epsg": 32631,
+    "vertical_epsg": 5703,
+    "unit": "metre",
+    "origin_projected_m": [
+      500000,
+      0,
+      0
+    ],
+    "gltf_axes": "X east, Y up, Z south",
+    "origin_note": "Synthetic Cartesian fixture, not a surveyed geolocation."
+  },
+  "pipeline": {
+    "version": "synthetic-fixture",
+    "commit": null,
+    "dirty": false
+  },
+  "spawn_enu_m": [
+    0,
+    -35
+  ],
+  "source_dates": [],
+  "source_ids": [
+    "synthetic-demo"
+  ],
+  "model": {
+    "url": "campus.glb",
+    "sha256": "9d34ed20a230a61a236b605e7a469d90ee17ac969352237099d36c6c6d3f4b13",
+    "glb_bytes": 39216
+  },
+  "heightfield_url": "heightfield.json",
+  "sources_url": "sources.json",
+  "quality": {
+    "cropped_points": 0,
+    "ground_cell_coverage_fraction": 1,
+    "external_control_points": 0,
+    "holdout_rmse_m": null,
+    "terrain_range_local_m": [
+      -1.8,
+      1.8
+    ]
+  },
+  "buildings": [
+    {
+      "id": "demo-library",
+      "name": "Demo Library",
+      "campus_id": "demo-library",
+      "kind": "building",
+      "status": "approximate-context-placeholder",
+      "name_match": "synthetic-fixture",
+      "footprint_enu_m": [
+        [
+          -39,
+          17
+        ],
+        [
+          -17,
+          17
+        ],
+        [
+          -17,
+          35
+        ],
+        [
+          -39,
+          35
+        ]
+      ],
+      "base_z_m": -0.16000000000000003,
+      "roof_z_m": 9.84,
+      "height_m": 10,
+      "area_m2": 396,
+      "method": "synthetic-fixture",
+      "quality_note": "Procedural demonstration; not a real building."
+    },
+    {
+      "id": "demo-laboratory",
+      "name": "Demo Laboratory",
+      "campus_id": "demo-laboratory",
+      "kind": "building",
+      "status": "approximate-context-placeholder",
+      "name_match": "synthetic-fixture",
+      "footprint_enu_m": [
+        [
+          18,
+          15
+        ],
+        [
+          38,
+          15
+        ],
+        [
+          38,
+          35
+        ],
+        [
+          18,
+          35
+        ]
+      ],
+      "base_z_m": 0.38,
+      "roof_z_m": 14.38,
+      "height_m": 14,
+      "area_m2": 400,
+      "method": "synthetic-fixture",
+      "quality_note": "Procedural demonstration; not a real building."
+    },
+    {
+      "id": "demo-center",
+      "name": "Demo Center",
+      "campus_id": "demo-center",
+      "kind": "building",
+      "status": "approximate-context-placeholder",
+      "name_match": "synthetic-fixture",
+      "footprint_enu_m": [
+        [
+          -40,
+          -38
+        ],
+        [
+          -16,
+          -38
+        ],
+        [
+          -16,
+          -18
+        ],
+        [
+          -40,
+          -18
+        ]
+      ],
+      "base_z_m": -1.2400000000000002,
+      "roof_z_m": 6.76,
+      "height_m": 8,
+      "area_m2": 480,
+      "method": "synthetic-fixture",
+      "quality_note": "Procedural demonstration; not a real building."
+    },
+    {
+      "id": "demo-studio",
+      "name": "Demo Studio",
+      "campus_id": "demo-studio",
+      "kind": "building",
+      "status": "approximate-context-placeholder",
+      "name_match": "synthetic-fixture",
+      "footprint_enu_m": [
+        [
+          19,
+          -39
+        ],
+        [
+          37,
+          -39
+        ],
+        [
+          37,
+          -15
+        ],
+        [
+          19,
+          -15
+        ]
+      ],
+      "base_z_m": -0.66,
+      "roof_z_m": 11.34,
+      "height_m": 12,
+      "area_m2": 432,
+      "method": "synthetic-fixture",
+      "quality_note": "Procedural demonstration; not a real building."
+    }
+  ],
+  "corridors": {
+    "sources": [
+      {
+        "id": "synthetic-demo",
+        "provider": "Procedural local fixture",
+        "title": "Synthetic road and path",
+        "license_note": "Original demonstration geometry; no third-party geographic data."
+      }
+    ],
+    "surface_nodes": [
+      "demo-road",
+      "demo-path-north",
+      "demo-path-south"
+    ],
+    "features": [
+      {
+        "id": "demo-road",
+        "name": "Demo Road",
+        "kind": "road",
+        "width_m": 6,
+        "source_id": "synthetic-demo",
+        "centerline_enu_m": [
+          [
+            -60,
+            0
+          ],
+          [
+            60,
+            0
+          ]
+        ]
+      },
+      {
+        "id": "demo-path",
+        "name": "Demo Path",
+        "kind": "path",
+        "width_m": 3,
+        "source_id": "synthetic-demo",
+        "centerline_enu_m": [
+          [
+            0,
+            -60
+          ],
+          [
+            0,
+            60
+          ]
+        ]
+      }
+    ]
+  },
+  "limitations": [
+    "Procedural synthetic demonstration; not a real campus, survey, or geographic reconstruction."
+  ]
+}

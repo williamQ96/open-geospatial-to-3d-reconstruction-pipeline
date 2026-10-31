@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 import unittest
 from pyproj import Transformer
 from geospatial3d.annotations import annotate

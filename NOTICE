@@ -1,0 +1,13 @@
+Open Geospatial-to-3D Reconstruction Pipeline
+Copyright 2026 Zhongyi "William" Qiu and contributors.
+https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline
+
+Software and viewer template code: Apache License 2.0.
+Original documentation, original model/design contributions and synthetic demo content: CC BY 4.0.
+Keep applicable notices, credit the project and author, link the license and identify modifications.
+Third-party source data and dependencies retain their own terms; public-domain material is not relicensed.
+No endorsement by the University of Oregon or source-data providers is implied.
+
+Browser explorer design and interactions originated in Open Campus: UO:
+https://github.com/williamQ96/open-campus-uo
+Refined here as an independent, data-neutral template.

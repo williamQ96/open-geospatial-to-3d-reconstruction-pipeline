@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Optional road/path centerlines, draped exactly onto the terrain triangles.
 
 Widths are downstream display estimates. This does not infer surveyed pavement,

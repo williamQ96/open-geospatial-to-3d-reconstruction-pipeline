@@ -1,7 +1,9 @@
-# 数据管理
+**English** | [简体中文](README.zh-CN.md)
 
-上游不携带 UO 实际大数据。首个真实样本由 downstream 的 `configs/memorial-quad.json` 指定，并缓存在 downstream 的 `data/raw/`。本仓库 `raw/`、`processed/` 与根目录 `exports/`、`artifacts/` 为本地工作目录，默认忽略。
+# Data management
 
-后续可提交小型合成验证样本、配置、来源台账与校验和；大型 LAZ、GeoTIFF、照片和生成模型不直接放入普通 Git。
+The upstream carries small synthetic fixtures, schemas, tools and the browser template. UO raw data and real-model outputs remain downstream; the generic fixture has no real geographic origin or campus assets.
 
-每个输入应有具体产品 ID、来源 URL、获取/采集日期、坐标与单位、校验和、使用条件依据及验证状态。通用代码的许可证与输入数据、生成资产的许可证分别记录。当前尚未选定许可证或数据存储服务。
+`raw/`, `processed/`, root `exports/` and `artifacts/` are ignored local working directories. Large LAZ, GeoTIFF, photos and real generated models are not ordinary upstream source files.
+
+Adopted inputs need product IDs, provider/URL, acquisition and access dates where known, CRS/units, hashes, terms and verification status. Track tool licensing separately from input-data and generated-asset terms. Font notices are included with the viewer template.

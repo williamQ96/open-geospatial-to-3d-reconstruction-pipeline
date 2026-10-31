@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#e3e5e4" />
+    <meta
+      name="description"
+      content="Explore a reusable geospatial 3D scene."
+    />
+    <link id="favicon" rel="icon" />
+    <title>OpenCampus · UO Eugene</title>
+  </head>
+  <body>
+    <main id="app">
+      <div id="viewport" aria-label="3D scene explorer" tabindex="0"></div>
+      <header class="masthead">
+        <a class="wordmark" href="./" aria-label="Explorer home"
+          ><img class="brand-logo" hidden alt="" /><span
+            id="brand-name"
+            class="brand-name"
+            >Geospatial Explorer</span
+          ><span id="brand-kicker" class="campus-wordmark">3D EXPLORER</span></a
+        >
+        <button
+          id="settings-open"
+          class="settings-button"
+          aria-haspopup="dialog"
+          aria-controls="settings-dialog"
+        >
+          <span aria-hidden="true">⚙</span> Settings / About
+        </button>
+      </header>
+      <section
+        id="building-search"
+        class="campus-search"
+        role="search"
+        aria-label="Building search"
+      >
+        <div class="search-field">
+          <svg
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"
+          >
+            <circle cx="10.5" cy="10.5" r="6.5" />
+            <path d="m15.5 15.5 4.5 4.5" />
+          </svg>
+          <input
+            id="building-search-input"
+            type="search"
+            role="combobox"
+            aria-label="Search buildings"
+            placeholder="Find a building…"
+            aria-autocomplete="list"
+            aria-controls="building-results"
+            aria-expanded="false"
+            autocomplete="off"
+            spellcheck="false"
+            disabled
+          />
+          <button
+            class="search-clear"
+            type="button"
+            aria-label="Clear building search"
+            hidden
+          >
+            ×
+          </button>
+        </div>
+        <div class="search-dropdown" hidden>
+          <div
+            id="building-results"
+            role="listbox"
+            aria-label="Matching buildings"
+          ></div>
+          <p class="search-status" role="status" aria-live="polite"></p>
+        </div>
+      </section>
+      <nav class="view-switch" aria-label="Camera view">
+        <button data-view="third" aria-pressed="false">
+          <kbd>1</kbd>Follow
+        </button>
+        <button data-view="first" aria-pressed="false">
+          <kbd>2</kbd>First person
+        </button>
+        <button data-view="aerial" aria-pressed="true">
+          <kbd>3</kbd>Overview
+        </button>
+      </nav>
+      <div class="compass" aria-hidden="true"><span>N</span><i>↑</i></div>
+      <section class="map-panel" aria-label="Scene minimap">
+        <div class="map-title">
+          <span id="map-label">SCENE MAP</span
+          ><span id="map-size">2 × 2 km</span>
+        </div>
+        <canvas
+          id="minimap"
+          width="240"
+          height="240"
+          aria-label="Buildings, roads and your location"
+        ></canvas>
+        <div class="map-legend">
+          <span><i></i> You</span><span>N ↑</span>
+        </div>
+      </section>
+      <div id="selection" class="selection" hidden></div>
+      <div class="position-readout">
+        <span class="status-dot"></span
+        ><span id="position">E 0.0 / N 0.0 / H 0.0 m</span>
+      </div>
+      <footer class="controls-bar">
+        <div class="control-hint">
+          <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> Move</span
+          ><span><kbd>SHIFT</kbd> Run</span><span><kbd>SPACE</kbd> Jump</span
+          ><span>Drag to look · Scroll to zoom</span
+          ><span><kbd>V</kbd> Change view</span>
+        </div>
+        <button
+          id="reset"
+          class="reset-button"
+          title="Return to your starting point"
+        >
+          ↺ Return to start
+        </button>
+      </footer>
+
+      <dialog id="settings-dialog" aria-labelledby="settings-title">
+        <div class="dialog-heading">
+          <h1 id="settings-title">Settings / About</h1>
+          <button id="settings-close" aria-label="Close settings">×</button>
+        </div>
+        <nav class="dialog-tabs" aria-label="Settings sections">
+          <button id="settings-tab" aria-selected="true">Settings</button
+          ><button id="about-tab" aria-selected="false">About</button>
+        </nav>
+        <section id="settings-panel" class="dialog-panel">
+          <h2>Display</h2>
+          <label class="setting-row"
+            ><span
+              >Building names<small
+                >Selected labels remain visible.</small
+              ></span
+            ><input id="show-labels" type="checkbox" checked
+          /></label>
+          <label class="setting-row"
+            ><span
+              >Wireframe<small>Inspect the reconstructed geometry.</small></span
+            ><input id="wireframe-setting" type="checkbox"
+          /></label>
+          <label class="setting-row"
+            ><span>Shadows<small>Static architectural shadows.</small></span
+            ><input id="shadows-setting" type="checkbox" checked
+          /></label>
+          <h2>Controls</h2>
+          <p>
+            Search frames a building in Overview. In Follow and First person, it
+            turns you toward the building while keeping your position.
+          </p>
+          <dl class="key-guide">
+            <dt>W A S D / arrow keys</dt>
+            <dd>Move</dd>
+            <dt>Shift</dt>
+            <dd>Run</dd>
+            <dt>Space</dt>
+            <dd>Jump</dd>
+            <dt>Mouse drag</dt>
+            <dd>Look around</dd>
+            <dt>Mouse wheel</dt>
+            <dd>Zoom in Follow or Overview</dd>
+            <dt>/</dt>
+            <dd>Find a building</dd>
+            <dt>Escape</dt>
+            <dd>Close search or clear selection</dd>
+            <dt>1 / 2 / 3 or V</dt>
+            <dd>Change camera</dd>
+          </dl>
+        </section>
+        <section id="about-panel" class="dialog-panel" hidden>
+          <h2 id="about-title">Scene information</h2>
+          <dl class="study-stats">
+            <dt>Coverage</dt>
+            <dd id="coverage-stat">—</dd>
+            <dt>Structure placeholders</dt>
+            <dd id="building-count">—</dd>
+            <dt>Named buildings</dt>
+            <dd id="named-count">—</dd>
+            <dt>Survey baseline</dt>
+            <dd id="source-year">�</dd>
+          </dl>
+          <h2>Data and accuracy</h2>
+          <p id="source-date"></p>
+          <p id="terrain-quality"></p>
+          <p id="road-source"></p>
+          <p id="about-summary"></p>
+          <p id="about-limitations"></p>
+          <div id="source-links" class="source-links"></div>
+          <h2>Project repositories</h2>
+          <p id="project-description"></p>
+          <div id="repository-links" class="source-links"></div>
+          <h2>Licensing and attribution</h2>
+          <p id="license-notice"></p>
+          <div id="license-links" class="source-links"></div>
+          <p id="about-footer" class="about-footnote"></p>
+        </section>
+      </dialog>
+      <div id="loading" class="loading" role="status">
+        <img id="loading-mark" alt="" hidden />
+        <p>Loading the Eugene campus…</p>
+      </div>
+      <div id="error" class="error" role="alert" hidden>
+        <h2>The scene is not ready</h2>
+        <p></p>
+        <button onclick="location.reload()">Try again</button>
+      </div>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

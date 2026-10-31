@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Georeferenced terrain and conservative roof candidates from LAS/LAZ.
 
 The v0.1 roof detector is a heuristic blockout, not a surveyed footprint extractor.

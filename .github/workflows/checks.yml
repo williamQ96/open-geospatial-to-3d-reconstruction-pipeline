@@ -12,3 +12,28 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install -e .
       - run: python -m unittest discover -s tests -v
+      - run: python -m pip wheel --no-deps . -w artifacts/wheels
+      - run: python -m geospatial3d init-viewer --output artifacts/scaffolded-viewer
+  browser-template:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: src/geospatial3d/templates/browser-explorer
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: src/geospatial3d/templates/browser-explorer/package-lock.json
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: viewer-template-failure-traces
+          path: src/geospatial3d/templates/browser-explorer/test-results/
