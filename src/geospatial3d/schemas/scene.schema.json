@@ -27,7 +27,7 @@
       "items": {
         "type": "object", "required": ["id", "status", "footprint_enu_m", "base_z_m", "roof_z_m"],
         "properties": {
-          "id": {"type": "string"}, "status": {"const": "estimated-blockout"},
+          "id": {"type": "string"}, "status": {"enum": ["estimated-blockout", "approximate-context-placeholder"]},
           "footprint_enu_m": {"type": "array", "minItems": 3, "items": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2}},
           "base_z_m": {"type": "number"}, "roof_z_m": {"type": "number"}
         }

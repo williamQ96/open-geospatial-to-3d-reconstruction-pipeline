@@ -40,7 +40,8 @@ def main():
     scene.unit_settings.scale_length = 1.0
     collection = bpy.data.collections.new("Georeferenced whitebox")
     scene.collection.children.link(collection)
-    terrain_mat = material("Terrain | white clay", (.66, .68, .66))
+    appearance = bundle['configuration'].get('appearance', {})
+    terrain_mat = material("Terrain | mineral grey", appearance.get('terrain_color_linear', (.30, .32, .34)))
     building_mat = material("Buildings | white clay", (.91, .90, .86))
     t = bundle["terrain"]
     nx, ny, step = t["nx"], t["ny"], t["spacing_m"]
@@ -70,6 +71,11 @@ def main():
         obj["asset_id"] = b["id"]
         obj["asset_kind"] = "building"
         obj["reconstruction_status"] = b["status"]
+        if b.get('name'):
+            obj['display_name'] = b['name']
+            obj['campus_id'] = b['campus_id']
+            obj['name_match'] = b['name_match']
+            obj.data.name = f"{b['name']} | Mesh"
         # Recalculate outward normals independently of polygon input winding.
         import bmesh
         bm = bmesh.new()

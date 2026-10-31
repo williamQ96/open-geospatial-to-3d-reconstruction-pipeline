@@ -1,3 +1,3 @@
 """Long-lived upstream geospatial reconstruction tools, independent of any campus."""
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

@@ -39,6 +39,16 @@ def build(args):
     paths = [fetch_source(s, cache) for s in config["sources"]]
     print("Reconstructing georeferenced terrain and roof candidates", flush=True)
     bundle = reconstruct(config, paths, output)
+    if config.get('annotations_file'):
+        from .annotations import annotate
+        catalog_path = (config_path.parent / config['annotations_file']).resolve()
+        catalog = json.loads(catalog_path.read_text(encoding='utf-8'))
+        annotation_schema = json.loads((Path(__file__).parent / 'schemas/annotations.schema.json').read_text())
+        jsonschema.validate(catalog, annotation_schema)
+        annotate(bundle, catalog)
+        bundle['annotations']['catalog_sha256'] = sha256(catalog_path)
+        write_json(output / 'reconstruction.json', bundle)
+        write_json(output / 'quality.json', bundle['quality'])
     print(json.dumps(bundle["quality"], indent=2), flush=True)
     script = Path(__file__).parent / "blender_export.py"
     blender = Path(args.blender).resolve()
@@ -61,7 +71,7 @@ def build(args):
         "spawn_enu_m": config.get("spawn_enu_m", [0, 0]),
         "model": {"url": "campus.glb", "sha256": sha256(output / "campus.glb"), **validation},
         "heightfield_url": "heightfield.json", "sources_url": "sources.json", "quality": bundle["quality"],
-        "buildings": bundle["buildings"], "limitations": [
+        "buildings": bundle["buildings"], "annotations": bundle.get('annotations'), "limitations": [
             "Historical airborne LiDAR, not a current campus survey.",
             "Buildings are heuristic placeholders; no authoritative footprint or facade claims.",
             "No independent control-point accuracy validation yet."

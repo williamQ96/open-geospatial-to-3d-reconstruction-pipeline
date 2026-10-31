@@ -158,7 +158,7 @@ def reconstruct(config, paths, output):
                 keep = (np.abs(x) <= half) & (np.abs(y) <= half)
                 keep &= ~np.asarray(points.withheld, dtype=bool)
                 if keep.any():
-                    arrays.append(np.column_stack((x[keep], y[keep], np.asarray(points.z)[keep], np.asarray(points.classification)[keep], np.asarray(points.number_of_returns)[keep] == 1)))
+                    arrays.append(np.column_stack((x[keep], y[keep], np.asarray(points.z)[keep], np.asarray(points.classification)[keep], np.asarray(points.number_of_returns)[keep] == 1)).astype(np.float32))
     if not arrays:
         raise ValueError("No input points overlap the AOI")
     points = np.concatenate(arrays)

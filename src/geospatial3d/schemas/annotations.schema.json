@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["buildings"],
+  "properties": {
+    "buildings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "lon_lat", "source"],
+        "properties": {
+          "id": {"type":"string","minLength":1},
+          "name": {"type":"string","minLength":1},
+          "source": {"type":"string","minLength":1},
+          "lon_lat": {"type":"array","minItems":2,"maxItems":2,"items":{"type":"number"}},
+          "max_match_distance_m": {"type":"number","minimum":0},
+          "fallback_envelope_m": {"$ref":"#/$defs/envelope"},
+          "placeholder": {"type":"object","required":["size_m"],"properties":{"size_m":{"$ref":"#/$defs/envelope"}}}
+        }
+      }
+    }
+  },
+  "$defs": {"envelope":{"type":"array","minItems":3,"maxItems":3,"items":{"type":"number","exclusiveMinimum":0}}}
+}
