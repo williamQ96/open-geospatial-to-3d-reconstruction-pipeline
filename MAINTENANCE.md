@@ -8,6 +8,8 @@ Upstream priorities include reconstruction quality, point/roof/terrain methods, 
 
 Downstream projects maintain area catalogs, names, specific models, materials, content and site branding. Reusable bug fixes flow upstream; a correction specific to one real building stays downstream. Automatic rebuilds must not replace manually refined authoritative assets.
 
+Prefer a recognizable, coherent first pass with explicitly recorded plausible inference. Refine realism through long-term corrections; do not require complete photographic coverage or field measurements before an openly sourced, useful art pass. Keep estimated dimensions and occluded details editable and distinct from geographic evidence. See [progressive modeling](docs/progressive-modeling.md).
+
 Downstream maintainers should archive adopted image/photo inputs with dated license evidence, attribution, local files and checksums under `data/reference-images/`. Review source rights before modeling or distributing textures, preserve historical exclusions and use sources compatible with open asset export. The [media policy and checker](docs/reference-media.md) define the shared baseline; regional media stay downstream.
 
 Python tools and the browser template have semantic versions; interchange/configuration formats use `schema_version`. A downstream reconstruction lock and viewer-template lock may intentionally point to different revisions. Advance reconstruction only after a small-area comparison. Upgrade shared viewer files only after validating their previous hashes; preserve project data, profiles and hosting identity.

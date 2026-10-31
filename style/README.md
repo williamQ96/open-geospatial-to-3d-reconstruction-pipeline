@@ -23,6 +23,8 @@ These are engineering judgments and intended benefits, not measured savings or a
 
 ## Other styles are welcome
 
+Follow the [recognizable-first modeling policy](../docs/progressive-modeling.md): allow documented, plausible first-pass inference and improve realism through sustained correction. The recommended style is compatible with modular geometry and shared materials; it does not require a photoreal scan before release.
+
 Authors are encouraged to explore Stylized PBR, photorealism, full comic, voxel/pixel, minimal architectural models and new visual languages. The default is a starting point, not an artistic gate. Alternative styles can be first-class entries here; no obligation to imitate the UO palette or Pacific Northwest vegetation.
 
 Propose a `style/<slug>/` directory with an English README, optional translations, representative mockups, palette/material rules, asset provenance and license scope, a clear status (proposal, experimental or recommended), and a cost/maintenance/runtime evaluation. Preserve the same verified geography and object IDs for comparisons. Keep mockups separate from survey evidence and do not bake an engine-specific shader into the only source asset.

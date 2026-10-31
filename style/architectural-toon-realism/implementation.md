@@ -15,6 +15,8 @@ glTF's core material model is metallic-roughness PBR; an arbitrary custom toon s
 
 ## Staged delivery
 
+Apply the [progressive modeling policy and implemented methods](../../docs/progressive-modeling.md): recognizable first passes may contain explicit, plausible inference. Reference/accuracy review records uncertainty and the next correction; it is not a requirement to reach photorealism before release.
+
 | Stage | Deliverable | Review gate |
 | --- | --- | --- |
 | 1. Baseline | Fixed geographic scene, camera poses, current whitebox and standard PBR reference | Record scene/source revision, browser/device, viewport, quality settings and baseline metrics. |

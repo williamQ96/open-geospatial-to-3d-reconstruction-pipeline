@@ -11,7 +11,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 IMAGE_SUFFIXES = {'.jpg', '.jpeg', '.png', '.webp', '.tif', '.tiff', '.svg', '.avif', '.gif', '.bmp', '.ico'}
-DEFAULT_LICENSES = {'CC-BY-4.0', 'CC0-1.0', 'LicenseRef-PD-self'}
+DEFAULT_LICENSES = {'CC-BY-4.0', 'CC0-1.0', 'LicenseRef-PD-self', 'LicenseRef-PD-USGov'}
 
 
 def audit(root, directory='data/reference-images'):

@@ -2,7 +2,7 @@
 
 # Open Geospatial-to-3D Reconstruction Pipeline
 
-长期维护的通用上游，将核验后的地理数据转换为 Blender、GLB 与可交互的浏览器地图。**v0.5** 增加[可选美术展示层](docs/zh-CN/presentation-layers.md)、PBR／Toon 切换和安全复制，保留 v0.4 浏览器模板与安全升级。上下游仓库均为 public。
+长期维护的通用上游，将核验后的地理数据转换为 Blender、GLB 与可交互的浏览器地图。**v0.6** 增加[参数化立面与航拍植被线索](docs/zh-CN/progressive-modeling.md)，保留 v0.5 可选美术层和 v0.4 浏览器交互。上下游仓库均为 public。
 
 ## 浏览器模板
 
@@ -18,6 +18,8 @@ npm run dev
 传入 `--scene-dir <导出目录>` 可创建自己的地图。修改 `public/viewer-profile.json`、场景与出生偏好完成项目定制。`sync-viewer --output <项目>` 按原有 hash 升级共享代码，保留资料并拒绝覆盖本地修改。见[模板文档](src/geospatial3d/templates/browser-explorer/README.zh-CN.md)。
 
 ## 推荐画风
+
+首轮先做完整可辨识场景，允许明确记录的合理推测；精细和写实程度通过长期维护提高，不以完整测绘或照片级还原阻断发布。采用[地理骨架＋归档照片＋建筑模块＋开放航拍的混合方法](docs/zh-CN/progressive-modeling.md)，保留可编辑参数与独立地理证据。
 
 [style 画风库](style/README.zh-CN.md)默认推荐 **Architectural Toon Realism（建筑卡通写实）**，综合考虑视觉可读性、制作成本、维护和运行。包含 UO 来源原始概念图、精确调色板、双语规范与评估计划，同时鼓励探索其他画风。模板仍默认合成白模，现支持可选美术 GLB／Toon；[UO 首个闭环](https://github.com/williamQ96/open-campus-uo/blob/main/docs/visual-pilot.md)已实现。
 
