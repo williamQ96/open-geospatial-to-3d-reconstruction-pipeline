@@ -2,7 +2,7 @@
 
 # Open Geospatial-to-3D Reconstruction Pipeline
 
-长期维护的通用上游，将核验后的地理数据转换为 Blender、GLB 与可交互的浏览器地图。**v0.7** 增加紧凑手机布局与第一人称上下半屏双指移动／转向，见[手机操作](docs/zh-CN/viewer-template.md#手机操作)。v0.6 增加[参数化立面与航拍植被线索](docs/zh-CN/progressive-modeling.md)，保留 v0.5 可选美术层和 v0.4 浏览器交互。上下游仓库均为 public。
+长期维护的通用上游，将核验后的地理数据转换为 Blender、GLB 与可交互的浏览器地图。**v0.7** 增加紧凑手机布局与Follow／第一人称上下半屏双指移动／转向，见[手机操作](docs/zh-CN/viewer-template.md#手机操作)。v0.6 增加[参数化立面与航拍植被线索](docs/zh-CN/progressive-modeling.md)，保留 v0.5 可选美术层和 v0.4 浏览器交互。上下游仓库均为 public。
 
 ## 浏览器模板
 

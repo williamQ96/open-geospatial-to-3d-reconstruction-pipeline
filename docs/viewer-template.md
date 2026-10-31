@@ -36,4 +36,4 @@ The [style library](../style/README.md) contains the default recommended Archite
 
 ## Phone controls
 
-Compact phone layouts respect safe areas, reduce the minimap, and keep camera buttons at the bottom. First-person touch assigns lower-half contacts to a floating movement stick (dead zone, bounded analog speed) and upper-half contacts to looking. Roles remain fixed until release; two fingers operate independently. Release/cancel/lost capture, blur, resize, search, view changes and Settings clear movement. Follow retains drag-to-look; Overview retains orbit/pinch gestures. Desktop input is unchanged.
+Compact phone layouts respect safe areas, reduce the minimap, and keep camera buttons at the bottom. Follow and First-person touch assign lower-half contacts to a floating movement stick (dead zone, bounded analog speed) and upper-half contacts to looking. Roles remain fixed until release; two fingers operate independently. Release/cancel/lost capture, blur, resize, search, view changes and Settings clear movement. Overview retains orbit/pinch gestures. Desktop input is unchanged.

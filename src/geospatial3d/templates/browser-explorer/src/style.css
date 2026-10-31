@@ -854,10 +854,10 @@ dialog::backdrop {
     padding: 3px 5px;
     max-width: 145px;
   }
-  #app[data-view="first"] .building-label {
+  #app:is([data-view="first"], [data-view="third"]) .building-label {
     pointer-events: none;
   }
-  #app[data-view="first"] .touch-hint {
+  #app:is([data-view="first"], [data-view="third"]) .touch-hint {
     display: block;
     position: absolute;
     bottom: calc(65px + env(safe-area-inset-bottom, 0px));
@@ -869,7 +869,7 @@ dialog::backdrop {
     background: #f5f5efcc;
     padding: 5px 7px;
   }
-  #app[data-view="first"] .selection {
+  #app:is([data-view="first"], [data-view="third"]) .selection {
     bottom: calc(98px + env(safe-area-inset-bottom, 0px));
   }
 }

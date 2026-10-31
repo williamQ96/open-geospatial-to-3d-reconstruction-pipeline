@@ -72,7 +72,7 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.02;
 viewport.append(renderer.domElement);
 const touchControls = createTouchControls(renderer.domElement, {
-  enabled: () => view === "first" && !dialog.open && !!field,
+  enabled: () => view !== "aerial" && !dialog.open && !!field,
   onLook: (dx, dy) => {
     focusCameraTarget = null;
     yaw -= dx * 0.004;
@@ -537,11 +537,11 @@ function updatePlayer(dt) {
   const forward =
     (keys.has("KeyW") || keys.has("ArrowUp") ? 1 : 0) -
     (keys.has("KeyS") || keys.has("ArrowDown") ? 1 : 0) +
-    (view === "first" ? touchControls.axes.forward : 0);
+    (view !== "aerial" ? touchControls.axes.forward : 0);
   const right =
     (keys.has("KeyD") || keys.has("ArrowRight") ? 1 : 0) -
     (keys.has("KeyA") || keys.has("ArrowLeft") ? 1 : 0) +
-    (view === "first" ? touchControls.axes.right : 0);
+    (view !== "aerial" ? touchControls.axes.right : 0);
   moving = !!(forward || right);
   if (moving) {
     focusCameraTarget = null;
