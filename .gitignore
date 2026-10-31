@@ -1,0 +1,25 @@
+# Local configuration
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+node_modules/
+dist/
+build/
+
+# Large local datasets and generated outputs
+/data/raw/
+/data/processed/
+/exports/
+/artifacts/
+*.blend1
+*.blend2
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
