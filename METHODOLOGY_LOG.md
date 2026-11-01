@@ -6,6 +6,10 @@ Record reusable changes to methods, algorithms, contracts, automation and valida
 
 Project-specific development logs, campus modeling progress, scene inventories and deployment diaries belong only to downstream repositories. Do not mirror downstream development logs here.
 
+## 2026-10-31 — Publication confirmed: 0.11.0 / template 0.3.0
+
+Implementation [64ed0a2](https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline/commit/64ed0a21898d8f156bc8657595a5407629491bb1) is pushed to public main. [Upstream Actions 41277680207](https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline/actions/runs/41277680207) passed synthetic geometry, 34 Python tests, wheel/scaffold checks, 35 JS tests, formatting/build and all 9 template browser cases. Consumers can pin this clean implementation; this later documentation-only confirmation does not change runtime hashes. The project-specific production/deployment diary remains downstream. [skip ci] is used only for this evidence-only follow-up after the implementation checks succeeded.
+
 ## 2026-10-31 — Publication batch: semantic explorers and rendering stability (0.11.0)
 
 User authorized publishing the accumulated phases together. Package 0.11.0 / browser template 0.3.0 includes semantic demand-generated actors, calibrated gait, developer inspection, reversible beta/Zombie School with terminal recovery, sky/ground-layer support, bounded pedestrian detours and quality-preserving render work reduction. The static-haze cache remains opt-in/default-off. Previous local entries preserve their original measurement states. Validation already passed 34 Python, 35 JS and 9 full synthetic browser cases, formatting/build, plus consumer integration. This commit prepares upstream publication; remote checks are recorded after completion. Place-specific assets and development logs remain downstream.
