@@ -5,7 +5,13 @@ import {
   CSS2DRenderer,
 } from "three/addons/renderers/CSS2DRenderer.js";
 
-export function createBuildingLabels(scene, viewport, camera, onSelect) {
+export function createBuildingLabels(
+  scene,
+  viewport,
+  camera,
+  onSelect,
+  onHover = () => {},
+) {
   // CSS labels already use world-space anchors. Keep their renderer off the
   // building/vegetation/animated-skeleton graph, with identical projections.
   const labelScene = new THREE.Scene();
@@ -15,6 +21,7 @@ export function createBuildingLabels(scene, viewport, camera, onSelect) {
   const entries = [];
   let enabled = true,
     selectedId = null,
+    suppressedId = null,
     lastUpdate = -1,
     visibleCount = 0;
   const projected = new THREE.Vector3();
@@ -34,6 +41,12 @@ export function createBuildingLabels(scene, viewport, camera, onSelect) {
         button.setAttribute("aria-label", `Inspect ${building.name}`);
         button.addEventListener("pointerdown", (e) => e.stopPropagation());
         button.addEventListener("click", () => onSelect(building.id));
+        button.addEventListener("pointerenter", (event) => {
+          if (event.pointerType === "mouse") onHover(building.id);
+        });
+        button.addEventListener("pointerleave", (event) => {
+          if (event.pointerType === "mouse") onHover(null);
+        });
         const label = new CSS2DObject(button);
         label.position.set(x, building.roof_z_m + 3, -north);
         labelScene.add(label);
@@ -61,6 +74,12 @@ export function createBuildingLabels(scene, viewport, camera, onSelect) {
         );
       }
     },
+    setSuppressed(id) {
+      suppressedId = id;
+      lastUpdate = -1;
+      for (const entry of entries)
+        if (entry.building.id === id) entry.button.hidden = true;
+    },
     update(time, view = "aerial") {
       if (!enabled && !selectedId) return;
       // Screen-facing labels stay horizontal at every orbit; declutter overlaps.
@@ -81,6 +100,10 @@ export function createBuildingLabels(scene, viewport, camera, onSelect) {
           );
         visibleCount = 0;
         for (const entry of sorted) {
+          if (view === "aerial" && entry.building.id === suppressedId) {
+            entry.button.hidden = true;
+            continue;
+          }
           if (
             view !== "aerial" &&
             entry.distance > 180 * 180 &&

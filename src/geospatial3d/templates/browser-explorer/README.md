@@ -42,3 +42,6 @@ Software is [Apache-2.0](LICENSE). Original prose/design/synthetic-model contrib
 ## Optional authored art / 可选美术层
 
 Version 0.5 supports a separate presentation GLB, stable replacement IDs and Toon/PBR settings without rewriting geospatial evidence. `init-viewer --scene-dir` copies the optional art JSON and GLB; safe upgrades preserve downstream content. See [the contract and validation plan](https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline/blob/main/docs/presentation-layers.md) ([中文](https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline/blob/main/docs/zh-CN/presentation-layers.md)). The default synthetic scene does not opt in.
+
+
+[Analog movement and independent interiors](../../../../docs/interiors-mobile.md) — shared analog walk/run gesture, estimated doorways, one active world and exportable classroom template (local pending development).

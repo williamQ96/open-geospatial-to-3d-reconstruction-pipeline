@@ -1,7 +1,7 @@
 **English** | [简体中文](README.zh-CN.md)
 
 # Open Geospatial-to-3D Reconstruction Pipeline
-**0.11.0 / explorer template 0.3.0:** semantic NPCs, developer/beta tools, environment layers and render stability. Publication checks are recorded in the methodology log.
+**0.12.0 / explorer template 0.4.0:** analog walk/run, independent classroom worlds, Overview building cards and hero-free inspection, plus subtle building hover. [Design and resource-lifetime contract](docs/interiors-mobile.md). Publication checks are recorded in the methodology log.
 
 
 Reusable tools for verified geographic data → editable Blender assets → GLB/glTF and interactive browser explorers.

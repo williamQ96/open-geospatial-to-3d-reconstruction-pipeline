@@ -61,7 +61,8 @@ test("standalone synthetic scene has the full explorer without campus-specific c
   await expect(page.locator(".building-label.is-selected")).toContainText(
     "Demo Library",
   );
-  await expect(page.locator(".building-label.is-selected")).toBeVisible();
+  await expect(page.locator(".building-label.is-selected")).toBeHidden();
+  await expect(page.locator(".building-card")).toBeVisible();
   for (const mode of ["Digit1", "Digit2"]) {
     await page.keyboard.press(mode);
     expect((await state()).player).toEqual(origin);

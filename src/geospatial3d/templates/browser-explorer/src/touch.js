@@ -1,46 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 // Pointer roles are chosen on contact and stay fixed until that finger lifts.
-export function createTouchControls(canvas, { enabled, onLook, onMove }) {
+export function createTouchControls(
+  canvas,
+  { enabled, onLook, onMove, onTap = () => {} },
+) {
   const axes = { forward: 0, right: 0 };
   const contacts = new Map();
-  let running = false;
-  const run = document.createElement("button");
-  run.className = "touch-run";
-  run.textContent = "Run";
-  run.setAttribute("aria-label", "Hold to run");
-  run.setAttribute("aria-pressed", "false");
-  canvas.parentElement.append(run);
-  function setRunning(value) {
-    running = value;
-    run.setAttribute("aria-pressed", String(value));
-  }
-  run.addEventListener("pointerdown", (event) => {
-    if (!enabled()) return;
-    event.preventDefault();
-    event.stopPropagation();
-    setRunning(true);
-    run.setPointerCapture(event.pointerId);
-  });
-  for (const type of ["pointerup", "pointercancel", "lostpointercapture"])
-    run.addEventListener(type, (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      setRunning(false);
-    });
-  run.addEventListener("keydown", (event) => {
-    if (["Space", "Enter"].includes(event.code)) {
-      event.preventDefault();
-      event.stopPropagation();
-      if (enabled()) setRunning(true);
-    }
-  });
-  run.addEventListener("keyup", (event) => {
-    if (["Space", "Enter"].includes(event.code)) {
-      event.preventDefault();
-      event.stopPropagation();
-      setRunning(false);
-    }
-  });
   const stick = document.createElement("div");
   stick.className = "touch-stick";
   stick.hidden = true;
@@ -49,7 +14,6 @@ export function createTouchControls(canvas, { enabled, onLook, onMove }) {
   canvas.parentElement.append(stick);
   const knob = stick.firstElementChild;
   function reset() {
-    setRunning(false);
     contacts.clear();
     axes.forward = axes.right = 0;
     stick.hidden = true;
@@ -72,6 +36,10 @@ export function createTouchControls(canvas, { enabled, onLook, onMove }) {
         role,
         x: event.clientX,
         y: event.clientY,
+        startX: event.clientX,
+        startY: event.clientY,
+        travelled: 0,
+        started: performance.now(),
       });
       canvas.setPointerCapture(event.pointerId);
       if (role === "move") {
@@ -95,6 +63,13 @@ export function createTouchControls(canvas, { enabled, onLook, onMove }) {
       }
       const dx = event.clientX - contact.x,
         dy = event.clientY - contact.y;
+      contact.travelled = Math.max(
+        contact.travelled,
+        Math.hypot(
+          event.clientX - contact.startX,
+          event.clientY - contact.startY,
+        ),
+      );
       if (contact.role === "look") {
         onLook(dx, dy);
         contact.x = event.clientX;
@@ -124,6 +99,12 @@ export function createTouchControls(canvas, { enabled, onLook, onMove }) {
       axes.forward = axes.right = 0;
       stick.hidden = true;
     }
+    if (
+      event.type === "pointerup" &&
+      contact.travelled < 6 &&
+      performance.now() - contact.started < 400
+    )
+      onTap(event);
     if (canvas.hasPointerCapture(event.pointerId))
       canvas.releasePointerCapture(event.pointerId);
   }
@@ -133,7 +114,28 @@ export function createTouchControls(canvas, { enabled, onLook, onMove }) {
     axes,
     reset,
     get running() {
-      return running;
+      return Math.hypot(axes.forward, axes.right) * 4.6 > 2.15;
     },
+  };
+}
+
+// Keyboard and analog touch share world speeds; preserve fractional stick magnitude.
+export function movementInput(
+  forward,
+  right,
+  sprint,
+  touch = { forward: 0, right: 0 },
+) {
+  const length = Math.max(1, Math.hypot(forward, right));
+  const keySpeed = sprint ? 4.6 : 1.7;
+  const f = (forward / length) * keySpeed + touch.forward * 4.6;
+  const r = (right / length) * keySpeed + touch.right * 4.6;
+  const speed = Math.hypot(f, r),
+    scale = Math.min(1, 4.6 / (speed || 1));
+  return {
+    forward: f * scale,
+    right: r * scale,
+    speed: speed * scale,
+    running: speed * scale > 2.15,
   };
 }

@@ -1,7 +1,7 @@
 [English](README.md) | **简体中文**
 
 # Open Geospatial-to-3D Reconstruction Pipeline
-**0.11.0／探索模板 0.3.0：**语义 NPC、开发／Beta 工具、环境层与渲染稳定。发布核验见方法日志。
+**0.12.0／探索模板 0.4.0：**拖拽走跑、独立教室世界、Overview 建筑卡片与无 hero 观察进入、建筑轻微悬停。[设计与资源生命周期](docs/zh-CN/interiors-mobile.md)。发布核验见方法日志。
 
 
 本地[深度稳定与不降质性能方法](docs/zh-CN/render-performance.md)覆盖保守 Overview 裁剪、独立标签、静态矩阵、精确重绘失效及需实测后选择的 shader 缓存。
