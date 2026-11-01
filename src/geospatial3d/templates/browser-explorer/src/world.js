@@ -84,14 +84,23 @@ export function movePlayer(
   half,
   field,
   snapToGround = true,
+  dynamicBlocked = () => false,
 ) {
   // Substeps prevent tunnelling at high frame times; axis separation slides along walls.
   const steps = Math.max(1, Math.ceil(Math.hypot(delta.x, delta.z) / 0.2));
   for (let i = 0; i < steps; i++) {
     const x = position.x + delta.x / steps;
-    if (!isBlocked(x, position.z, buildings, half)) position.x = x;
+    if (
+      !isBlocked(x, position.z, buildings, half) &&
+      !dynamicBlocked(x, position.z, position.y)
+    )
+      position.x = x;
     const z = position.z + delta.z / steps;
-    if (!isBlocked(position.x, z, buildings, half)) position.z = z;
+    if (
+      !isBlocked(position.x, z, buildings, half) &&
+      !dynamicBlocked(position.x, z, position.y)
+    )
+      position.z = z;
   }
   if (snapToGround) position.y = sampleGround(field, position.x, position.z);
   return position;

@@ -20,6 +20,15 @@ def sha256(path):
         return hashlib.file_digest(f, "sha256").hexdigest()
 
 
+def text_sha256(path):
+    """Portable UTF-8 text digest, without BOM and with LF line endings.
+
+    Opt-in companion to the raw build-byte digest; never use for binary inputs.
+    """
+    text = Path(path).read_text(encoding='utf-8-sig')
+    return hashlib.sha256(text.encode('utf-8')).hexdigest()
+
+
 def fetch_source(source, cache):
     path = Path(cache) / source["filename"]
     path.parent.mkdir(parents=True, exist_ok=True)

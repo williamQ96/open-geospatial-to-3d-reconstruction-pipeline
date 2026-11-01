@@ -6,6 +6,10 @@ Reusable tools for verified geographic data → editable Blender assets → GLB/
 
 **v0.7 adds compact phone layouts and dual-touch Follow/First person movement/look controls.** [Phone behavior](docs/viewer-template.md#phone-controls). v0.6 added reusable modular facade poses and aerial vegetation cues, with a [recognizable-first, progressively corrected modeling policy](docs/progressive-modeling.md). The v0.5 authored presentation layers and v0.4 explorer interactions remain available. See [presentation methodology](docs/presentation-layers.md). The reconstruction exchange remains schema v1. This upstream repository and the [Open Campus: UO](https://github.com/williamQ96/open-campus-uo) downstream and its [live explorer](https://williamq96.github.io/open-campus-uo/) are public.
 
+[Methodology update log](METHODOLOGY_LOG.md) records reusable changes; project-specific development logs stay downstream.
+
+Recommended [scene hierarchy](docs/scene-hierarchy.md): photo-derived grammar for main landmarks, reusable main-scene components, and inexpensive open low-poly or seeded procedural background appearance with spatial haze. Preserve building coordinates, footprints, IDs, streets and blocks; randomize appearance only. Editable building objects and runtime batches are independent.
+
 ## Start with the browser template
 
 ```powershell
@@ -88,4 +92,6 @@ Code and template software use **Apache-2.0**; original documentation and model/
 
 ## Campus life and outdoor routing
 
-The optional browser extension adds rigged heroes, scripted walkers/bicycles/scooters/road cars, independent default-on immersion switches and mode-aware A/B navigation with animated chevrons. [Contracts, reusable graph generation, asset licensing and limitations](docs/campus-life-navigation.md). Local routes, clothing colors and open asset archives stay downstream.
+The optional browser extension adds rigged heroes, scripted walkers/bicycles/scooters/road cars, a four-level density slider (default Mid), actor collisions, optional sound/walking feedback and downstream GitHub issue drafts and mode-aware A/B navigation with animated chevrons. [Contracts, reusable graph generation, asset licensing and limitations](docs/campus-life-navigation.md). Local routes, clothing colors and open asset archives stay downstream.
+
+[Recommended: early playable, community refinement loop](docs/iterative-community-modeling.md).

@@ -7,6 +7,29 @@ import {
   setEmissive,
 } from "../src/presentation.js";
 
+test("context batches retain registered identities without creating a mesh per anonymous building", () => {
+  const root = new THREE.Group(),
+    batch = new THREE.Mesh(
+      new THREE.BoxGeometry(),
+      new THREE.MeshStandardMaterial(),
+    );
+  batch.userData = {
+    asset_kind: "context-building-batch",
+    asset_ids: ["a", "b"],
+  };
+  root.add(batch);
+  const layer = createPresentation(root, { replaces_building_ids: ["a", "b"] });
+  assert.equal(layer.groups.size, 0);
+  assert.equal(layer.batchedIds.size, 2);
+  assert.equal(layer.collisionMeshes.length, 1);
+  layer.setToon(false);
+  assert.equal(batch.material.isMeshStandardMaterial, true);
+  assert.throws(
+    () => createPresentation(root, { replaces_building_ids: ["a"] }),
+    /Unregistered context/,
+  );
+});
+
 test("presentation assets stay within the local scene directory", () => {
   assert.equal(
     sceneAssetUrl("/map/scene/", "art/pilot.glb"),

@@ -15,6 +15,58 @@
     <title>OpenCampus · UO Eugene</title>
   </head>
   <body>
+    <dialog id="feedback-dialog" aria-labelledby="feedback-heading">
+      <div class="feedback-heading">
+        <h2 id="feedback-heading">Map feedback</h2>
+        <button id="feedback-close" aria-label="Close feedback">×</button>
+      </div>
+      <p id="feedback-iteration"></p>
+      <p>
+        Share a correction, idea or problem. Continue on GitHub to sign in and
+        confirm issue creation.
+      </p>
+      <form id="feedback-form">
+        <label
+          >Title <small>(optional)</small
+          ><input
+            id="feedback-title"
+            maxlength="120"
+            placeholder="Leave blank for an automatic feedback title"
+        /></label>
+        <label
+          >Feedback <small>(required)</small
+          ><textarea
+            id="feedback-content"
+            required
+            rows="6"
+            maxlength="20000"
+            placeholder="What could we improve?"
+          ></textarea>
+        </label>
+        <label
+          >Coordinates <small>(optional)</small
+          ><input
+            id="feedback-coordinates"
+            maxlength="160"
+            placeholder="Include a location only if useful"
+        /></label>
+        <button id="feedback-position" type="button">
+          Use current position
+        </button>
+        <p>
+          Coordinates are included only when you fill the optional field.
+          Nothing is posted until you confirm on GitHub.
+        </p>
+        <button type="submit" class="feedback-submit">
+          Continue on GitHub ↗
+        </button>
+      </form>
+      <p id="feedback-status" role="status" aria-live="polite"></p>
+      <button id="feedback-copy" hidden>Copy feedback text</button>
+      <a id="feedback-continue" target="_blank" rel="noopener noreferrer" hidden
+        >Open GitHub issue draft ↗</a
+      >
+    </dialog>
     <main id="app">
       <div id="viewport" aria-label="3D scene explorer" tabindex="0"></div>
       <header class="masthead">
@@ -34,6 +86,51 @@
             title="Directions"
           >
             ↗ <span>Directions</span></button
+          ><button
+            id="sound-toggle"
+            class="icon-button"
+            aria-label="Mute sound"
+            aria-pressed="true"
+            hidden
+            title="Sound on"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="21"
+              height="21"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              aria-hidden="true"
+            >
+              <path d="M11 4 6 8H3v8h3l5 4Z" />
+              <path
+                class="sound-waves"
+                d="M15 8c3 2 3 6 0 8m3-11c5 4 5 10 0 14"
+              />
+              <path class="sound-mute" d="m15 9 6 6m0-6-6 6" />
+            </svg></button
+          ><button
+            id="feedback-open"
+            class="icon-button"
+            aria-label="Feedback"
+            title="Feedback"
+            aria-haspopup="dialog"
+            aria-controls="feedback-dialog"
+            hidden
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="21"
+              height="21"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              aria-hidden="true"
+            >
+              <path d="M4 3h16v13H9l-5 5Z" />
+              <path d="M8 8h8m-8 4h5" />
+            </svg></button
           ><button
             id="settings-open"
             class="settings-button"
@@ -216,27 +313,50 @@
               ></span
             ><input id="toon-setting" type="checkbox" checked
           /></label>
+          <label id="context-fog-row" class="setting-row" hidden
+            ><span
+              >Background haze<small
+                >Soften surrounding blocks while keeping the campus
+                clear.</small
+              ></span
+            ><input id="context-fog-setting" type="checkbox" checked
+          /></label>
           <div id="immersion-settings" hidden>
             <h2>Campus life</h2>
-            <label class="setting-row"
+            <label class="setting-row" for="activity-density"
               ><span
-                >People and traffic<small
-                  >Scripted walkers, bicycles, scooters and cars.</small
+                >Campus activity density<small
+                  >Students, bicycles, scooters, cars, squirrels and parked
+                  props.</small
                 ></span
-              ><input id="people-setting" type="checkbox" checked
-            /></label>
-            <label class="setting-row"
-              ><span
-                >Parked vehicles and props<small
-                  >Illustrative static objects.</small
-                ></span
-              ><input id="props-setting" type="checkbox" checked
-            /></label>
+              ><output id="activity-density-value">Mid</output></label
+            >
+            <input
+              id="activity-density"
+              type="range"
+              min="0"
+              max="3"
+              step="1"
+              value="2"
+              aria-label="Campus activity density"
+              aria-valuetext="Mid"
+            />
+            <div class="density-ticks" aria-hidden="true">
+              <span>No</span><span>Low</span><span>Mid</span><span>High</span>
+            </div>
             <p>
-              Turn both off for a clean map. Activity is illustrative, not live
-              campus data.
+              No removes all activity, props and their collision volumes for a
+              clean map. Activity is illustrative, not live campus data.
             </p>
           </div>
+          <label class="setting-row"
+            ><span
+              >First-person motion<small
+                >Gentle walking sway; system reduced-motion preference takes
+                priority.</small
+              ></span
+            ><input id="motion-setting" type="checkbox" checked
+          /></label>
           <h2>Controls</h2>
           <p>
             Search frames a building in Overview. In Follow and First person, it

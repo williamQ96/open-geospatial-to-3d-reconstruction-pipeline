@@ -8,6 +8,8 @@ This is a production policy, not permission to present generated details as meas
 
 ## Hybrid inputs, without specialist equipment
 
+Use the [recommended scene hierarchy](scene-hierarchy.md) to separate reference-rich main landmarks from inexpensive supporting surroundings. Randomize background appearance while retaining original geographic envelopes, IDs, roads and blocks; keep haze and runtime batching separate from editable source assets.
+
 Use existing verified terrain/LiDAR or explicit geographic envelopes for position and scale; archived photographs for recognizable facade vocabulary; open georeferenced aerial imagery for broad landscape distribution; and simple reusable materials for the chosen style. Actual measurements can replace estimated dimensions later. If no new measurements were taken, say so. A known envelope does not establish the accuracy of every authored detail.
 
 Instead of forcing a sparse or mixed-date photo collection into a dense reconstruction, reconstruct the building's **architectural grammar**: repeated window bays, floor bands, columns, cornices, steps, awnings and entrances. Keep those dimensions/counts in editable parameters. Export clean mesh geometry with standard PBR materials, then apply optional renderer styling. Photography need not become a giant texture atlas for this method to be useful.
@@ -45,3 +47,5 @@ For each asset or feature group, keep source IDs, observed features, inferred di
 The first application is [UO v0.7](https://github.com/williamQ96/open-campus-uo/blob/main/docs/visual-refinement-v0.7.md). Synthetic tests cover facade spacing/reversal/validation, cue behavior and north/south sampling; the downstream verifies its real assets and interactions. These checks demonstrate a working first case, not independent surveying accuracy, universal RGB thresholds or broad geographic validation.
 
 See [reference-media intake](reference-media.md), [presentation layers](presentation-layers.md) and [the recommended style](../style/README.md). New maps can reuse the methods while choosing their own architectural modules, vegetation and art direction.
+
+Use the [early playable/community iteration loop](iterative-community-modeling.md): publish inspectable interaction early, then improve from user feedback and developer-led refinement, keeping geographic evidence and inferred art separate.

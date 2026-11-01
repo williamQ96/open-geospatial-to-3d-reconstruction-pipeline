@@ -2,6 +2,7 @@
 // Optional authored art layer. It never rewrites the measured scene manifest.
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { createContextFog } from "./context-fog.js";
 
 export function sceneAssetUrl(base, name) {
   if (
@@ -42,6 +43,8 @@ export async function loadPresentation(base, name, buildingIds) {
 
 export function createPresentation(root, config) {
   const groups = new Map();
+  const batchedIds = new Set();
+  const contextFog = createContextFog(config.context_fog);
   const collisionMeshes = [];
   const materials = [];
   const ramp = new THREE.DataTexture(
@@ -77,6 +80,7 @@ export function createPresentation(root, config) {
     const toon = Array.isArray(original)
       ? original.map(toToon)
       : toToon(original);
+    for (const material of [original, toon].flat()) contextFog?.apply(material);
     materials.push({ object, original, toon });
     object.material = toon;
     if (object.userData.asset_kind === "landscape-surface") {
@@ -87,6 +91,16 @@ export function createPresentation(root, config) {
       }
     }
     const id = object.userData.asset_id;
+    if (object.userData.asset_kind === "context-building-batch") {
+      if (!Array.isArray(object.userData.asset_ids))
+        throw Error("Missing batch identities");
+      for (const batchId of object.userData.asset_ids) {
+        if (!config.replaces_building_ids.includes(batchId))
+          throw Error("Unregistered context building: " + batchId);
+        batchedIds.add(batchId);
+      }
+      collisionMeshes.push(object);
+    }
     if (id && object.userData.asset_kind === "building") {
       if (!config.replaces_building_ids.includes(id))
         throw new Error("Unregistered authored building: " + id);
@@ -97,12 +111,14 @@ export function createPresentation(root, config) {
   });
   // Groups reference the same materials, while original nodes retain their exported transforms.
   for (const id of config.replaces_building_ids)
-    if (!groups.has(id))
+    if (!groups.has(id) && !batchedIds.has(id))
       throw new Error("Missing authored building geometry: " + id);
   return {
     root,
     config,
     groups,
+    batchedIds,
+    contextFog,
     collisionMeshes,
     setToon(enabled) {
       for (const entry of materials) {

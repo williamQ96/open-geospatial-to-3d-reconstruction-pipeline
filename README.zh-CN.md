@@ -2,6 +2,10 @@
 
 # Open Geospatial-to-3D Reconstruction Pipeline
 
+可复用改进持续记录在[方法论更新日志](METHODOLOGY_LOG.zh-CN.md)；具体子地图开发日志只保留在下游。
+
+推荐[场景分层](docs/zh-CN/scene-hierarchy.md)：重点地标从照片提炼语法，一般建筑复用构件，外围用开源 low-poly 或原创程序化外观与空间雾化。只随机外观，保留坐标、占地、身份、道路和街区；编辑对象与运行时合批独立。
+
 长期维护的通用上游，将核验后的地理数据转换为 Blender、GLB 与可交互的浏览器地图。**v0.7** 增加紧凑手机布局与Follow／第一人称上下半屏双指移动／转向，见[手机操作](docs/zh-CN/viewer-template.md#手机操作)。v0.6 增加[参数化立面与航拍植被线索](docs/zh-CN/progressive-modeling.md)，保留 v0.5 可选美术层和 v0.4 浏览器交互。上下游仓库均为 public。
 
 ## 浏览器模板
@@ -62,4 +66,6 @@ python -m venv .venv
 
 ## 校园活动与室外导航
 
-模板新增可选骨骼角色、NPC／交通、独立的默认开启开关及按视角区分起点的 A／B 导航。[接口与可复用方法](docs/campus-life-navigation.zh-CN.md)。具体路线、配色、素材归档由下游维护。
+模板新增可选骨骼角色、NPC／交通、统一四档密度（默认 Mid）、碰撞、可选声音／行走反馈和下游 GitHub Issue 草稿及按视角区分起点的 A／B 导航。[接口与可复用方法](docs/campus-life-navigation.zh-CN.md)。具体路线、配色、素材归档由下游维护。
+
+[推荐：尽早可交互、社区共同迭代](docs/zh-CN/iterative-community-modeling.md)。

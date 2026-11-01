@@ -25,17 +25,26 @@ import { loadStudentFactory } from "./student.js";
 import { createRouter, distance } from "./routing.js";
 import { createNavigation } from "./navigation.js";
 import { createCampusLife } from "./life.js";
+import { loadWildlifeFactory } from "./wildlife.js";
+import { createWalkMotion, DENSITY_NAMES } from "./ambience.js";
+import { createSound } from "./sound.js";
+import { createFeedback } from "./feedback.js";
 import { applyProfile } from "./profile.js";
 import "@fontsource-variable/dm-sans";
 import "@fontsource/ibm-plex-mono/latin-400.css";
 import "@fontsource/ibm-plex-mono/latin-500.css";
 import "./style.css";
 
-let navigation, life, studentFactory;
+let navigation, life, studentFactory, squirrelFactory;
+let sound = { step() {}, state: () => ({ enabled: false }) };
+const walkMotion = createWalkMotion();
+let motion = { bobX: 0, bobY: 0, roll: 0, walking: false, steps: 0 };
+const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 let analytics = { event() {} };
 const $ = (selector) => document.querySelector(selector);
 const viewport = $("#viewport"),
   dialog = $("#settings-dialog");
+const modalOpen = () => dialog.open || $("#feedback-dialog").open;
 const views = ["third", "first", "aerial"],
   keys = new Set();
 let view = "aerial",
@@ -83,7 +92,7 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.02;
 viewport.append(renderer.domElement);
 const touchControls = createTouchControls(renderer.domElement, {
-  enabled: () => view !== "aerial" && !dialog.open && !!field,
+  enabled: () => view !== "aerial" && !modalOpen() && !!field,
   onLook: (dx, dy) => {
     focusCameraTarget = null;
     yaw -= dx * 0.004;
@@ -165,6 +174,8 @@ addEventListener("resize", resize);
 resize();
 
 function setView(next) {
+  walkMotion.reset();
+  motion = { ...motion, bobX: 0, bobY: 0, roll: 0, walking: false };
   if (!views.includes(next)) return;
   if (next !== view) analytics.event("view-" + next);
   cancelCameraTransition();
@@ -267,6 +278,8 @@ $("#settings-open").addEventListener("click", () => {
   keys.clear();
   drag = null;
   touchControls.reset();
+  walkMotion.reset();
+  motion = { ...motion, bobX: 0, bobY: 0, roll: 0, walking: false };
   dialog.showModal();
 });
 $("#settings-close").addEventListener("click", () => dialog.close());
@@ -307,7 +320,7 @@ $("#shadows-setting").addEventListener("change", (event) => {
 
 addEventListener("keydown", (event) => {
   if (
-    dialog.open ||
+    modalOpen() ||
     ["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement?.tagName) ||
     event.ctrlKey ||
     event.metaKey ||
@@ -397,7 +410,7 @@ renderer.domElement.addEventListener("pointercancel", () => {
 viewport.addEventListener(
   "wheel",
   (event) => {
-    if (view !== "third" || dialog.open || event.ctrlKey || event.metaKey)
+    if (view !== "third" || modalOpen() || event.ctrlKey || event.metaKey)
       return;
     event.preventDefault();
     const delta =
@@ -566,6 +579,7 @@ function selectAt(event) {
   else clearSelection();
 }
 function updatePlayer(dt) {
+  const previous = player.clone();
   const forward =
     (keys.has("KeyW") || keys.has("ArrowUp") ? 1 : 0) -
     (keys.has("KeyS") || keys.has("ArrowDown") ? 1 : 0) +
@@ -592,7 +606,15 @@ function updatePlayer(dt) {
       z: (-Math.cos(heading) * forward - Math.sin(heading) * right) * speed,
     };
     const before = player.clone();
-    movePlayer(player, delta, buildings, half, field, false);
+    movePlayer(
+      player,
+      delta,
+      buildings,
+      half,
+      field,
+      false,
+      (x, z, y) => life?.blockedPlayer(x, z, y) || false,
+    );
     character.root.rotation.y = Math.atan2(
       player.x - before.x,
       player.z - before.z,
@@ -600,6 +622,14 @@ function updatePlayer(dt) {
   }
   const ground = sampleGround(field, player.x, player.z);
   stepVertical(player, vertical, dt, ground);
+  const travelled = Math.hypot(player.x - previous.x, player.z - previous.z);
+  moving = travelled > 0.0001;
+  motion = walkMotion.update(dt, travelled, {
+    grounded: vertical.grounded,
+    enabled: view !== "aerial",
+    reducedMotion: reducedMotion.matches || !$("#motion-setting").checked,
+  });
+  if (motion.step) sound.step();
   character.root.position.copy(player);
   character.animate(elapsed, moving && vertical.grounded);
   contactShadow.position.set(player.x, ground + 0.035, player.z);
@@ -632,6 +662,9 @@ function updateCamera(dt, snap = false) {
   }
   const eye = player.clone().add(new THREE.Vector3(0, 1.58, 0));
   if (view === "first") {
+    eye.x += Math.cos(yaw) * motion.bobX;
+    eye.z -= Math.sin(yaw) * motion.bobX;
+    eye.y += motion.bobY;
     camera.position.copy(eye);
     if (focusCameraTarget) {
       camera.lookAt(focusCameraTarget);
@@ -648,6 +681,7 @@ function updateCamera(dt, snap = false) {
           ),
         ),
     );
+    camera.rotation.z += motion.roll;
     return;
   }
   const desired = eye
@@ -690,6 +724,30 @@ try {
     throw new Error("Unsupported scene manifest version.");
   field = await loadJson(base + manifest.heightfield_url);
   applyProfile(profile, manifest, field);
+  sound = createSound(
+    profile.audio,
+    import.meta.env.BASE_URL,
+    $("#sound-toggle"),
+  );
+  createFeedback(profile.feedback, {
+    iteration: profile.iteration || "development",
+    getView: () => view,
+    getPosition: () =>
+      `E ${player.x.toFixed(1)} / N ${(-player.z).toFixed(1)} / H ${player.y.toFixed(1)} m (local ENU)`,
+    pause: () => {
+      keys.clear();
+      drag = null;
+      touchControls.reset();
+      walkMotion.reset();
+      motion = { ...motion, bobX: 0, bobY: 0, roll: 0, walking: false };
+    },
+    resume: () => viewport.focus({ preventScroll: true }),
+  });
+  if (profile.wildlife?.asset_url)
+    squirrelFactory = await loadWildlifeFactory(
+      sceneAssetUrl(import.meta.env.BASE_URL, profile.wildlife.asset_url),
+      profile.wildlife.yaw_correction,
+    );
   analytics = createAnalytics(profile.analytics);
   if (analytics.enabled) {
     const notice = document.createElement("p");
@@ -806,6 +864,17 @@ try {
     });
   }
   scene.add(model);
+  if (presentation?.contextFog) {
+    model.traverse((object) => {
+      if (object.isMesh)
+        for (const material of [object.material].flat())
+          presentation.contextFog.apply(material);
+    });
+    $("#context-fog-row").hidden = false;
+    $("#context-fog-setting").addEventListener("change", (e) =>
+      presentation.contextFog.setEnabled(e.target.checked),
+    );
+  }
   if (profile.character?.asset_url) {
     studentFactory = await loadStudentFactory(
       sceneAssetUrl(import.meta.env.BASE_URL, profile.character.asset_url),
@@ -828,9 +897,14 @@ try {
       return true;
     };
     const surfaces = [];
+    let drapedOffset = 0;
     model.traverse((o) => {
-      if (o.isMesh && o.userData.asset_kind === "landscape-surface")
-        surfaces.push(o);
+      if (o.isMesh && o.userData.asset_kind === "landscape-surface") {
+        const offset = o.userData.heightfield_offset_m;
+        if (Number.isFinite(offset) && offset >= 0 && offset <= 0.3)
+          drapedOffset = Math.max(drapedOffset, offset);
+        else surfaces.push(o);
+      }
     });
     model.updateMatrixWorld(true);
     const surfaceRay = new THREE.Raycaster(),
@@ -838,7 +912,7 @@ try {
     const ground = (x, z) => {
       const key = Math.round(x * 2) + "," + Math.round(z * 2);
       if (heightCache.has(key)) return heightCache.get(key);
-      const y = sampleGround(field, x, z);
+      const y = sampleGround(field, x, z) + drapedOffset;
       surfaceRay.set(
         new THREE.Vector3(x, y + 20, z),
         new THREE.Vector3(0, -1, 0),
@@ -888,16 +962,18 @@ try {
         router,
         activity,
         studentFactory: studentFactory || createCharacter,
+        squirrelFactory,
+        getPlayer: () => player,
         ground,
         clearSegment,
       });
       $("#immersion-settings").hidden = false;
-      $("#people-setting").addEventListener("change", (e) =>
-        life.setPeople(e.target.checked),
-      );
-      $("#props-setting").addEventListener("change", (e) =>
-        life.setProps(e.target.checked),
-      );
+      $("#activity-density").addEventListener("input", (e) => {
+        life.setDensity(e.target.value);
+        const name = DENSITY_NAMES[life.state().densityLevel];
+        $("#activity-density-value").textContent = name;
+        e.target.setAttribute("aria-valuetext", name);
+      });
     }
   }
   labels.populate(buildings);
@@ -923,10 +999,10 @@ try {
     const dt = Math.min((now - lastTime) / 1000 || 0, 0.08);
     lastTime = now;
     elapsed += dt;
-    if (!dialog.open) updatePlayer(dt);
+    if (!modalOpen()) updatePlayer(dt);
     updateCamera(dt);
     navigation?.update(elapsed);
-    if (!dialog.open) life?.update(dt);
+    if (!modalOpen()) life?.update(dt);
     renderer.render(scene, camera);
     labels.update(now, view);
     frames++;
@@ -954,6 +1030,8 @@ try {
       ready: true,
       riggedHero: !!character.rigged,
       life: life?.state() || null,
+      audio: sound.state(),
+      walkMotion: { ...motion },
       navigation: navigation?.state() || null,
       view,
       followDistance,
@@ -986,10 +1064,13 @@ try {
             id: presentation.config.id,
             buildings: presentation.groups.size,
             toon: $("#toon-setting").checked,
+            backgroundHaze: presentation.contextFog?.enabled || false,
+            batchedBuildings: presentation.batchedIds.size,
             ...presentation.config.stats,
           }
         : null,
     }),
+    lifeColliders: () => life?.colliders() || [],
     setView,
     reset: resetPlayer,
     labelInfo: (id) => labels.projectedLabel(id),

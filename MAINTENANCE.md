@@ -17,3 +17,9 @@ Python tools and the browser template have semantic versions; interchange/config
 Breaking coordinate or field changes require schema migration notes. Location-quantized roof IDs are seed identities that may split or merge; stable institutional registries remain a downstream refinement task.
 
 The historical UO loop and synthetic geometry/interaction checks are implemented. Independent survey accuracy, a second real geographic region, arbitrary CRS conversion, incremental regeneration and cross-engine validation remain open work.
+
+## Methodology records
+
+Maintain the [methodology update log](METHODOLOGY_LOG.md) for reusable changes, recording motivation, transferable principles, verification and publication status. Keep the Chinese companion consistent. Downstream projects keep their own development logs; do not copy project-specific logs or release diaries here. See `AGENTS.md` for the ongoing recording rule.
+
+Recommend the [early playable/community iteration loop](docs/iterative-community-modeling.md): whitebox first, rapid moderate-fidelity source-guided modeling with documented inference, then feedback and proactive refinement.

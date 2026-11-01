@@ -21,6 +21,10 @@ The first case study is [Open Campus: UO](https://github.com/williamQ96/open-cam
 
 These are engineering judgments and intended benefits, not measured savings or a performance benchmark. See the [implementation and evaluation plan](architectural-toon-realism/implementation.md).
 
+## Recommended scene hierarchy
+
+Use photo-derived architectural grammar for main landmarks, reusable components for main-scene context, and open low-poly or original procedural assets with seeded appearance and spatial haze for supporting surroundings. **Keep geographic positions, footprints, roads and blocks fixed; randomize only appearance.** Preserve individual editable assets while batching runtime copies. See the [recommended hierarchy and implementation](../docs/scene-hierarchy.md).
+
 ## Other styles are welcome
 
 Follow the [recognizable-first modeling policy](../docs/progressive-modeling.md): allow documented, plausible first-pass inference and improve realism through sustained correction. The recommended style is compatible with modular geometry and shared materials; it does not require a photoreal scan before release.
@@ -32,3 +36,7 @@ Propose a `style/<slug>/` directory with an English README, optional translation
 Original design documentation and rights-held illustration contributions follow [CC BY 4.0](../LICENSING.md); code examples follow Apache-2.0. Third-party references retain their own rights.
 
 For each concrete map, keep the adopted photographs, mockups and image inputs in its own `data/reference-images/` archive with per-file provenance and export-compatible terms. Follow the [reference-media policy](../docs/reference-media.md); a style choice does not remove source restrictions.
+
+## Iterative delivery
+
+Establish a playable whitebox early, then refine through source-guided moderate-fidelity modeling, community feedback and developer-led corrections. See the [recommended loop](../docs/iterative-community-modeling.md) and [optional ambience/feedback controls](../docs/ambient-interaction.md).

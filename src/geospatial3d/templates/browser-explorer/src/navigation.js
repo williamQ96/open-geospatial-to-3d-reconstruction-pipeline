@@ -20,8 +20,8 @@ export function createNavigation({
     pending = null,
     active = false,
     current = null,
-    lastPlan = -10,
-    lastStart = null;
+    lastArrivalCheck = -10,
+    walkingStart = null;
   const live = () => getView() !== "aerial",
     playerPoint = () => {
       const p = getPlayer();
@@ -30,7 +30,9 @@ export function createNavigation({
   const status = (text) => ($("#route-status").textContent = text);
   function render() {
     $("#route-a").textContent = live()
-      ? "You · live position"
+      ? walkingStart && active
+        ? "You · fixed starting point"
+        : "You · position when route starts"
       : a?.label || "Choose starting point";
     $("#route-b").textContent = b?.label || "Choose destination";
     panel
@@ -47,14 +49,16 @@ export function createNavigation({
     panel.classList.toggle("is-pinning", !!pending?.pin);
   }
   function plan() {
-    const start = live() ? { point: playerPoint() } : a;
+    // Capture once per walking route. The player/minimap marker stays live;
+    // the blue origin and route geometry remain anchored to the saved point.
+    if (live() && !walkingStart) walkingStart = playerPoint();
+    const start = live() ? { point: walkingStart } : a;
     if (!start || !b) return;
     current = router.route(start.point, b.point, {
       startBuilding: !!start.building,
       endBuilding: !!b.building,
     });
     routeView.set(current);
-    lastStart = [...start.point];
     if (!current) {
       status(
         "No connected outdoor route found. Try a nearby path or another pin.",
@@ -72,6 +76,7 @@ export function createNavigation({
     else b = value;
     pending = null;
     active = false;
+    walkingStart = null;
     current = null;
     routeView.clear();
     status("Ready when both endpoints are chosen.");
@@ -107,6 +112,7 @@ export function createNavigation({
     }),
   );
   $("#route-start").addEventListener("click", () => {
+    walkingStart = live() ? playerPoint() : null;
     active = true;
     plan();
     if (current && !live()) fitRoute(current.points);
@@ -116,6 +122,7 @@ export function createNavigation({
   });
   $("#route-clear").addEventListener("click", () => {
     active = false;
+    walkingStart = null;
     current = null;
     pending = null;
     a = b = null;
@@ -172,9 +179,8 @@ export function createNavigation({
     },
     update(time) {
       routeView.update(time);
-      if (active && live() && time - lastPlan > 1) {
-        lastPlan = time;
-        if (!lastStart || distance(lastStart, playerPoint()) > 3) plan();
+      if (active && live() && time - lastArrivalCheck > 1) {
+        lastArrivalCheck = time;
         if (current && distance(playerPoint(), current.points.at(-1)) < 5)
           status("You have reached the approximate destination approach.");
       }
@@ -186,6 +192,7 @@ export function createNavigation({
       return {
         active,
         originMode: live() ? "player" : "manual",
+        walkingStart: walkingStart ? [...walkingStart] : null,
         a,
         b,
         picking: pending?.endpoint || null,
