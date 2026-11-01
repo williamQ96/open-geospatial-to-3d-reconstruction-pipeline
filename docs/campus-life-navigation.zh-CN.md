@@ -15,3 +15,5 @@ NPC／交通是固定路线往返的示意活动，不是实时模拟，使用�
 首轮允许合理推测，优先形成完整、可辨识且可维护的闭环，精度和写实通过长期纠正提升。完整接口、测试与 UO 示例见英文文档。
 
 当前推荐统一 No / Low / Mid / High 密度滑块（默认 Mid），代替独立开关。可选松鼠、声音、脚步、轻微晃动与反馈的接口见[氛围交互](zh-CN/ambient-interaction.md)。配合[尽早可交互的迭代循环](zh-CN/iterative-community-modeling.md)。
+
+当前本地活动接口升级到 version 2，导航图仍为 version 1；先迁移旧活动数据，再同步运行时。见[语义活动与模板](zh-CN/semantic-activity.md)、[一级 Beta](zh-CN/beta-functions.md)及 [Zombie 模板](beta/zombie-school.zh-CN.md)。

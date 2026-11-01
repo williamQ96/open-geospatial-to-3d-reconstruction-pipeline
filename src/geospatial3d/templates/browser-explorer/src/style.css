@@ -1141,3 +1141,179 @@ dialog::backdrop {
     gap: 4px;
   }
 }
+
+#developer-panel {
+  position: absolute;
+  z-index: 24;
+  right: 30px;
+  top: 100px;
+  box-sizing: border-box;
+  width: 330px;
+  max-height: calc(100dvh - 210px);
+  overflow: auto;
+  padding: 16px;
+  background: #f5f6eff5;
+  color: #24483b;
+  border: 1px solid #b8c7bc;
+  box-shadow: 0 12px 35px #193e2920;
+}
+#developer-panel[hidden] {
+  display: none;
+}
+#developer-panel pre {
+  font:
+    11px/1.5 "IBM Plex Mono",
+    monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+#developer-panel p {
+  font-size: 12px;
+}
+#developer-panel > button {
+  min-height: 44px;
+  font: inherit;
+  color: inherit;
+  background: #fff9;
+  border: 1px solid #b8c7bc;
+  padding: 8px;
+  cursor: pointer;
+}
+@media (max-width: 600px) {
+  #developer-panel {
+    top: 122px;
+    right: 12px;
+    width: calc(100% - 24px);
+    max-height: 45dvh;
+  }
+}
+
+#beta-badge {
+  position: absolute;
+  left: 50%;
+  bottom: 60px;
+  transform: translateX(-50%);
+  padding: 7px 12px;
+  background: #314b3ce8;
+  color: #f3eed9;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 12;
+  white-space: nowrap;
+}
+#beta-badge[hidden] {
+  display: none;
+}
+@media (max-width: 600px) {
+  #beta-badge {
+    bottom: calc(106px + env(safe-area-inset-bottom, 0px));
+  }
+  .dialog-tabs button {
+    padding-inline: 10px;
+  }
+}
+
+.touch-run {
+  display: none;
+}
+@media (pointer: coarse) {
+  #app:is([data-view="first"], [data-view="third"]) .touch-run {
+    display: block;
+    position: absolute;
+    z-index: 18;
+    right: 14px;
+    bottom: calc(160px + env(safe-area-inset-bottom, 0px));
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    border: 1px solid #52735c;
+    background: #f4f4ebdf;
+    color: #24483b;
+    font: inherit;
+    font-weight: 600;
+    font-size: 12px;
+    touch-action: none;
+    user-select: none;
+  }
+  .touch-run[aria-pressed="true"] {
+    background: #245b45 !important;
+    color: #fff !important;
+  }
+}
+
+#motion-setting {
+  width: 100%;
+  min-height: 44px;
+  accent-color: #245b45;
+  margin: 0;
+}
+#death-shade {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 4;
+  pointer-events: none;
+}
+#death-shade[hidden] {
+  display: none;
+}
+#death-dialog {
+  width: min(370px, calc(100% - 32px));
+  box-sizing: border-box;
+  border: 1px solid #aebfb1;
+  padding: 30px;
+  color: #24483b;
+  background: #f5f6ef;
+  text-align: center;
+}
+#death-dialog::backdrop {
+  background: transparent;
+}
+#death-dialog h1 {
+  font-size: 28px;
+  margin: 0 0 12px;
+}
+#death-dialog p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+#death-restart {
+  min-height: 46px;
+  width: 100%;
+  padding: 10px;
+  color: #fff;
+  background: #245b45;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.masthead,
+.view-switch,
+.map-panel,
+.controls-bar,
+.selection,
+.compass,
+.campus-search {
+  z-index: 6;
+}
+.label-layer {
+  z-index: 5;
+}
+#app[data-dead="true"] .touch-run {
+  display: none !important;
+}
+
+#death-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  height: fit-content;
+  max-height: calc(100dvh - 32px);
+  transform: none;
+}
+#death-dialog::backdrop {
+  background: transparent;
+  backdrop-filter: none;
+}

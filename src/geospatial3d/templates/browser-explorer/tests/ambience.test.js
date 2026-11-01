@@ -40,18 +40,18 @@ test("walking feedback follows ground displacement; reduced motion preserves foo
       motion.update(0.02, 0, { grounded: true, enabled: true }).step,
       false,
     );
-  const moving = motion.update(0.05, 0.8, { grounded: true, enabled: true });
+  const moving = motion.update(0.05, 1.0, { grounded: true, enabled: true });
   assert.equal(moving.step, true);
-  assert.ok(Math.abs(moving.bobY) > 0 && Math.abs(moving.bobY) < 0.019);
+  assert.ok(Math.abs(moving.bobY) > 0 && Math.abs(moving.bobY) <= 0.003);
   assert.equal(
-    motion.update(0.05, 0.8, { grounded: false, enabled: true }).step,
+    motion.update(0.05, 1.0, { grounded: false, enabled: true }).step,
     false,
   );
   assert.equal(
-    motion.update(0.05, 0.8, { grounded: true, enabled: false }).step,
+    motion.update(0.05, 1.0, { grounded: true, enabled: false }).step,
     false,
   );
-  const reduced = motion.update(0.05, 0.8, {
+  const reduced = motion.update(0.05, 1.0, {
     grounded: true,
     enabled: true,
     reducedMotion: true,
@@ -104,27 +104,38 @@ test("feedback is an encoded downstream draft, with optional location and lossle
 
 test("density changes real populations and collision volumes; actors yield to player and each other", () => {
   const player = { x: 0, y: 0, z: -0.5 };
-  const route = {
-    points: [
-      [-100, 0],
-      [100, 0],
-    ],
-    distance: 200,
-  };
   const life = createCampusLife({
     scene: new THREE.Scene(),
-    router: {
-      nodes: [
-        [-100, 0],
-        [100, 0],
-      ],
-      route: () => route,
-    },
     activity: {
-      students: { routes_enu_m: [route.points] },
-      traffic: { routes_enu_m: [] },
-      squirrels: { routes_enu_m: [route.points] },
-      props: [],
+      version: 2,
+      seed: 1,
+      prop_slots: [],
+      paths: [
+        {
+          id: "walk",
+          surface: "pedestrian",
+          points_enu_m: [
+            [-100, 0, 0],
+            [100, 0, 0],
+          ],
+        },
+        {
+          id: "grass",
+          surface: "vegetation",
+          points_enu_m: [
+            [-100, 3, 0],
+            [100, 3, 0],
+          ],
+        },
+        {
+          id: "tree",
+          surface: "tree",
+          points_enu_m: [
+            [-30, 6, 0],
+            [-30, 6, 5],
+          ],
+        },
+      ],
     },
     studentFactory: () => ({ root: new THREE.Group() }),
     squirrelFactory: () => ({ root: new THREE.Group() }),

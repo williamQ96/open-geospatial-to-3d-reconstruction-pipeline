@@ -3,6 +3,44 @@
 export function createTouchControls(canvas, { enabled, onLook, onMove }) {
   const axes = { forward: 0, right: 0 };
   const contacts = new Map();
+  let running = false;
+  const run = document.createElement("button");
+  run.className = "touch-run";
+  run.textContent = "Run";
+  run.setAttribute("aria-label", "Hold to run");
+  run.setAttribute("aria-pressed", "false");
+  canvas.parentElement.append(run);
+  function setRunning(value) {
+    running = value;
+    run.setAttribute("aria-pressed", String(value));
+  }
+  run.addEventListener("pointerdown", (event) => {
+    if (!enabled()) return;
+    event.preventDefault();
+    event.stopPropagation();
+    setRunning(true);
+    run.setPointerCapture(event.pointerId);
+  });
+  for (const type of ["pointerup", "pointercancel", "lostpointercapture"])
+    run.addEventListener(type, (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setRunning(false);
+    });
+  run.addEventListener("keydown", (event) => {
+    if (["Space", "Enter"].includes(event.code)) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (enabled()) setRunning(true);
+    }
+  });
+  run.addEventListener("keyup", (event) => {
+    if (["Space", "Enter"].includes(event.code)) {
+      event.preventDefault();
+      event.stopPropagation();
+      setRunning(false);
+    }
+  });
   const stick = document.createElement("div");
   stick.className = "touch-stick";
   stick.hidden = true;
@@ -11,6 +49,7 @@ export function createTouchControls(canvas, { enabled, onLook, onMove }) {
   canvas.parentElement.append(stick);
   const knob = stick.firstElementChild;
   function reset() {
+    setRunning(false);
     contacts.clear();
     axes.forward = axes.right = 0;
     stick.hidden = true;
@@ -90,5 +129,11 @@ export function createTouchControls(canvas, { enabled, onLook, onMove }) {
   }
   for (const name of ["pointerup", "pointercancel", "lostpointercapture"])
     canvas.addEventListener(name, finish, true);
-  return { axes, reset };
+  return {
+    axes,
+    reset,
+    get running() {
+      return running;
+    },
+  };
 }

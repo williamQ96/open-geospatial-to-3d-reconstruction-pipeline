@@ -2,6 +2,7 @@
 // Optional authored art layer. It never rewrites the measured scene manifest.
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { applySurfaceGrain } from "./surface-grain.js";
 import { createContextFog } from "./context-fog.js";
 
 export function sceneAssetUrl(base, name) {
@@ -38,6 +39,12 @@ export async function loadPresentation(base, name, buildingIds) {
   const gltf = await new GLTFLoader().loadAsync(
     sceneAssetUrl(base, config.asset_url),
   );
+  if (config.landcover_url) {
+    const land = await new GLTFLoader().loadAsync(
+      sceneAssetUrl(base, config.landcover_url),
+    );
+    gltf.scene.add(land.scene);
+  }
   return createPresentation(gltf.scene, config);
 }
 
@@ -47,6 +54,7 @@ export function createPresentation(root, config) {
   const contextFog = createContextFog(config.context_fog);
   const collisionMeshes = [];
   const materials = [];
+  let hasFoundation = false;
   const ramp = new THREE.DataTexture(
     new Uint8Array([105, 185, 255]),
     3,
@@ -80,14 +88,20 @@ export function createPresentation(root, config) {
     const toon = Array.isArray(original)
       ? original.map(toToon)
       : toToon(original);
-    for (const material of [original, toon].flat()) contextFog?.apply(material);
+    for (const material of [original, toon].flat()) {
+      contextFog?.apply(material);
+      if (object.userData.surface_grain)
+        applySurfaceGrain(material, object.userData.surface_grain);
+    }
     materials.push({ object, original, toon });
     object.material = toon;
     if (object.userData.asset_kind === "landscape-surface") {
       for (const material of [original, toon].flat()) {
         material.polygonOffset = true;
-        material.polygonOffsetFactor = -2;
-        material.polygonOffsetUnits = -4;
+        const foundation = object.userData.surface_layer === "foundation";
+        hasFoundation ||= foundation;
+        material.polygonOffsetFactor = foundation ? -0.1 : -2;
+        material.polygonOffsetUnits = foundation ? -0.25 : -4;
       }
     }
     const id = object.userData.asset_id;
@@ -120,6 +134,11 @@ export function createPresentation(root, config) {
     batchedIds,
     contextFog,
     collisionMeshes,
+    hasFoundation,
+    bakeStaticHaze() {
+      for (const entry of materials)
+        contextFog?.bakeMesh(entry.object, [entry.original, entry.toon].flat());
+    },
     setToon(enabled) {
       for (const entry of materials) {
         const wireframe = [entry.object.material].flat()[0].wireframe;

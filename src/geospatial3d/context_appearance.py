@@ -34,11 +34,16 @@ def appearance_plan(buildings, focus_polygon, seed=613, protected_ids=()):
                      'house' if shape.area < 650 and h < 15 else
                      'warehouse' if shape.area > 1600 and h < 15 else 'walkup')
         rect = shape.minimum_rotated_rectangle
-        roof = 'gable' if archetype == 'house' and shape.area / rect.area > .67 else 'flat'
+        compact = shape.area / rect.area
+        roof = 'gable' if ((archetype == 'house' and compact > .67) or
+                           (archetype == 'institutional' and shape.area < 1500 and h < 18 and compact > .55)) else 'flat'
         item = {key: deepcopy(building[key]) for key in
                 ['id', 'footprint_enu_m', 'base_z_m', 'height_m', 'roof_z_m']}
         item.update(name=building.get('name'), tier=tier, archetype=archetype,
                     roof=roof, variant=rng.randrange(4), seed=entropy,
+                    roof_style=rng.choice(['weathered-metal', 'muted-tile', 'dark-slate']) if roof == 'gable' else
+                    rng.choice(['flat-parapet', 'flat-services', 'flat-skylights']),
+                    roof_inference='Plausible style from massing/architectural family; not a verified roof survey',
                     window_budget=84 if tier == 'campus' and building.get('name') else 16,
                     status='Illustrative appearance; source position/footprint preserved')
         result.append(item)

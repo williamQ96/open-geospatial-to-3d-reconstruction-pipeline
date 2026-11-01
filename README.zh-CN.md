@@ -1,6 +1,12 @@
 [English](README.md) | **简体中文**
 
 # Open Geospatial-to-3D Reconstruction Pipeline
+**0.11.0／探索模板 0.3.0：**语义 NPC、开发／Beta 工具、环境层与渲染稳定。发布核验见方法日志。
+
+
+本地[深度稳定与不降质性能方法](docs/zh-CN/render-performance.md)覆盖保守 Overview 裁剪、独立标签、静态矩阵、精确重绘失效及需实测后选择的 shader 缓存。
+
+本批模板改进：[语义活动／seed 模板](docs/zh-CN/semantic-activity.md)、[一级 Beta 入口](docs/zh-CN/beta-functions.md)、[环境分层、晃动档位、受约束绕行和恢复](docs/zh-CN/environment-recovery.md)。发布状态见方法日志。
 
 可复用改进持续记录在[方法论更新日志](METHODOLOGY_LOG.zh-CN.md)；具体子地图开发日志只保留在下游。
 
@@ -69,3 +75,5 @@ python -m venv .venv
 模板新增可选骨骼角色、NPC／交通、统一四档密度（默认 Mid）、碰撞、可选声音／行走反馈和下游 GitHub Issue 草稿及按视角区分起点的 A／B 导航。[接口与可复用方法](docs/campus-life-navigation.zh-CN.md)。具体路线、配色、素材归档由下游维护。
 
 [推荐：尽早可交互、社区共同迭代](docs/zh-CN/iterative-community-modeling.md)。
+
+下一阶段本地开发：[语义路径、可重放 NPC 模板与开发检查](docs/zh-CN/semantic-activity.md)，以及[一级 Beta](docs/zh-CN/beta-functions.md)和 [Zombie School](docs/beta/zombie-school.zh-CN.md)。尚未发布。

@@ -11,7 +11,7 @@
       name="description"
       content="Explore a reusable geospatial 3D scene."
     />
-    <link id="favicon" rel="icon" />
+    <link id="favicon" rel="icon" href="data:," />
     <title>OpenCampus · UO Eugene</title>
   </head>
   <body>
@@ -67,8 +67,15 @@
         >Open GitHub issue draft ↗</a
       >
     </dialog>
+    <dialog id="death-dialog" aria-labelledby="death-title">
+      <h1 id="death-title">You are dead</h1>
+      <p>Restart to return to the T-junction with the default map settings.</p>
+      <button id="death-restart">Restart</button>
+    </dialog>
     <main id="app">
-      <div id="viewport" aria-label="3D scene explorer" tabindex="0"></div>
+      <div id="viewport" aria-label="3D scene explorer" tabindex="0">
+        <div id="death-shade" aria-hidden="true" hidden></div>
+      </div>
       <header class="masthead">
         <a class="wordmark" href="./" aria-label="Explorer home"
           ><img class="brand-logo" hidden alt="" /><span
@@ -231,6 +238,21 @@
           available in Overview.</small
         >
       </section>
+      <div id="beta-badge" role="status" hidden>ZOMBIE SCHOOL!!!</div>
+      <aside id="developer-panel" aria-label="NPC developer inspector" hidden>
+        <div class="route-heading">
+          <strong id="developer-title">NPC inspector</strong
+          ><button id="developer-close" aria-label="Close NPC inspector">
+            ×
+          </button>
+        </div>
+        <p>Template, random seed and sampled properties</p>
+        <pre id="developer-properties"></pre>
+        <p>Current path and position</p>
+        <pre id="developer-location"></pre>
+        <button id="developer-copy">Copy seed and properties</button>
+        <p id="developer-status" role="status"></p>
+      </aside>
       <nav class="view-switch" aria-label="Camera view">
         <button data-view="third" aria-pressed="false">
           <kbd>1</kbd>Follow
@@ -286,6 +308,7 @@
         </div>
         <nav class="dialog-tabs" aria-label="Settings sections">
           <button id="settings-tab" aria-selected="true">Settings</button
+          ><button id="beta-tab" aria-selected="false">Beta functions</button
           ><button id="about-tab" aria-selected="false">About</button>
         </nav>
         <section id="settings-panel" class="dialog-panel">
@@ -349,14 +372,27 @@
               clean map. Activity is illustrative, not live campus data.
             </p>
           </div>
-          <label class="setting-row"
+          <label class="setting-row" for="motion-setting"
             ><span
               >First-person motion<small
-                >Gentle walking sway; system reduced-motion preference takes
+                >Walking sway. System reduced-motion preference takes
                 priority.</small
               ></span
-            ><input id="motion-setting" type="checkbox" checked
-          /></label>
+            ><output id="motion-value">Low</output></label
+          >
+          <input
+            id="motion-setting"
+            type="range"
+            min="0"
+            max="3"
+            step="1"
+            value="1"
+            aria-label="First-person motion"
+            aria-valuetext="Low"
+          />
+          <div class="density-ticks" aria-hidden="true">
+            <span>No</span><span>Low</span><span>Mid</span><span>High</span>
+          </div>
           <h2>Controls</h2>
           <p>
             Search frames a building in Overview. In Follow and First person, it
@@ -386,7 +422,32 @@
             <dd>Change camera</dd>
           </dl>
         </section>
+        <section id="beta-panel" class="dialog-panel" hidden>
+          <h2>Beta functions</h2>
+          <p>
+            Optional experiments. Off by default. Switching an experiment off
+            restores the previous map activity setting.
+          </p>
+          <div id="beta-functions">
+            <p role="status" aria-live="polite"></p>
+          </div>
+          <p>
+            ZOMBIE SCHOOL!!! uses a shared original cartoon monster template.
+            Wandering: 0.45 m/s within 12 m. Pursuit: 2.2 m/s (hero walk 1.7
+            m/s; run 4.6 m/s). Spawns stay on clear terrain, never on roofs.
+            Buildings and collision still apply. Contact ends the round; Restart
+            restores the default map.
+          </p>
+        </section>
         <section id="about-panel" class="dialog-panel" hidden>
+          <label class="setting-row"
+            ><span
+              >Developer mode<small
+                >Inspect NPC seeds and sampled properties by clicking an NPC.
+                More developer tools will use this entry.</small
+              ></span
+            ><input id="developer-setting" type="checkbox"
+          /></label>
           <h2 id="about-title">Scene information</h2>
           <dl class="study-stats">
             <dt>Coverage</dt>

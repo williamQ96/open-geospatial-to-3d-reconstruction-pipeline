@@ -6,6 +6,9 @@ import {
 } from "three/addons/renderers/CSS2DRenderer.js";
 
 export function createBuildingLabels(scene, viewport, camera, onSelect) {
+  // CSS labels already use world-space anchors. Keep their renderer off the
+  // building/vegetation/animated-skeleton graph, with identical projections.
+  const labelScene = new THREE.Scene();
   const renderer = new CSS2DRenderer();
   renderer.domElement.className = "label-layer";
   viewport.append(renderer.domElement);
@@ -33,7 +36,7 @@ export function createBuildingLabels(scene, viewport, camera, onSelect) {
         button.addEventListener("click", () => onSelect(building.id));
         const label = new CSS2DObject(button);
         label.position.set(x, building.roof_z_m + 3, -north);
-        scene.add(label);
+        labelScene.add(label);
         entries.push({ building, label, button, position: label.position });
       }
     },
@@ -124,7 +127,7 @@ export function createBuildingLabels(scene, viewport, camera, onSelect) {
           }
         }
       }
-      renderer.render(scene, camera);
+      renderer.render(labelScene, camera);
       const selected = entries.find(
         (entry) => entry.building.id === selectedId,
       );

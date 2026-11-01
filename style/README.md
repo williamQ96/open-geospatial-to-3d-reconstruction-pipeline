@@ -39,4 +39,6 @@ For each concrete map, keep the adopted photographs, mockups and image inputs in
 
 ## Iterative delivery
 
+The local [environment-layer extension](../docs/environment-recovery.md) adds original palette-based ground cover, matte grain and a blue/soft-block-cloud sky without photographic runtime textures. Preserve source geography, archive the aerial reference downstream, and disclose inference and geometry/download costs. This is an adaptable style option, not a requirement to copy one map's environment.
+
 Establish a playable whitebox early, then refine through source-guided moderate-fidelity modeling, community feedback and developer-led corrections. See the [recommended loop](../docs/iterative-community-modeling.md) and [optional ambience/feedback controls](../docs/ambient-interaction.md).

@@ -69,10 +69,16 @@ class ScaffoldTests(unittest.TestCase):
             root = Path(directory)
             source = create_viewer(root/'source')/'public/scene'
             (source/'viewer-settings.json').write_text(json.dumps({'presentation_url':'art.json'}))
-            (source/'art.json').write_text(json.dumps({'version':1,'asset_url':'art.glb','replaces_building_ids':[]}))
+            (source/'art.json').write_text(json.dumps({'version':1,'asset_url':'art.glb','landcover_url':'ground.glb','replaces_building_ids':[]}))
             (source/'art.glb').write_bytes(b'authored overlay fixture')
+            (source/'ground.glb').write_bytes(b'inferred ground fixture')
             target = create_viewer(root/'target',source)
             self.assertEqual((target/'public/scene/art.glb').read_bytes(), b'authored overlay fixture')
+            self.assertEqual((target/'public/scene/ground.glb').read_bytes(), b'inferred ground fixture')
+            (source/'art.json').write_text(json.dumps({'version':1,'asset_url':'art.glb','landcover_url':'../escape.glb'}))
+            with self.assertRaisesRegex(ValueError, 'inside the scene'):
+                create_viewer(root/'unsafe-ground',source)
+            self.assertFalse((root/'unsafe-ground').exists())
             (source/'art.json').write_text(json.dumps({'version':1,'asset_url':'../escape.glb'}))
             with self.assertRaisesRegex(ValueError, 'inside the scene'):
                 create_viewer(root/'unsafe',source)

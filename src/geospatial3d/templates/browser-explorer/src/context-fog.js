@@ -33,7 +33,11 @@ export function createContextFog(config) {
     contextDesaturation: { value: config.desaturation },
     contextTint: { value: new THREE.Color(config.color) },
   };
-  const applied = new WeakSet();
+  const applied = new WeakMap();
+  const bakedGeometry = new WeakMap(),
+    bakedMeshes = new WeakSet();
+  let cachedVertices = 0,
+    cachedMeshes = 0;
   let enabled = true;
   const field = `
     varying float vContextHaze;
@@ -55,7 +59,33 @@ export function createContextFog(config) {
       return inside?0.0:smoothstep(0.0,contextTransition,gap)*contextStrength;
     }
   `;
-  return {
+  function weightAt(x, z) {
+    let inside = false,
+      gap = Infinity;
+    for (let i = 0; i < ring.length; i++) {
+      const a = uniforms.contextRing.value[i],
+        b = uniforms.contextRing.value[(i + 1) % ring.length];
+      const dx = b.x - a.x,
+        dz = b.y - a.y;
+      const t = Math.max(
+        0,
+        Math.min(
+          1,
+          ((x - a.x) * dx + (z - a.y) * dz) /
+            Math.max(dx * dx + dz * dz, 0.0001),
+        ),
+      );
+      gap = Math.min(gap, Math.hypot(x - a.x - dx * t, z - a.y - dz * t));
+      if (
+        a.y > z != b.y > z &&
+        x < ((b.x - a.x) * (z - a.y)) / (b.y - a.y) + a.x
+      )
+        inside = !inside;
+    }
+    const t = Math.max(0, Math.min(1, gap / config.transition_m));
+    return inside ? 0 : t * t * (3 - 2 * t);
+  }
+  const api = {
     config,
     get enabled() {
       return enabled;
@@ -66,7 +96,8 @@ export function createContextFog(config) {
     },
     apply(material) {
       if (applied.has(material)) return;
-      applied.add(material);
+      const record = { baked: false };
+      applied.set(material, record);
       const previous = material.onBeforeCompile,
         cache = material.customProgramCacheKey.bind(material);
       const key = cache();
@@ -74,10 +105,19 @@ export function createContextFog(config) {
         previous.call(this, shader, renderer);
         Object.assign(shader.uniforms, uniforms);
         shader.vertexShader = shader.vertexShader
-          .replace("#include <common>", "#include <common>\n" + field)
+          .replace(
+            "#include <common>",
+            "#include <common>\n" +
+              (record.baked
+                ? "attribute float contextHazeWeight; varying float vContextHaze; uniform float contextStrength;"
+                : field),
+          )
           .replace(
             "#include <project_vertex>",
-            "#include <project_vertex>\nvContextHaze=contextWeight((modelMatrix*vec4(transformed,1.0)).xz);",
+            "#include <project_vertex>\nvContextHaze=" +
+              (record.baked
+                ? "contextHazeWeight*contextStrength;"
+                : "contextWeight((modelMatrix*vec4(transformed,1.0)).xz);"),
           );
         shader.fragmentShader = shader.fragmentShader
           .replace(
@@ -95,8 +135,69 @@ export function createContextFog(config) {
           );
       };
       material.customProgramCacheKey = () =>
-        key + "|spatial-context-haze-v2|" + ring.length;
+        key +
+        "|spatial-context-haze-v3|" +
+        ring.length +
+        (record.baked ? "|baked" : "|dynamic");
       material.needsUpdate = true;
     },
+    // Call only after final placement of a static map layer. The shader still
+    // interpolates the exact same per-vertex field; only its repeated work moves
+    // to load time. Moving/skinned/instanced inputs retain the original path.
+    bakeMesh(mesh, materials = [mesh.material].flat()) {
+      if (
+        !mesh.isMesh ||
+        mesh.isSkinnedMesh ||
+        mesh.isInstancedMesh ||
+        mesh.morphTargetInfluences?.length
+      )
+        return false;
+      mesh.updateWorldMatrix(true, false);
+      let geometry = mesh.geometry;
+      const key = mesh.matrixWorld.elements.join(",");
+      let cached = bakedGeometry.get(geometry);
+      if (
+        (cached && cached.key !== key) ||
+        (!cached && geometry.hasAttribute("contextHazeWeight"))
+      ) {
+        geometry = geometry.clone();
+        mesh.geometry = geometry;
+        cached = null;
+      }
+      if (!cached) {
+        const pos = geometry.attributes.position,
+          values = new Float32Array(pos.count),
+          p = new THREE.Vector3();
+        for (let i = 0; i < pos.count; i++) {
+          p.fromBufferAttribute(pos, i).applyMatrix4(mesh.matrixWorld);
+          values[i] = weightAt(p.x, p.z);
+        }
+        geometry.setAttribute(
+          "contextHazeWeight",
+          new THREE.BufferAttribute(values, 1),
+        );
+        bakedGeometry.set(geometry, { key });
+        cachedVertices += pos.count;
+      }
+      for (const material of materials) {
+        api.apply(material);
+        const record = applied.get(material);
+        if (!record.baked) {
+          record.baked = true;
+          material.needsUpdate = true;
+        }
+      }
+      if (!bakedMeshes.has(mesh)) {
+        bakedMeshes.add(mesh);
+        cachedMeshes++;
+      }
+      return true;
+    },
+    state: () => ({
+      cachedMeshes,
+      cachedVertices,
+      additionalBytes: cachedVertices * 4,
+    }),
   };
+  return api;
 }

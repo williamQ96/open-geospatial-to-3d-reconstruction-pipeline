@@ -7,6 +7,54 @@ import {
   setEmissive,
 } from "../src/presentation.js";
 
+test("full ground foundation is distinct from detail paving and keeps shader hooks in PBR and toon", () => {
+  const root = new THREE.Group();
+  const ground = new THREE.Mesh(
+    new THREE.PlaneGeometry(),
+    new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.98 }),
+  );
+  ground.userData = {
+    asset_kind: "landscape-surface",
+    surface_layer: "foundation",
+    surface_grain: 0.1,
+  };
+  root.add(ground);
+  const layer = createPresentation(root, {
+    replaces_building_ids: [],
+    context_fog: {
+      polygon_enu_m: [
+        [0, 0],
+        [10, 0],
+        [10, 10],
+        [0, 10],
+      ],
+      transition_m: 100,
+      strength: 0.6,
+      desaturation: 0.4,
+      color: "#d6e0da",
+    },
+  });
+  assert.equal(layer.hasFoundation, true);
+  assert.equal(layer.collisionMeshes.length, 0);
+  assert.equal(ground.castShadow, false);
+  for (const mode of [true, false]) {
+    layer.setToon(mode);
+    assert.equal(ground.material.polygonOffsetFactor, -0.1);
+    const shader = {
+      uniforms: {},
+      vertexShader:
+        "#include <common>\n#include <begin_vertex>\n#include <project_vertex>",
+      fragmentShader:
+        "#include <common>\n#include <color_fragment>\n#include <tonemapping_fragment>",
+    };
+    ground.material.onBeforeCompile(shader, {});
+    assert.match(shader.vertexShader, /grainWorld=/);
+    assert.match(shader.vertexShader, /vContextHaze/);
+    assert.match(shader.fragmentShader, /fwidth/);
+    assert.match(shader.fragmentShader, /contextDesaturation/);
+  }
+});
+
 test("context batches retain registered identities without creating a mesh per anonymous building", () => {
   const root = new THREE.Group(),
     batch = new THREE.Mesh(

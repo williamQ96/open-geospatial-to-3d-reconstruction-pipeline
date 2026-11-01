@@ -40,7 +40,13 @@ export function createMinimap(canvas, buildings, half, corridors = []) {
     b.fill();
   }
   const context = canvas.getContext("2d");
+  let last;
+  const empty = [];
   return (player, yaw, target, route = []) => {
+    route = route?.length ? route : empty;
+    const next = [player.x, player.z, yaw, target?.x, target?.z, route];
+    if (last && next.every((value, i) => value === last[i])) return;
+    last = next;
     context.drawImage(background, 0, 0);
     if (route?.length) {
       context.beginPath();

@@ -2,7 +2,7 @@
 // Original, exportable low-poly props. No brands, logos or third-party geometry.
 import * as THREE from "three";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
-export function createCampusProp(kind = "car", color = 0x567a72) {
+export function createCampusProp(kind = "car", color = 0x567a72, rider = null) {
   const parts = [];
   function add(geometry, x, y, z, c, rotation = [0, 0, 0]) {
     geometry.rotateX(rotation[0]);
@@ -45,15 +45,16 @@ export function createCampusProp(kind = "car", color = 0x567a72) {
       c,
     );
   };
-  if (["car", "van", "pickup"].includes(kind)) {
-    const van = kind === "van";
+  if (["car", "suv", "van", "pickup"].includes(kind)) {
+    const van = kind === "van",
+      suv = kind === "suv";
     box(1.8, 0.65, van ? 4.7 : 4.2, 0, 0.7, 0, color);
     box(
       1.6,
-      van ? 1.35 : 0.7,
+      van ? 1.35 : suv ? 1.05 : 0.7,
       van ? 3.3 : 2.1,
       0,
-      van ? 1.5 : 1.35,
+      van ? 1.5 : suv ? 1.5 : 1.35,
       van ? -0.35 : -0.1,
       color,
     );
@@ -86,15 +87,12 @@ export function createCampusProp(kind = "car", color = 0x567a72) {
     } else box(0.3, 0.1, 1.15, 0, 0.18, 0, color);
     beam([0, r, front], [0, 1.1, front - 0.1], 0.045, color);
     beam([-0.3, 1.1, front - 0.1], [0.3, 1.1, front - 0.1], 0.035, 0x283a34);
+    const riderStart = parts.length,
+      shirt = rider ? new THREE.Color(rider.shirtColor).getHex() : 0x285d43,
+      skin = rider ? new THREE.Color(rider.skinColor).getHex() : 0xd3b89a;
     // Original stylized rider; bent arms and legs, neutral green/yellow outfit.
-    box(0.4, 0.54, 0.25, 0, bike ? 1.35 : 1.35, bike ? -0.16 : 0, 0x285d43);
-    add(
-      new THREE.SphereGeometry(0.16, 8, 6),
-      0,
-      1.81,
-      bike ? -0.08 : 0,
-      0xd3b89a,
-    );
+    box(0.4, 0.54, 0.25, 0, bike ? 1.35 : 1.35, bike ? -0.16 : 0, shirt);
+    add(new THREE.SphereGeometry(0.16, 8, 6), 0, 1.81, bike ? -0.08 : 0, skin);
     add(
       new THREE.SphereGeometry(0.18, 8, 6, 0, Math.PI * 2, 0, Math.PI / 2),
       0,
@@ -103,7 +101,7 @@ export function createCampusProp(kind = "car", color = 0x567a72) {
       0xd3b64b,
     );
     for (const x of [-0.14, 0.14]) {
-      beam([x, 1.45, 0], [x, 1.1, front - 0.1], 0.065, 0x285d43);
+      beam([x, 1.45, 0], [x, 1.1, front - 0.1], 0.065, shirt);
       beam([x, 1.08, -0.1], [x, 0.75, 0.27], 0.075, 0x333e42);
       beam(
         [x, 0.75, 0.27],
@@ -112,6 +110,12 @@ export function createCampusProp(kind = "car", color = 0x567a72) {
         0x333e42,
       );
     }
+    if (rider)
+      for (let i = riderStart; i < parts.length; i++)
+        parts[i]
+          .translate(0, -1, 0)
+          .scale(rider.bodyWidth, rider.heightM / 1.78, 1)
+          .translate(0, 1, 0);
   }
   const geometry = mergeGeometries(parts, false);
   parts.forEach((g) => g.dispose());

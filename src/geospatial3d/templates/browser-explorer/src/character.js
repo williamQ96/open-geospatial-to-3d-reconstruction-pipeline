@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 import * as THREE from "three";
 
-export function createCharacter() {
+export function createCharacter(properties = null) {
   const root = new THREE.Group();
   root.name = "whitebox-explorer";
+  if (properties?.heightM) root.scale.setScalar(properties.heightM / 1.78);
   const white = new THREE.MeshStandardMaterial({
     color: 0xfaf8ee,
     roughness: 0.8,
@@ -41,8 +42,19 @@ export function createCharacter() {
   const legs = [limb(-0.12, 0.75, 0.085, 0.54), limb(0.12, 0.75, 0.085, 0.54)];
   return {
     root,
-    animate(time, moving) {
-      const a = moving ? Math.sin(time * 10) * 0.45 : 0;
+    dispose() {
+      const mats = new Set();
+      root.traverse((o) => {
+        if (o.isMesh) {
+          o.geometry.dispose();
+          mats.add(o.material);
+        }
+      });
+      for (const m of mats) m.dispose();
+      root.removeFromParent();
+    },
+    animate(time, moving, gait = {}) {
+      const a = moving ? Math.sin(gait.phase ?? time * 10) * 0.45 : 0;
       arms[0].rotation.x = a;
       arms[1].rotation.x = -a;
       legs[0].rotation.x = -a;

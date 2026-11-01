@@ -82,6 +82,8 @@ def create_viewer(output, scene_dir=None):
                 if presentation.get('version') != 1:
                     raise ValueError('Unsupported presentation contract')
                 names.extend([presentation_name, presentation['asset_url']])
+                if presentation.get('landcover_url'):
+                    names.append(presentation['landcover_url'])
         for name in names:
             path = (scene / name).resolve()
             if Path(name).is_absolute() or ':' in name or not path.is_relative_to(scene):

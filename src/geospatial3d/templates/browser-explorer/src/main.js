@@ -24,6 +24,16 @@ import { createAnalytics } from "./analytics.js";
 import { loadStudentFactory } from "./student.js";
 import { createRouter, distance } from "./routing.js";
 import { createNavigation } from "./navigation.js";
+import { createSky } from "./sky.js";
+import {
+  createOverviewDepth,
+  freezeStaticTransforms,
+} from "./render-stability.js";
+import { createDeathFlow } from "./death.js";
+import { applySurfaceGrain } from "./surface-grain.js";
+import { createBetaRegistry } from "./beta.js";
+import { createZombieSchool } from "./zombie-school.js";
+import { createDeveloperTools } from "./developer.js";
 import { createCampusLife } from "./life.js";
 import { loadWildlifeFactory } from "./wildlife.js";
 import { createWalkMotion, DENSITY_NAMES } from "./ambience.js";
@@ -35,7 +45,13 @@ import "@fontsource/ibm-plex-mono/latin-400.css";
 import "@fontsource/ibm-plex-mono/latin-500.css";
 import "./style.css";
 
-let navigation, life, studentFactory, squirrelFactory;
+let navigation,
+  life,
+  studentFactory,
+  squirrelFactory,
+  zombies,
+  outdoorRouter,
+  betaRegistry;
 let sound = { step() {}, state: () => ({ enabled: false }) };
 const walkMotion = createWalkMotion();
 let motion = { bobX: 0, bobY: 0, roll: 0, walking: false, steps: 0 };
@@ -44,7 +60,20 @@ let analytics = { event() {} };
 const $ = (selector) => document.querySelector(selector);
 const viewport = $("#viewport"),
   dialog = $("#settings-dialog");
-const modalOpen = () => dialog.open || $("#feedback-dialog").open;
+const death = createDeathFlow({
+  pause: () => {
+    keys.clear();
+    drag = null;
+    touchControls.reset();
+    walkMotion.reset();
+  },
+});
+const modalOpen = () => dialog.open || $("#feedback-dialog").open || death.dead;
+const developer = createDeveloperTools({
+  getLife: () => ({
+    inspect: (id) => life?.inspect(id) || zombies?.inspect(id),
+  }),
+});
 const views = ["third", "first", "aerial"],
   keys = new Set();
 let view = "aerial",
@@ -108,6 +137,7 @@ const touchHint = document.createElement("p");
 touchHint.className = "touch-hint";
 touchHint.textContent = "Lower half: drag to walk · Upper half: drag to look";
 $("#app").append(touchHint);
+const sky = createSky(scene);
 scene.add(new THREE.HemisphereLight(0xffffff, 0x929b94, 1.9));
 const sun = new THREE.DirectionalLight(0xfff9ef, 2.4);
 sun.position.set(-1400, 2400, 1300);
@@ -267,11 +297,10 @@ $("#reset").addEventListener("click", () => {
   setView(view);
 });
 function setSettingsTab(tab) {
-  const about = tab === "about";
-  $("#settings-panel").hidden = about;
-  $("#about-panel").hidden = !about;
-  $("#settings-tab").setAttribute("aria-selected", String(!about));
-  $("#about-tab").setAttribute("aria-selected", String(about));
+  for (const name of ["settings", "beta", "about"]) {
+    $("#" + name + "-panel").hidden = name !== tab;
+    $("#" + name + "-tab").setAttribute("aria-selected", String(name === tab));
+  }
 }
 $("#settings-open").addEventListener("click", () => {
   analytics.event("settings-open");
@@ -297,6 +326,12 @@ dialog.addEventListener("click", (event) => {
   }
 });
 $("#settings-tab").addEventListener("click", () => setSettingsTab("settings"));
+$("#beta-tab").addEventListener("click", () => setSettingsTab("beta"));
+$("#motion-setting").addEventListener("input", (e) => {
+  const name = DENSITY_NAMES[Number(e.target.value)];
+  $("#motion-value").textContent = name;
+  e.target.setAttribute("aria-valuetext", name);
+});
 $("#about-tab").addEventListener("click", () => setSettingsTab("about"));
 $("#show-labels").addEventListener("change", (event) =>
   labels.setEnabled(event.target.checked),
@@ -575,6 +610,17 @@ function selectAt(event) {
     camera,
   );
   const hit = raycaster.intersectObjects(collisionMeshes, false)[0];
+  if (developer.enabled && (life || zombies)) {
+    const npc = raycaster.intersectObjects(
+      [...(life?.pickables() || []), ...(zombies?.pickables() || [])],
+      true,
+    )[0];
+    if (npc && (!hit || npc.distance < hit.distance)) {
+      let root = npc.object;
+      while (root && !root.userData.npcId) root = root.parent;
+      if (root && developer.inspect(root.userData.npcId)) return;
+    }
+  }
   if (hit) selectBuilding(hit.object.userData.asset_id || hit.object.name);
   else clearSelection();
 }
@@ -599,7 +645,10 @@ function updatePlayer(dt) {
           )
         : yaw;
     const speed =
-      ((keys.has("ShiftLeft") || keys.has("ShiftRight") ? 7 : 3) * dt) /
+      ((keys.has("ShiftLeft") || keys.has("ShiftRight") || touchControls.running
+        ? 4.6
+        : 1.7) *
+        dt) /
       Math.max(1, Math.hypot(forward, right));
     const delta = {
       x: (-Math.sin(heading) * forward + Math.cos(heading) * right) * speed,
@@ -613,7 +662,10 @@ function updatePlayer(dt) {
       half,
       field,
       false,
-      (x, z, y) => life?.blockedPlayer(x, z, y) || false,
+      (x, z, y) =>
+        life?.blockedPlayer(x, z, y) ||
+        zombies?.blockedPlayer(x, z, y) ||
+        false,
     );
     character.root.rotation.y = Math.atan2(
       player.x - before.x,
@@ -627,11 +679,14 @@ function updatePlayer(dt) {
   motion = walkMotion.update(dt, travelled, {
     grounded: vertical.grounded,
     enabled: view !== "aerial",
-    reducedMotion: reducedMotion.matches || !$("#motion-setting").checked,
+    reducedMotion: reducedMotion.matches,
+    motionLevel: Number($("#motion-setting").value),
+    running:
+      keys.has("ShiftLeft") || keys.has("ShiftRight") || touchControls.running,
   });
   if (motion.step) sound.step();
   character.root.position.copy(player);
-  character.animate(elapsed, moving && vertical.grounded);
+  character.animate(elapsed, moving && vertical.grounded, motion);
   contactShadow.position.set(player.x, ground + 0.035, player.z);
   const altitude = player.y - ground;
   contactShadow.material.opacity = 0.16 / (1 + altitude);
@@ -681,7 +736,7 @@ function updateCamera(dt, snap = false) {
           ),
         ),
     );
-    camera.rotation.z += motion.roll;
+
     return;
   }
   const desired = eye
@@ -799,6 +854,9 @@ try {
       }
     }
     if (object.userData.asset_kind === "corridor") {
+      object.material.color.set(0x5e6765);
+      object.material.roughness = 0.98;
+      applySurfaceGrain(object.material, 0.08);
       object.material.polygonOffset = true;
       object.material.polygonOffsetFactor = -1;
       object.material.polygonOffsetUnits = -1;
@@ -824,6 +882,8 @@ try {
   if (!terrainMesh) throw new Error("The GLB does not contain terrain.");
   if (presentation) {
     model.add(presentation.root);
+    // Keep the source mesh for geographic checks, but draw only one full ground base.
+    if (presentation.hasFoundation) terrainMesh.visible = false;
     for (const [id, group] of presentation.groups) meshesById.set(id, group);
     collisionMeshes.push(...presentation.collisionMeshes);
     const light = presentation.config.lighting;
@@ -863,12 +923,24 @@ try {
       renderer.shadowMap.needsUpdate = true;
     });
   }
+  scene.background.set(0x9ac7e6);
+  scene.fog.color.set(0xc7dfec);
+  applySurfaceGrain(terrainMesh.material, 0.08);
   scene.add(model);
   if (presentation?.contextFog) {
+    // Opt in only after profiling the target device: cached fields add memory.
+    if (viewerSettings.cache_static_haze === true)
+      presentation.bakeStaticHaze();
     model.traverse((object) => {
       if (object.isMesh)
         for (const material of [object.material].flat())
           presentation.contextFog.apply(material);
+      if (
+        viewerSettings.cache_static_haze === true &&
+        object.isMesh &&
+        object.visible
+      )
+        presentation.contextFog.bakeMesh(object);
     });
     $("#context-fog-row").hidden = false;
     $("#context-fog-setting").addEventListener("change", (e) =>
@@ -878,6 +950,7 @@ try {
   if (profile.character?.asset_url) {
     studentFactory = await loadStudentFactory(
       sceneAssetUrl(import.meta.env.BASE_URL, profile.character.asset_url),
+      profile.character,
     );
     scene.remove(character.root);
     character = studentFactory();
@@ -923,6 +996,7 @@ try {
       return height;
     };
     const router = createRouter(graph, clearSegment);
+    outdoorRouter = router;
     navigation = createNavigation({
       scene,
       router,
@@ -976,6 +1050,63 @@ try {
       });
     }
   }
+  zombies = createZombieSchool({
+    scene,
+    field,
+    buildings,
+    half,
+    onCaught: () => death.show(),
+    getPlayer: () => player,
+    router: outdoorRouter,
+    clearSegment: (a, b) => {
+      const count = Math.max(
+        1,
+        Math.ceil(Math.hypot(a[0] - b[0], a[1] - b[1]) / 2),
+      );
+      for (let i = 0; i <= count; i++)
+        if (
+          isBlocked(
+            a[0] + ((b[0] - a[0]) * i) / count,
+            -a[1] - ((b[1] - a[1]) * i) / count,
+            buildings,
+            half,
+            0.6,
+          )
+        )
+          return false;
+      return true;
+    },
+  });
+  betaRegistry = createBetaRegistry($("#beta-functions"));
+  let savedDensity = 2;
+  function syncDensityUI() {
+    if (!life) return;
+    const state = life.state();
+    $("#activity-density").value = String(state.densityLevel);
+    $("#activity-density").setAttribute("aria-valuetext", state.density);
+    $("#activity-density-value").textContent = state.density;
+  }
+  betaRegistry.register({
+    id: "zombie-school",
+    title: "ZOMBIE SCHOOL!!!",
+    description:
+      "Clean map + slow wandering chibi monsters. They chase within 30 m and lose interest beyond 60 m. Contact ends the round.",
+    start() {
+      savedDensity = life?.state().densityLevel ?? 2;
+      life?.setDensity(0);
+      syncDensityUI();
+      $("#activity-density").disabled = true;
+      zombies.start();
+      $("#beta-badge").hidden = false;
+    },
+    stop() {
+      zombies.stop();
+      life?.setDensity(savedDensity);
+      syncDensityUI();
+      $("#activity-density").disabled = false;
+      $("#beta-badge").hidden = true;
+    },
+  });
   labels.populate(buildings);
   buildingSearch.populate(buildings);
   resetPlayer();
@@ -995,16 +1126,34 @@ try {
   scene.add(skirt);
   renderer.shadowMap.needsUpdate = true;
   $("#loading").hidden = true;
+  const depth = createOverviewDepth(camera, model);
+  const frozenStaticNodes = freezeStaticTransforms(model);
+  let betaLastUpdate = 0;
   renderer.setAnimationLoop((now) => {
     const dt = Math.min((now - lastTime) / 1000 || 0, 0.08);
     lastTime = now;
     elapsed += dt;
     if (!modalOpen()) updatePlayer(dt);
-    updateCamera(dt);
+    if (!death.dead) updateCamera(dt);
+    depth.update(view);
+    sky.update(
+      camera,
+      death.dead ? elapsed - dt : elapsed,
+      reducedMotion.matches || death.dead,
+    );
     navigation?.update(elapsed);
-    if (!modalOpen()) life?.update(dt);
+    if (!modalOpen()) {
+      life?.update(dt);
+      zombies?.update(dt);
+    }
+    if (zombies?.active && now - betaLastUpdate > 250) {
+      betaLastUpdate = now;
+      $("#beta-badge").textContent =
+        `ZOMBIE SCHOOL!!! · ${zombies.state().chasing} chasing`;
+    }
     renderer.render(scene, camera);
     labels.update(now, view);
+    developer.update(now);
     frames++;
     if (now - lastFps > 1000) {
       fps = Math.round((frames * 1000) / (now - lastFps));
@@ -1016,7 +1165,7 @@ try {
     camera.getWorldDirection(heading);
     $(".compass i").style.transform =
       "rotate(" + Math.atan2(heading.x, -heading.z) + "rad)";
-    $("#position").textContent =
+    const positionText =
       "E " +
       player.x.toFixed(1) +
       " / N " +
@@ -1024,19 +1173,31 @@ try {
       " / H " +
       player.y.toFixed(1) +
       " m";
+    if ($("#position").textContent !== positionText)
+      $("#position").textContent = positionText;
   });
   window.__campus = {
     getState: () => ({
       ready: true,
       riggedHero: !!character.rigged,
+      developerMode: developer.enabled,
+      dead: death.dead,
+      sky: sky.state(),
+      motionLevel: Number($("#motion-setting").value),
+      inspectedNpc: developer.selected,
       life: life?.state() || null,
+      beta: betaRegistry?.state(),
+      zombies: zombies?.state(),
       audio: sound.state(),
       walkMotion: { ...motion },
+      heroGait: character.gaitState?.() || null,
       navigation: navigation?.state() || null,
       view,
       followDistance,
       player: player.toArray(),
       camera: camera.position.toArray(),
+      cameraNear: camera.near,
+      frozenStaticNodes,
       cameraDirection: camera.getWorldDirection(new THREE.Vector3()).toArray(),
       characterDirection: character.root
         .getWorldDirection(new THREE.Vector3())
@@ -1065,12 +1226,35 @@ try {
             buildings: presentation.groups.size,
             toon: $("#toon-setting").checked,
             backgroundHaze: presentation.contextFog?.enabled || false,
+            hazeCache: presentation.contextFog?.state(),
+            landcover: Boolean(presentation.config.landcover_url),
             batchedBuildings: presentation.batchedIds.size,
             ...presentation.config.stats,
           }
         : null,
     }),
     lifeColliders: () => life?.colliders() || [],
+    npcInfo: (id) => life?.inspect(id) || zombies?.inspect(id),
+    npcScreenPosition: (id) => {
+      const root = [
+        ...(life?.pickables() || []),
+        ...(zombies?.pickables() || []),
+      ].find((root) => root.userData.npcId === id);
+      if (!root) return null;
+      const point = new THREE.Box3()
+        .setFromObject(root)
+        .getCenter(new THREE.Vector3())
+        .project(camera);
+      return {
+        x: ((point.x + 1) * viewport.clientWidth) / 2,
+        y: ((1 - point.y) * viewport.clientHeight) / 2,
+        visible:
+          point.z > -1 &&
+          point.z < 1 &&
+          Math.abs(point.x) < 1 &&
+          Math.abs(point.y) < 1,
+      };
+    },
     setView,
     reset: resetPlayer,
     labelInfo: (id) => labels.projectedLabel(id),

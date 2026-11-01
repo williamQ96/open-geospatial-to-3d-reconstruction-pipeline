@@ -93,3 +93,50 @@ for (const mode of ["First person", "Follow"]) {
     }
   });
 }
+
+test("mobile hold-to-run works with a separate movement finger and releases cleanly", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.waitForFunction(() => window.__campus?.getState().ready);
+  await page
+    .getByRole("button", { name: "First person", exact: false })
+    .click();
+  const cdp = await page.context().newCDPSession(page),
+    point = (id, x, y) => ({ id, x, y, radiusX: 4, radiusY: 4, force: 1 });
+  await cdp.send("Input.dispatchTouchEvent", {
+    type: "touchStart",
+    touchPoints: [point(1, 90, 600)],
+  });
+  await cdp.send("Input.dispatchTouchEvent", {
+    type: "touchMove",
+    touchPoints: [point(1, 90, 548)],
+  });
+  const button = await page
+    .getByRole("button", { name: "Hold to run" })
+    .boundingBox();
+  await cdp.send("Input.dispatchTouchEvent", {
+    type: "touchStart",
+    touchPoints: [
+      point(1, 90, 548),
+      point(2, button.x + button.width / 2, button.y + button.height / 2),
+    ],
+  });
+  await expect
+    .poll(() => page.evaluate(() => __campus.getState().walkMotion.running))
+    .toBe(true);
+  await cdp.send("Input.dispatchTouchEvent", {
+    type: "touchEnd",
+    // CDP lists the contacts being released here, rather than remaining contacts.
+    touchPoints: [
+      point(2, button.x + button.width / 2, button.y + button.height / 2),
+    ],
+  });
+  await expect
+    .poll(() => page.evaluate(() => __campus.getState().walkMotion.running))
+    .toBe(false);
+  await cdp.send("Input.dispatchTouchEvent", {
+    type: "touchEnd",
+    touchPoints: [],
+  });
+});
