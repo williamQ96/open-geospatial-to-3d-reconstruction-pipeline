@@ -1,10 +1,10 @@
-Release batch 0.12.0 / template 0.4.0. See METHODOLOGY_LOG.md for actual publication verification.
+Published source: 0.12.0 / template 0.4.0. See METHODOLOGY_LOG.md for actual publication verification.
 
 **English** | [简体中文](zh-CN/interiors-mobile.md)
 
 # Analog movement and independent interiors
 
-Local development, not yet published. These are recommended reusable explorer patterns. Keep site-specific building IDs, doorway corrections and indoor art in downstream content.
+Included in 0.12.0 / template 0.4.0. These are recommended reusable explorer patterns. Keep site-specific building IDs, doorway corrections and indoor art in downstream content.
 
 ## One analog movement gesture
 
@@ -37,7 +37,7 @@ A versioned same-tab session record stores outdoor position, heading, pitch, Fol
 Test both windings and doorway overrides; analog scaling, diagonal cap and malformed return records; mouse/E/touch entry, return pose/mode/density, room collisions and portrait/landscape layout. Browser integration must inspect indoor network requests as well as visible appearance to catch accidental outdoor preloading. Test the upstream synthetic fixture and each real downstream independently. Keep actual publication and test results in the methodology log; downstreams keep their own development log.
 
 
-## Overview cards and inspection visits (local pending)
+## Overview cards and inspection visits (included in template 0.4.0)
 
 Overview selection opens one world-anchored building card for label clicks, model clicks and search results. The card shows the name, `to be fill` information placeholder, and Enter, plus a close control. Suppress only that building's regular label while its card is active; restore it when the card closes or character mode resumes. Keep the card inside the viewport on portrait and landscape screens; moving the map updates its anchor. Selection never moves the hero.
 

@@ -6,6 +6,10 @@ Record reusable changes to methods, algorithms, contracts, automation and valida
 
 Project-specific development logs, campus modeling progress, scene inventories and deployment diaries belong only to downstream repositories. Do not mirror downstream development logs here.
 
+## 2026-11-01 — Source publication confirmed: 0.12.0 / template 0.4.0
+
+Implementation [16e754a](https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline/commit/16e754a918e87d77cebc8e511e5932191f8d4924) is pushed. [Upstream checks](https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline/actions/runs/41348974431) succeeded: synthetic geometry/Python, wheel/scaffold, format, 42 JS tests, production build and all 17 synthetic browser cases. The consumer pins this clean implementation separately from historical reconstruction. This documentation-only confirmation changes no runtime or generated asset and uses [skip ci]; prior local/pending entries retain their original context. Regional deployment details and development records remain downstream.
+
 ## 2026-11-01 — Publication batch: 0.12.0 / browser template 0.4.0
 
 User authorized pushing the accumulated work. This release packages analog walk/run with no Run button, estimated building portals and an original exportable classroom, single-active-world transitions/GPU disposal with return-state recovery, anchored Overview cards, hero-free observer visits and throttled per-building hover. Generic methods and source stay upstream; regional content and development logs remain downstream. Local validation passed 34 Python, 42 JS and the full 17-case synthetic browser suite, plus both format/build checks and consumer scenarios. This entry prepares publication; remote checks and deployment evidence are recorded after completion. Historical pending/local verification entries remain as evidence of their original state.

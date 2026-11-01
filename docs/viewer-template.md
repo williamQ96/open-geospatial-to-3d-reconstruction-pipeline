@@ -39,4 +39,4 @@ The [style library](../style/README.md) contains the default recommended Archite
 Compact phone layouts respect safe areas, reduce the minimap, and keep camera buttons at the bottom. Follow and First-person touch assign lower-half contacts to a floating movement stick (dead zone, bounded analog speed) and upper-half contacts to looking. Roles remain fixed until release; two fingers operate independently. Release/cancel/lost capture, blur, resize, search, view changes and Settings clear movement. Overview retains orbit/pinch gestures. Desktop input is unchanged.
 
 
-[Analog movement and independent interiors](interiors-mobile.md) — shared analog walk/run gesture, estimated doorways, one active world and exportable classroom template (local pending development).
+[Analog movement and independent interiors](interiors-mobile.md) — shared analog walk/run gesture, estimated doorways, one active world and exportable classroom template (included in template 0.4.0).
