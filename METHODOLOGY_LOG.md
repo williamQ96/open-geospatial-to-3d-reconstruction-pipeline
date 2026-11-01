@@ -6,6 +6,13 @@ Record reusable changes to methods, algorithms, contracts, automation and valida
 
 Project-specific development logs, campus modeling progress, scene inventories and deployment diaries belong only to downstream repositories. Do not mirror downstream development logs here.
 
+## 2026-10-31 — Publication confirmed: upstream implementation and CI
+
+- **Published implementation:** [`6b15ce8878051dbbd0928d4332f507e6a5df4780`](https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline/commit/6b15ce8878051dbbd0928d4332f507e6a5df4780) is on public `main`, with package 0.10.0 and browser template 0.2.0.
+- **Remote verification:** [Upstream checks run 41264186786](https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline/actions/runs/41264186786) passed both synthetic geometry/package/scaffold and browser-template jobs, including 32 Python cases, 19 JS tests, 4 browser tests, formatting and build.
+- **Provenance:** consumers can pin that committed runtime with `dirty: false`; subsequent documentation records do not require rebuilding historical model assets. Previous local-only entries describe earlier states and are superseded for publication by this confirmation.
+- **Scope:** this confirmation records reusable methods and their validation only. Campus development/deployment history and project-specific logs remain downstream.
+
 ## 2026-10-31 — Publication batch: reusable scene hierarchy and community iteration (v0.10.0)
 
 - **Scope:** combine the previously local scene-hierarchy/context-appearance methods, fixed route-origin behavior, ambient density/collision, optional audio/walking feedback and downstream GitHub draft hooks. Package version is 0.10.0; the standalone browser template is 0.2.0.
