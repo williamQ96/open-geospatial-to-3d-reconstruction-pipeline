@@ -12,6 +12,8 @@ Reusable tools for verified geographic data → editable Blender assets → GLB/
 
 Local [depth stability and quality-preserving performance methods](docs/render-performance.md) cover conservative Overview clipping, isolated labels, static transforms, precise redraw invalidation and measured opt-in shader caching.
 
+[Fixed people design](docs/fixed-person-design.md) covers scene-specific named characters, path behavior, labels and cards; only its reusable route primitive is currently included.
+
 Included template work: [semantic activity / seeded templates](docs/semantic-activity.md), [discoverable beta functions](docs/beta-functions.md), and [environment layers, comfort, bounded detours and scene recovery](docs/environment-recovery.md). See the methodology log for publication status.
 
 Recommended [scene hierarchy](docs/scene-hierarchy.md): photo-derived grammar for main landmarks, reusable main-scene components, and inexpensive open low-poly or seeded procedural background appearance with spatial haze. Preserve building coordinates, footprints, IDs, streets and blocks; randomize appearance only. Editable building objects and runtime batches are independent.

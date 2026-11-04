@@ -119,3 +119,7 @@ Implemented in [`0361592`](https://github.com/williamQ96/open-geospatial-to-3d-r
 - Separate optional activity from static props and the clean-map rendering budget. Batch simple geometry and instance directional arrows.
 
 This entry links existing evidence rather than reconstructing earlier development history. The pending entry above supersedes the baseline's live-rerouting behavior.
+
+## 2026-11-04 - Fixed people design (local)
+
+Documented a reusable fixed-person contract for outdoor and indoor scenes, source-backed identity, appearance customization, stationary or paused waypoint behavior, lightweight labels, accessible cards, optional map marker and scripted proximity text. Added and unit-tested the scene-independent ping-pong route primitive to the browser template; renderer, UI, indoor integration and generalized person assets remain proposed. See `docs/fixed-person-design.md`. Publication: included in this repository when committed; no downstream identity data is included.
