@@ -1,3 +1,7 @@
+## 2026-11-05 — General asset method (local branch; not published)
+
+Motivation: support low-cost stylized assets across geographic and conceptual applications without making GIS mandatory. The new handoff guidance records evidence, rights, generation and editing choices, style, portable output and hosting responsibilities; distinguish observations from inference. Existing schema v1, CLI and viewer locks remain unchanged. Open Campus consumes geographic outputs/template; Open Philosophy currently shares principles only. This is documentation and an illustrative record, not an implemented generic generator, validator or host. Verification: 34 existing Python unit tests passed with locked dependencies; `git diff --check` passed; no deployment or downstream migration performed.
+
 # Methodology update log
 
 **English** | [简体中文](METHODOLOGY_LOG.zh-CN.md)

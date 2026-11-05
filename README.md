@@ -1,6 +1,12 @@
 **English** | [简体中文](README.zh-CN.md)
 
 # Open Geospatial-to-3D Reconstruction Pipeline
+
+## Direction: low-cost, reusable stylized assets
+
+This upstream develops a method for creating, styling and delivering assets using fit-for-purpose tools and evidence: GIS, photographs, open datasets and assets, manual authoring, AI-assisted tools and reusable skills. Geographic reconstruction remains a supported, implemented workflow, not a requirement for every asset. The repository name, `geospatial3d` package, CLI, viewer and schema v1 remain unchanged for compatibility.
+
+[Asset method and handoff](docs/asset-method.md) separates existing capabilities from proposed practices and covers provenance, rights, style, portable delivery and hosting. This is a direction and a documented handoff, not an implemented general asset generator, asset registry or hosting service. The two current downstreams are [Open Campus: UO](https://github.com/williamQ96/open-campus-uo) and [Open Philosophy](https://github.com/williamQ96/open-philosophy). The latter is methodologically related and has its own runtime, not a consumer of the geographic schema or template.
 **0.12.0 / explorer template 0.4.0:** analog walk/run, independent classroom worlds, Overview building cards and hero-free inspection, plus subtle building hover. [Design and resource-lifetime contract](docs/interiors-mobile.md). Publication checks are recorded in the methodology log.
 
 
@@ -83,8 +89,9 @@ The [style library](style/README.md) recommends **Architectural Toon Realism** b
 | Project | Map | Source | Live explorer |
 | --- | --- | --- | --- |
 | **Open Campus: UO** | University of Oregon, main Eugene campus | [Repository](https://github.com/williamQ96/open-campus-uo) | [Open map](https://williamq96.github.io/open-campus-uo/) |
+| **Open Philosophy** | Interpretive concept scenes | [Repository](https://github.com/williamQ96/open-philosophy) | [Open app](https://williamq96.github.io/open-philosophy/) |
 
-This is the first entry in an expandable [downstream registry](docs/downstream-projects.md). Additional campuses, neighborhoods and other maps can reuse the template while maintaining their own data and refinement goals.
+The [downstream registry](docs/downstream-projects.md) records both current projects and their different integration paths.
 
 ## Maintenance boundary
 

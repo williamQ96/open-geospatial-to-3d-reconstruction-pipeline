@@ -2,6 +2,10 @@
 
 # Architecture and interchange contracts
 
+## Scope and compatibility
+
+The [general asset method](asset-method.md) is a layer of documented practices around diverse authoring workflows. The geographic pipeline below remains the implemented reference path; its schema v1 is specific to geographic scenes, not a universal asset contract. Open Philosophy currently has its own procedural scene builders and no upstream runtime dependency. The proposed handoff is voluntary and does not change either downstream's formats, locks or deployment. Hosting is performed by downstream applications, not by an upstream hosting service.
+
 ## Implemented components
 
 `cli.py` drives validated reconstruction, Blender export, GLB checks and viewer scaffolding. `io.py` handles fixed-hash caching and revision evidence. `reconstruct.py` interpolates ground and detects conservative roofs. `annotations.py` matches independent semantic anchors and approximate envelopes. `corridors.py` creates terrain-conforming road/path surfaces. `blender_export.py` writes metre-based ENU Blender scenes and Y-up GLB. `scaffold.py` creates and safely synchronizes the reusable browser template.
@@ -31,7 +35,7 @@ Sources identify products, URLs, acquisition/access dates, hashes, terms and ver
 
 `templates/browser-explorer` is a consumer of exports, not part of geospatial reconstruction. Shared runtime and layout are managed separately from `public/viewer-profile.json`, scene data and hosting identity. A synthetic fixture makes the template runnable without any UO assets. Independent source-hash locks make upgrades reviewable and reject local-code overwrite.
 
-Three.js, Godot, Unity and Unreal consume the same asset contract. Engine-specific interaction adapters remain optional. The shared browser template demonstrates one adapter without making the Python reconstruction depend on a particular deployment.
+glTF is intended for portable consumption, but Godot, Unity and Unreal integration and rendering equivalence have not been validated here. Engine-specific interaction adapters are future work. The shared browser template demonstrates one adapter without making the Python reconstruction depend on a particular deployment.
 
 ## Reproducibility
 

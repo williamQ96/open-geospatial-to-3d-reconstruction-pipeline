@@ -1,6 +1,12 @@
 [English](README.md) | **简体中文**
 
 # Open Geospatial-to-3D Reconstruction Pipeline
+
+## 方向：低成本、可复用的风格化资产
+
+上游方法按需求组合 GIS、照片、开放资料与资产、人工制作、AI 辅助工具及可复用技能，用于创建、风格化和交付资产。地理重建仍是已实现的工作流，但不是所有资产的前提。为保持兼容，仓库名称、`geospatial3d` 包、命令、查看器和 schema v1 均不变。
+
+[资产方法与交付约定](docs/zh-CN/asset-method.md) 区分现有能力和拟议实践，涵盖来源、权利、风格、可移植交付与托管；通用生成器、资产注册表和托管服务尚未实现。当前两个下游是 [Open Campus: UO](https://github.com/williamQ96/open-campus-uo) 和 [Open Philosophy](https://github.com/williamQ96/open-philosophy)。后者采用独立运行时，借鉴方法，但不消费地理 schema 或模板。
 **0.12.0／探索模板 0.4.0：**拖拽走跑、独立教室世界、Overview 建筑卡片与无 hero 观察进入、建筑轻微悬停。[设计与资源生命周期](docs/zh-CN/interiors-mobile.md)。发布核验见方法日志。
 
 

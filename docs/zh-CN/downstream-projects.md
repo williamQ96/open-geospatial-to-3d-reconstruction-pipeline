@@ -2,6 +2,8 @@
 
 # 下游项目
 
+当前范围仅包括 Open Campus: UO 和 [Open Philosophy](https://github.com/williamQ96/open-philosophy)。前者使用地理导出与模板锁；后者有独立的 Three.js 场景，仅借鉴方法，不依赖地理 schema 或模板。参见[英文登记表](../downstream-projects.md)。
+
 | 项目 | 地图范围 | 仓库 | 在线预览 |
 | --- | --- | --- | --- |
 | **Open Campus: UO** | University of Oregon 主 Eugene 校园 | [源码](https://github.com/williamQ96/open-campus-uo) | [打开地图](https://williamq96.github.io/open-campus-uo/) |
