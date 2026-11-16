@@ -33,10 +33,17 @@ class InventoryTests(unittest.TestCase):
         self.assertTrue(self.check([self.row(), self.row()]))
         self.assertTrue(self.check([self.row(evidence="")]))
 
-    def test_planned_and_reserved_levels(self):
-        self.assertTrue(self.check([self.row(status="planned", level="0")]))
-        self.assertTrue(self.check([self.row(level="3")]))
-        self.assertFalse(self.check([self.row(level="2")]))
+    def test_levels_and_planned_assets(self):
+        for level in ("", "0", "1", "2", "3", "4", "5"):
+            with self.subTest(level=level):
+                self.assertFalse(self.check([self.row(level=level)]))
+        for level in ("-1", "6", "2.5", "L4", "04"):
+            with self.subTest(invalid=level):
+                self.assertTrue(self.check([self.row(level=level)]))
+        for level in ("0", "1", "2", "3", "4", "5"):
+            with self.subTest(planned=level):
+                self.assertTrue(self.check([self.row(status="planned", level=level)]))
+        self.assertFalse(self.check([self.row(status="planned", level="")]))
 
     def test_bad_header(self):
         with tempfile.TemporaryDirectory() as directory:

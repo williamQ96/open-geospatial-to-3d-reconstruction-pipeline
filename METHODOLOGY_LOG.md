@@ -6,6 +6,10 @@ Record reusable changes to methods, algorithms, contracts, automation and valida
 
 Project-specific development logs, campus modeling progress, scene inventories and deployment diaries belong only to downstream repositories. Do not mirror downstream development logs here.
 
+## 2026-11-16 - Reconstruction maturity levels
+
+Document the user's L3–L5 definitions alongside the existing L0/L1 definitions and explicit Knight L2 example. L4 is the intended goal for most reconstruction projects; L5's approximately 100% is an aspiration, not a fabricated numeric acceptance test. The inventory checker accepts 0–5 without assessing factual accuracy or changing any asset's assigned grade. Planned assets remain ungraded. All 38 Python tests, the empty-template check and git diff --check passed locally. Remote publication and checks must be verified separately.
+
 ## 2026-11-16 - Asset inventory integration (release candidate)
 
 Integrated the previously local inventory method on top of the later fixed-person methodology. The reusable template, structural checker and bilingual guidance preserve evidence and separate existing assets from planned work. Verified 38 Python tests and the empty template; the checker cannot establish factual accuracy, rights or approval. Publication will be confirmed after push; the earlier local entry remains as historical evidence.

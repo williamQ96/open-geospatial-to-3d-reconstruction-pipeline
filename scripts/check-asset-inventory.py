@@ -6,7 +6,7 @@ from pathlib import Path
 
 FIELDS = ("asset_id", "area", "asset_type", "name", "status", "level", "evidence", "next_refinement", "unknowns")
 STATUSES = {"existing", "planned"}
-LEVELS = {"", "0", "1", "2"}
+LEVELS = {"", "0", "1", "2", "3", "4", "5"}
 
 
 def validate(path):
@@ -30,7 +30,7 @@ def validate(path):
             if row["status"] not in STATUSES:
                 errors.append(f"Line {line}: status must be existing or planned")
             if row["level"] not in LEVELS:
-                errors.append(f"Line {line}: level must be blank, 0, 1 or 2; 3–5 await criteria")
+                errors.append(f"Line {line}: level must be blank or an integer from 0 through 5")
             if row["status"] == "planned" and row["level"]:
                 errors.append(f"Line {line}: planned assets must have a blank level")
     return errors
