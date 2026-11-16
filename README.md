@@ -1,6 +1,9 @@
 **English** | [简体中文](README.zh-CN.md)
 
 # Open Geospatial-to-3D Reconstruction Pipeline
+
+Reusable [asset inventory and divide-and-conquer refinement](docs/asset-refinement-inventory.md) keeps asset status, evidence, uncertainty and user-defined maturity levels visible across iterative work.
+
 **0.12.0 / explorer template 0.4.0:** analog walk/run, independent classroom worlds, Overview building cards and hero-free inspection, plus subtle building hover. [Design and resource-lifetime contract](docs/interiors-mobile.md). Publication checks are recorded in the methodology log.
 
 

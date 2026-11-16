@@ -49,3 +49,5 @@ The first application is [UO v0.7](https://github.com/williamQ96/open-campus-uo/
 See [reference-media intake](reference-media.md), [presentation layers](presentation-layers.md) and [the recommended style](../style/README.md). New maps can reuse the methods while choosing their own architectural modules, vegetation and art direction.
 
 Use the [early playable/community iteration loop](iterative-community-modeling.md): publish inspectable interaction early, then improve from user feedback and developer-led refinement, keeping geographic evidence and inferred art separate.
+
+Use the [asset inventory and divide-and-conquer workflow](asset-refinement-inventory.md) to track existing and planned work, user-defined levels, evidence and uncertainty by area and building. A shared interior is not a completed individual interior.

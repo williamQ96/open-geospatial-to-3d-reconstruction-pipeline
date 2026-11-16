@@ -31,3 +31,5 @@
 第一份实际应用是 [UO v0.7](https://github.com/williamQ96/open-campus-uo/blob/main/docs/visual-refinement-v0.7.md)。合成测试覆盖立面间距／反向／参数、树冠线索与南北采样；下游验证真实资产和交互。这是一份有效首例，不等于测绘精度、通用 RGB 阈值或其他地区均已验证。见[素材规范](reference-media.md)、[美术层契约](presentation-layers.md)与[画风库](../../style/README.zh-CN.md)。
 
 推荐[尽早可交互的社区迭代循环](iterative-community-modeling.md)：先形成可检查的交互，再通过用户反馈和开发者主动细化持续改进，保留地理证据与推测艺术细节的区别。
+
+通过[资产清单与分治细化](asset-refinement-inventory.md)按区域和建筑记录现有与计划资产、用户定义等级、证据及未知事项；共用室内不等于每栋建筑已完成独立内部。

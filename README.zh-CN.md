@@ -1,6 +1,9 @@
 [English](README.md) | **简体中文**
 
 # Open Geospatial-to-3D Reconstruction Pipeline
+
+可复用的[资产清单与分治细化方法](docs/zh-CN/asset-refinement-inventory.md)记录资产状态、证据、未知事项及用户定义的等级。
+
 **0.12.0／探索模板 0.4.0：**拖拽走跑、独立教室世界、Overview 建筑卡片与无 hero 观察进入、建筑轻微悬停。[设计与资源生命周期](docs/zh-CN/interiors-mobile.md)。发布核验见方法日志。
 
 

@@ -6,6 +6,14 @@ Record reusable changes to methods, algorithms, contracts, automation and valida
 
 Project-specific development logs, campus modeling progress, scene inventories and deployment diaries belong only to downstream repositories. Do not mirror downstream development logs here.
 
+## 2026-11-16 - Asset inventory integration (release candidate)
+
+Integrated the previously local inventory method on top of the later fixed-person methodology. The reusable template, structural checker and bilingual guidance preserve evidence and separate existing assets from planned work. Verified 38 Python tests and the empty template; the checker cannot establish factual accuracy, rights or approval. Publication will be confirmed after push; the earlier local entry remains as historical evidence.
+
+## 2026-11-03 - Local pending: asset inventory and bounded refinement
+
+Added a reusable, downstream-owned inventory template, bilingual divide-and-conquer guidance and structural checker. Keep existing and planned assets separate, preserve identity and evidence across batches, distinguish shared interior kits from uncreated building-specific interiors, and use only the user-established 0/1 meanings and explicit 2 example; levels 3–5 await user criteria. The first downstream baseline is not generalized to other projects. All 38 upstream Python tests (including four focused inventory tests), the empty-template check, local documentation links and git diff --check passed. The checker does not verify factual claims, source rights or user approval. Local uncommitted work; not pushed or published.
+
 ## 2026-11-01 — Source publication confirmed: 0.12.0 / template 0.4.0
 
 Implementation [16e754a](https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline/commit/16e754a918e87d77cebc8e511e5932191f8d4924) is pushed. [Upstream checks](https://github.com/williamQ96/open-geospatial-to-3d-reconstruction-pipeline/actions/runs/41348974431) succeeded: synthetic geometry/Python, wheel/scaffold, format, 42 JS tests, production build and all 17 synthetic browser cases. The consumer pins this clean implementation separately from historical reconstruction. This documentation-only confirmation changes no runtime or generated asset and uses [skip ci]; prior local/pending entries retain their original context. Regional deployment details and development records remain downstream.
